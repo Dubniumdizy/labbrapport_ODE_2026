@@ -238,6 +238,93 @@ $10$ & $1024$ & $\infty$ & -- & Krasch: \texttt{overflow} (\texttt{inf}) \\
 
 \subsection*{Uppgift 6. Disa Degerholm}
 
+
+Betrakta begynnelsevärdesproblemet
+\begin{equation}
+    y'' + y = 0, \quad y(0) = 1, \quad y'(0) = 0.
+\end{equation}
+
+\subsection*{1. Analytisk lösning och kvalitativ analys}
+Karakteristiska ekvationen $r^2 + 1 = 0 \implies r = \pm i$ ger $y(t) = c_1 \cos(t) + c_2 \sin(t)$. Begynnelsevillkoren ger $c_1 = 1, c_2 = 0$, dvs.\ den unika analytiska lösningen:
+\begin{equation}
+    y(t) = \cos(t).
+\end{equation}
+
+\paragraph{Kvalitativ definition av $\pi$ (Simmons kap.~4.24):}
+Låt $s(t)$ och $c(t)$ vara lösningarna till $y'' + y = 0$ med startvärdena $s(0) = 0, s'(0) = 1$ respektive $c(0) = 1, c'(0) = 0$.
+\begin{itemize}
+    \item Eftersom $(y')'' + y' = 0$ gäller $s'(t) = c(t)$ och $c'(t) = -s(t)$.
+    \item Energin är konstant bevarad:
+    \begin{equation}
+        \frac{d}{dt}\big(s(t)^2 + c(t)^2\big) = 2s(t)s'(t) + 2c(t)c'(t) = 2s(t)c(t) - 2c(t)s(t) = 0,
+    \end{equation}
+    vilket med startvärdena ger $s(t)^2 + c(t)^2 \equiv 1$.
+    \item Kurvan $s(t)$ stiger från origo med avtagande lutning ($s'' = -s < 0$) och når en topp vid $s = 1$ där $s' = c = 0$. Den första positiva skärningspunkten för $s(t) = 0$ definieras som $\pi$. Av symmetri nås toppen vid $t^* = \pi/2$ där hastigheten är noll:
+    \begin{equation}
+        c(t^*) = 0 \implies t^* = \frac{\pi}{2} \iff \pi = 2t^*.
+    \end{equation}
+    \item Enligt separationssatsen (Simmons kap.~4.24/4.25) alternerar nollställena för $s(t)$ och $c(t)$ strikt, varför nollstället $t^*$ är isolerat och unikt på $(0, \pi)$.
+\end{itemize}
+
+\subsection*{2. Omskrivning till första ordningens system}
+Med $v(t) = y'(t)$ fås $v'(t) = y''(t) = -y(t)$:
+\begin{equation}
+    \begin{cases}
+        y'(t) = v(t) \\
+        v'(t) = -y(t)
+    \end{cases}
+    \quad \text{med} \quad
+    \begin{pmatrix} y(0) \\ v(0) \end{pmatrix} = \begin{pmatrix} 1 \\ 0 \end{pmatrix}.
+\end{equation}
+
+\subsection*{3. Numerisk skattning av första nollstället $t^* = \pi/2$}
+När lösaren identifierar ett steg där $y_n > 0$ och $y_{n+1} \le 0$ bestäms $t^*$ via ett linjärt Newton-steg längs tangenten:
+\begin{equation}
+    t^* \approx t_n - \frac{y_n}{y'_n} = t_n - \frac{y_n}{v_n} \implies \pi \approx 2t^*.
+\end{equation}
+
+\begin{itemize}
+    \item \textbf{Eulers metod (Varför datorn smälter):}
+    Att nå maskinprecision ($\sim 16$ siffror) med Eulers metod kräver $N \sim 10^{16}$ steg eftersom metodens globala trunkeringsfel är $\mathcal{O}(h)$, vilket för $16$ siffror kräver en steglängd $h \approx 10^{-16}$ och därmed $N = T/h \approx T/10^{-16} \sim 10^{16}$ beräkningssteg. Detta är beräkningsmässigt orimligt och havererar i flyttalsaritmetiken då varje operation medför ett relativt avrundningsfel $\sim \epsilon_{\text{mach}} \approx 2{,}22 \cdot 10^{-16}$, vilket över alla steg ackumuleras som $N \cdot \epsilon_{\text{mach}} = (T/h)\epsilon_{\text{mach}} \propto \frac{\epsilon_{\text{mach}}}{h}$, en felterm som exploderar då $h \to 0$.
+    
+    \item \textbf{RK4:}
+    Med global konvergensordning $\mathcal{O}(h^4)$ reduceras felet med en faktor $16$ per halvering av $h$, vilket ger hög noggrannhet med måttligt antal steg (t.ex.\ $h = 10^{-3}$).
+\end{itemize}
+
+\subsection*{4. Skattning med 20 korrekta decimaler}
+Standard flyttal (\texttt{float64}) har 53 bitars mantissa ($\epsilon_{\text{mach}} \approx 2{,}22 \cdot 10^{-16}$) och är begränsat till $\sim 15$--$17$ decimaler. Att nå 20 säkra decimaler löses genom:
+\begin{enumerate}
+    \item Godtycklig flyttalsprecision (\texttt{mpmath} satt till 40 siffrors intern precision som säkerhetsmarginal mot ackumulerade avrundningsfel).
+    \item \textbf{Taylor-polynom och Newtons metod:}
+    För att undvika att ackumulera trunkerings- och fasfel från tusentals små tidssteg med stegmetoder (som RK4), utnyttjas att ODE:ns derivator är kända analytiskt vid $t = 0$. Hela lösningskurvan fram till nollstället ersätts då med ett enda analytiskt Taylor-polynom:
+    \begin{equation}
+        y_M(t) = \sum_{k=0}^{M} \frac{(-1)^k}{(2k)!} t^{2k}, \quad y'_M(t) = \sum_{k=1}^{M} \frac{(-1)^k}{(2k-1)!} t^{2k-1}.
+    \end{equation}
+    Genom att välja $M = 16$ (polynomgrad 32) begränsas seriens trunkeringsfel av resttermen $|R_{16}(t)| \le \frac{t^{34}}{34!} < 10^{-38}$ vid $t \approx 1{,}57$, vilket gör approximationsfelet helt försumbart jämfört med kravet på $10^{-20}$. Nollstället $t^* = \pi/2$ beräknas därefter snabbt och med kvadratisk konvergens via Newtons metod direkt på polynomet:
+    \begin{equation}
+        t \leftarrow t - \frac{y_M(t)}{y'_M(t)}.
+    \end{equation}
+\end{enumerate}
+
+\subsection*{5. Skattning av $\pi$ nära $t \approx 10^3$}
+Nollställena är $t_k = \frac{\pi}{2} + k\pi = \left(k + \frac{1}{2}\right)\pi$. Närmast $T = 1000$ ges av:
+\begin{equation}
+    k = \text{round}\left(\frac{1000 - \pi/2}{\pi}\right) = 318 \implies t_{318} = 318{,}5\pi \approx 1000{,}597.
+\end{equation}
+Skattningen av $\pi$ ur det beräknade nollstället $\hat{t}_{318}$ sker via $\hat{\pi} = \frac{\hat{t}_{318}}{318{,}5}$.
+
+\paragraph{Jämförelse mellan teoretiskt fel och beräkningsfel:}
+\begin{itemize}
+    \item \textbf{Teoretisk dämpning:}
+    Eftersom nollställena ges av $t_k = (k + 0{,}5)\pi$ skattas $\pi$ via $\hat{\pi} = \frac{\hat{t}_k}{k + 0{,}5}$. För $k = 318$ ger ett numeriskt beräkningsfel $\delta t = |\hat{t}_{318} - t_{318}|$ därmed direkt felet i $\pi$:
+    \begin{equation}
+        \delta \pi = \left| \frac{\hat{t}_{318}}{318{,}5} - \frac{t_{318}}{318{,}5} \right| = \frac{\delta t}{318{,}5}.
+    \end{equation}
+    Divisionen med $k + 0{,}5$ dämpar alltså felet i $\pi$ med en faktor drygt $300$.
+    \item \textbf{Numerisk felförstoring:} Integrationstiden $t \approx 1000$ är över $600$ gånger längre än $t \approx \pi/2$. För en enstegsmetod (som RK4) ackumuleras fasfelet linjärt med integrationstiden, vilket ger över $600$ gånger större fasdrift. Dessutom genererar de hundratusentals beräkningsstegen betydligt större ackumulerade flyttalsfel.
+    \item \textbf{Slutsats:} Den numeriska fasdriften och avrundningsfelet över 1000 tidsenheter överväger dämpningsfaktorn $1/318{,}5$. Att bestämma $\pi$ vid $10^3$ är därmed avsevärt svårare och ger sämre precision än att beräkna det första nollstället.
+\end{itemize}
+
 \subsection*{Uppgift 6. Hampus Hillding}
 
 \subsection*{Uppgift 6. Skillnader och likheter}
@@ -265,6 +352,80 @@ $10$ & $1024$ & $\infty$ & -- & Krasch: \texttt{overflow} (\texttt{inf}) \\
 \section*{Uppgift 8. Titel}
 
 \subsection*{Uppgift 8. Disa Degerholm}
+
+
+\subsection*{1. Modellering och rörelseekvationer i trekropparsproblemet}
+Systemet modelleras som ett planärt, cirkulärt begränsat trekropparsproblem bestående av Solen fix i origo ($M_S = 1$), Jupiter ($M_J = 0{,}08$) i cirkulär bana, samt en rymdsond med försumbar massa ($m \to 0$). Jordens gravitationella påverkan försummas då dess influensradie är försumbar i förhållande till solens gravitationsfält.
+
+Astronomiska enheter väljs så att $G = 1$, längdenheten är $1\text{ AU}$ och $G M_S = 1$. Keplers tredje lag ger Jupiters vinkelhastighet vid banradien $R_J = 5{,}2\text{ AU}$:
+\begin{equation}
+    \omega_J = \sqrt{\frac{G M_S}{R_J^3}} = R_J^{-3/2} = 5{,}2^{-3/2} \approx 0{,}0843\text{ rad/tidsenhet}.
+\end{equation}
+Jupiters banvektor ges av:
+\begin{equation}
+    \mathbf{r}_J(t) = \begin{pmatrix} x_J(t) \\ y_J(t) \end{pmatrix} = \begin{pmatrix} R_J \cos(\omega_J t + \phi_0) \\ R_J \sin(\omega_J t + \phi_0) \end{pmatrix},
+\end{equation}
+där fasvinkeln $\phi_0$ anger Jupiters position vid $t = 0$.
+
+Superposition av Newtons gravitationslag för Solen och Jupiter ger kraften per massenhet på sonden vid $\mathbf{r}(t) = \begin{pmatrix} x(t) \\ y(t) \end{pmatrix}$:
+\begin{equation}
+    \mathbf{r}''(t) = -\frac{\mathbf{r}}{\|\mathbf{r}\|^3} - M_J \frac{\mathbf{r} - \mathbf{r}_J(t)}{\|\mathbf{r} - \mathbf{r}_J(t)\|^3}.
+\end{equation}
+Med hastigheterna $v_x = x'$ och $v_y = y'$ formuleras rörelsen som fyra kopplade första ordningens differentialekvationer:
+\begin{equation}
+    \frac{d}{dt}\begin{pmatrix} x \\ y \\ v_x \\ v_y \end{pmatrix} 
+    = \begin{pmatrix} v_x \\ v_y \\ -\dfrac{x}{(x^2+y^2)^{3/2}} - M_J \dfrac{x - x_J}{\big((x-x_J)^2 + (y-y_J)^2\big)^{3/2}} \\[1em] -\dfrac{y}{(x^2+y^2)^{3/2}} - M_J \dfrac{y - y_J}{\big((x-x_J)^2 + (y-y_J)^2\big)^{3/2}} \end{pmatrix}.
+\end{equation}
+
+\subsection*{2. Flyktvillkor och energiprincip}
+Sondens specifika mekaniska energi relativt Solen definieras av:
+\begin{equation}
+    E_{\text{helio}}(t) = \frac{1}{2}\|\mathbf{v}(t)\|^2 - \frac{1}{\|\mathbf{r}(t)\|}.
+\end{equation}
+Banans geometri bestäms av energins tecken:
+\begin{itemize}
+    \item \textbf{Bunden bana ($E < 0$):} Flykthastigheten vid $r = 1\text{ AU}$ ges av $v_{\text{esc}} = \sqrt{2} \approx 1{,}414$. Startfarten sätts till $v_0 = 1{,}34 < \sqrt{2}$, vilket ger en bunden startellips med $E_0 = \frac{1}{2}(1{,}34)^2 - 1 = -0{,}1022 < 0$. Sonden kan därmed inte lämna solsystemet på egen hand.
+    \item \textbf{Hyperbolisk flykt ($E > 0$):} Efter närpassagen vid en tidpunkt $t_{\text{post}}$ där sonden avlägsnat sig från Jupiters närfält gäller:
+    \begin{equation}
+        E_{\text{post}} = \frac{1}{2}\|\mathbf{v}(t_{\text{post}})\|^2 - \frac{1}{\|\mathbf{r}(t_{\text{post}})\|} > 0.
+    \end{equation}
+    Ett positivt energivärde ($E_{\text{post}} > 0$) garanterar en öppen hyperbolisk flyktbana med asymptotisk resthastighet vid oändligheten.
+\end{itemize}
+
+\subsection*{3. Gravitationsslunga (Gravitational Slingshot)}
+En gravitationsslunga fungerar som en elastisk stöt där sonden lånar rörelseenergi av planeten.
+
+\paragraph{1. Relativ rörelse kring Jupiter}
+Låt sondens hastighet i solsystemet före och efter mötet vara $\mathbf{v}_{\text{in}}$ respektive $\mathbf{v}_{\text{ut}}$, och Jupiters banhastighet vara $\mathbf{v}_J$. I Jupiters eget vilosystem är sondens relativa hastigheter:
+\begin{equation}
+    \mathbf{v}_{\text{rel, in}} = \mathbf{v}_{\text{in}} - \mathbf{v}_J, \qquad \mathbf{v}_{\text{rel, ut}} = \mathbf{v}_{\text{ut}} - \mathbf{v}_J.
+\end{equation}
+Eftersom gravitationsfältet kring Jupiter är konservativt ändras inte farten under passagen, utan banan vrids bara en vinkel $\delta$:
+\begin{equation}
+    \|\mathbf{v}_{\text{rel, ut}}\| = \|\mathbf{v}_{\text{rel, in}}\| = v_{\text{rel}}.
+\end{equation}
+
+\paragraph{2. Hastighetsökning i solsystemet}
+När sonden lämnar Jupiter transformeras hastigheten tillbaka till solens koordinatsystem genom att lägga till $\mathbf{v}_J$:
+\begin{equation}
+    \mathbf{v}_{\text{ut}} = \mathbf{v}_J + \mathbf{v}_{\text{rel, ut}}.
+\end{equation}
+Sondens nya rörelseenergi per massenhet beräknas via skalärprodukten:
+\begin{equation}
+    \frac{1}{2}\|\mathbf{v}_{\text{ut}}\|^2 = \frac{1}{2}\|\mathbf{v}_J + \mathbf{v}_{\text{rel, ut}}\|^2 = \frac{1}{2}\|\mathbf{v}_J\|^2 + \frac{1}{2}v_{\text{rel}}^2 + \mathbf{v}_J \cdot \mathbf{v}_{\text{rel, ut}}.
+\end{equation}
+Termen $\mathbf{v}_J \cdot \mathbf{v}_{\text{rel, ut}} = \|\mathbf{v}_J\| v_{\text{rel}} \cos \theta$ (där $\theta$ är vinkeln mellan $\mathbf{v}_J$ och $\mathbf{v}_{\text{rel, ut}}$) avgör energiändringen:
+\begin{itemize} 
+    \item Passerar sonden \emph{framför} planeten pekar uthastigheten mot planetens rörelseriktning ($\cos \theta < 0$), vilket bromsar sonden.
+    \item Passerar sonden \emph{bakom} planeten vinklas uthastigheten med planetens rörelseriktning ($\cos \theta > 0$), vilket ger ett positivt tillskott av rörelseenergi.
+\end{itemize}
+
+\paragraph{3. Numeriskt resultat}
+Med startvinkeln $\phi_0 = 1{,}78\text{ rad}$ styrs sonden så att den passerar strax bakom Jupiter. Därmed ökar den specifika energin från en bunden bana vid start till en permanent flyktbana:
+\begin{equation}
+    E_0 \approx -0{,}10 < 0 \implies E_{\text{post}} \approx +0{,}14 > 0.
+\end{equation}
+Eftersom $E_{\text{post}} > 0$ är banan en öppen hyperbel som garanterar att skeppet lämnar solsystemet.
 
 \subsection*{Uppgift 8. Hampus Hillding}
 
