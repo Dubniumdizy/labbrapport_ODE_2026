@@ -1,0 +1,80 @@
+% --- ENCODING & LANGUAGE (MUST BE FIRST) ---
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[swedish]{babel}
+\usepackage[margin=2cm]{geometry}
+
+% --- CORE MATH & SYMBOLS ---
+\usepackage{amsmath, amssymb, amsthm}
+
+% --- GRAPHICS & UTILS ---
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{ulem}
+\usepackage{changepage}
+\usepackage{listings}
+\lstset{language=Python}
+
+% --- NATURE COLOR DEFINITIONS ---f
+\definecolor{natyellow}{HTML}{D4AC0D}   % Teorem, Lemma, Proposition, Corollary
+\definecolor{natblue}{HTML}{1A5276}    % Definition
+\definecolor{natorange}{HTML}{CA6F1E}   % Proof
+\definecolor{natgray}{HTML}{696969}    % Remark
+\definecolor{natbrown}{HTML}{6E2C00}    % Ex
+\definecolor{natgreen}{HTML}{27AE60}    % Keyword
+\definecolor{pink}{HTML}{d951bb} 
+
+% --- SÄKERT HJÄLPKOMMANDO FÖR RUBRIKER ---
+\newcommand{\naturetitle}[3]{%
+  \par\addvspace{0.8em}%
+  \noindent%
+  \colorbox{#1!25}{\textbf{\textcolor{black}{#2}}}\textbf{ (#3):}%
+  \vspace{0.3em}\noindent\ignorespaces
+}
+
+% --- MILJÖER ---
+
+% 1. Definition environment
+\newenvironment{defi}[1]%
+{\naturetitle{natblue}{Definition}{#1}\par}%
+{\addvspace{0.8em}}
+
+% 2. Theorem, Lemma, Proposition, Corollary (Gula)
+\newenvironment{theorem}[1]%
+{\naturetitle{natyellow}{Theorem}{#1}\par}%
+{\vspace{0.8em}}
+
+\newenvironment{lemma}[1]%
+{\naturetitle{natyellow}{Lemma}{#1}\par}%
+{\vspace{0.8em}}
+
+\newenvironment{proposition}[1]%
+{\naturetitle{natyellow}{Proposition}{#1}\par}%
+{\vspace{0.8em}}
+
+\newenvironment{corollary}[1]%
+{\naturetitle{natyellow}{Corollary}{#1}\par}%
+{\vspace{0.8em}}
+
+% 3. Proof (Orange)
+\newenvironment{prf}[1]%
+{\naturetitle{natorange}{Proof}{#1}\par\itshape}%
+{\hfill$\square$\vspace{0.5em}}
+
+% 4. Ex / Example (Brun)
+\newenvironment{example}[1]%
+{\naturetitle{natbrown}{Example}{#1}\par}%
+{\vspace{0.5em}}
+
+% 5. Remark (Grå - med högerpil och indrag)
+\newenvironment{remark}
+{\par\addvspace{0.05em}\noindent\textbf{\textcolor{natgray}{$\hookrightarrow$ \uline{Remark:}}}\\[0.1em]\small\itshape\begin{adjustwidth}{0.1em}{0.1em}}
+{\end{adjustwidth}\par\addvspace{0.05em}}
+
+% 6. Keyword (Grön)
+\newcommand{\keyword}[1]{\textbf{\textcolor{natgreen}{#1}}}
+
+% 7. Method 
+\newenvironment{method}[1]%
+{\naturetitle{pink}{Method}{#1}\par}%
+{\addvspace{0.8em}}

@@ -1,0 +1,97 @@
+\documentclass{article}
+\input{preambles/preamble_rapport}
+
+\title{Rapport}
+\author{Disa Degerholm}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+\thispagestyle{empty}
+
+\section*{Uppgift 3. Existens men inte entydighet}
+
+\subsection*{Uppgift 3. Disa Degerholm}
+
+\subsection*{Uppgift 3. Hampus Hillding}
+
+\subsection*{Uppgift 3. Skillnader och likheter}
+
+\begin{enumerate}
+    \item \textbf{Skillnader för härledning till ODE:n:} Disa tittade på Lipschitz kontinuitet i punkten y=0 medan Hampus löste ODE:n direkt. Detta gjorde att när Hampus tittade på sin numeriska lösning antog funktionen 0 inte bara i ett värde utan flera medan Disa hittade det.
+    \item \textbf{Lös problemet numeriskt med kommentarer:} Både Disa och Hampus fick att $y=0, \forall x\in \mathbb{R}$ oavsett om man använde RK4 eller Euler. Det var annorlunda än Hampus analytiska lösning.
+    \item \textbf{Hur länge fastnar den numeriska lösningen:} Disa trodde att om $y_n$ träffas exakt på 0 så kommer derivatan bli 0 och lösaren fastnar i $y=0$, hon trodde detta möjligen kunde ske om metoder med lägre ordning skulle användas tex Eulers metod. Men då visade Hampus att den faktiskt tillslut ändå växte förbi 0. Enligt Disas analytiska lösning så blev tiden ca 1 tidsenhet på $y=0$ enligt hennes härledning. ??? (när nås bara y=0)
+\end{enumerate}
+
+\section*{Uppgift 4. Titel}
+
+\subsection*{Uppgift 4. Disa Degerholm}
+
+\subsection*{Uppgift 4. Hampus Hillding}
+
+\subsection*{Uppgift 4. Skillnader och likheter}
+
+\begin{enumerate}
+    \item \textbf{Lös analytiskt mha personnummer:} Disa löste ODE:n för generellt N och stoppade sedan in sina sista två personnummersiffror. Hampus löste med sina direkt i formeln men båda fick samma svar (om N är samma).
+    \item \textbf{När smäller det numeriskt?} Hampus använde Euler igen och Disa använde RK4. Detta gjorde att Disa fick fler iterationer innan overflow (??? why). Det "smällde" ungefär vid 1.1 för både Disa och Hampus vilket stämde överens med det analytiska. Vi ser att det "smäller" då programmet går in i "overflow".
+    \item \textbf{Visa att om $y(0)<0$ så måste $y(t)<0$ för alla $t>0$:} Både DIsa och Hampus hade samma argument med att f är lokalt Lipschitz kontineruligt överallt och att då y(t)=0 är en lösning kan ingen annan lösning korsa den och blir därmed bara över eller under 0 i sitt y värde.
+    \item \textbf{Numeriska exempel:} Hampus testade sig fram till ett stort nog C då han tänkte att ett stort C skulle ge ett $y'$ som var tillräckligt stor hopp för att komma över gränsen. Disa härledde formeln för det istället och kom fram till att $h > \frac{1}{C |\epsilon|}$.
+    \item \textbf{Automatlösare:} Disa tänkte att en adaptiv steglängdskontroll (???) och detektering av teckenbyte (???) skulle kunna hjälpa. Hampus hade samma ideer.
+\end{enumerate}
+
+\section*{Uppgift 5. Titel}
+
+\subsection*{Uppgift 5. Disa Degerholm}
+
+\subsection*{Uppgift 5. Hampus Hillding}
+
+\subsection*{Uppgift 5. Skillnader och likheter}
+
+\begin{enumerate}
+    \item \textbf{Lös numeriskt med 2 korrekta decimaler:} Hampus gjorde Euler, Disa gjorde RK4. Både tog fram den teoretiska formeln för det totala trunkeringsfelet $|E_n|$. 
+    \item \textbf{Jämför teoretiska och numeriska felen:} ??? (varför får hampus fler decimaler med euler än RK4. loglog plot rätt ordning).
+\end{enumerate}
+
+\section*{Uppgift 6. Titel}
+
+\subsection*{Uppgift 6. Disa Degerholm}
+
+\subsection*{Uppgift 6. Hampus Hillding}
+
+\subsection*{Uppgift 6. Skillnader och likheter}
+
+\begin{enumerate}
+    \item \textbf{Analytisk lösning:} Både Hampus och Disa får att $y(t)=cost(t)$.
+    \item \textbf{Hur många korrekta siffror kan man få innan datorn smälter:} Disa får ca 11 (???) korrekta siffror mha RK4 medan Hampus får 9 korrekt siffror ??? (räkna med första 3:an). Vi ser att datorn smälter då det tar för lång tid att vänta. Vi hittade sen mha mp.math, taylor och RK4 för att få 20 decimaler ???.
+    \item \textbf{Hur mycket svårare blir det med skifte:} Dia härledde och insåg att k är ca 318 för att få ca t=1000. Det ger en dämpande effekt med en faktor på 300 men $t_{318}$ är betydligt svårare att få fram än $t=\pi/2$ och tar helt över med sin feltillväxt. Hampus funderar ???.
+\end{enumerate}
+
+\section*{Uppgift 7. Titel}
+
+\subsection*{Uppgift 7. Disa Degerholm}
+
+\subsection*{Uppgift 7. Hampus Hillding}
+
+\subsection*{Uppgift 7. Skillnader och likheter}
+
+\begin{enumerate}
+    \item \textbf{Härled systemets ODE:} Kolla formel ???
+    \item \textbf{Simulera för olika initialvärden under kort och lång tid:} Disa upptäckte att för lång tid blir det en instabil spiral utåt och för kort tid så syns inte detta. Detta är på grund av att energin ökar på grund av den numeriska härledningen ???.
+    \item \textbf{Använd Semi implcit Euler för att återställa ordningen i systemet:} Check, det gick bra efterosm att ???
+\end{enumerate}
+
+\section*{Uppgift 8. Titel}
+
+\subsection*{Uppgift 8. Disa Degerholm}
+
+\subsection*{Uppgift 8. Hampus Hillding}
+
+\subsection*{Uppgift 8. Skillnader och likheter}
+
+\begin{enumerate}
+    \item \textbf{Utforska numerisk för att hitta olika planetbanor s.a systemet stämmer:} Är jorden försumbar ??? 
+    \item \textbf{Hur vet man att skeppet lämnar solsystemet:} Printar banan över tid och ser skillnaden på energi ??? (hur mycket)
+\end{enumerate}
+
+\end{document}

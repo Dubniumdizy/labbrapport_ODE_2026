@@ -1,0 +1,49 @@
+{
+  "lists": [
+    {
+      "id": "list-default",
+      "name": "Default",
+      "view": "kanban",
+      "statuses": [
+        {
+          "id": "todo",
+          "label": "To Do",
+          "color": "#808080"
+        },
+        {
+          "id": "doing",
+          "label": "Leo",
+          "color": "#4A9EFF"
+        },
+        {
+          "id": "done",
+          "label": "Asse/Lärare",
+          "color": "#4CAF50"
+        },
+        {
+          "id": "status-5f331788-48c6-497a-90eb-39f8ac82739a",
+          "label": "Klar",
+          "color": "#f34dff"
+        }
+      ],
+      "tasks": [
+        {
+          "id": "cb489b1c-1148-4e1b-bd6d-73b8bfb99a72",
+          "text": "Jobbar vi med komplexa tal? Tex om t \\ge C eller ej i upg 3",
+          "statusId": "status-5f331788-48c6-497a-90eb-39f8ac82739a"
+        },
+        {
+          "id": "66287a93-7d3e-4304-90bc-a66d038145fb",
+          "text": "\"Läs början av kap 6\"?",
+          "statusId": "done"
+        },
+        {
+          "id": "046ddfab-10be-4ff0-bc43-9d2c62dd0a43",
+          "text": "\"Ledtråd: du kan be om ledtråd\"",
+          "statusId": "done"
+        }
+      ]
+    }
+  ],
+  "activeListId": "list-default"
+}
