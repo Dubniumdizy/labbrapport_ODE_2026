@@ -13,265 +13,186 @@
 \section*{Uppgift 3. Existens men inte entydighet}
 
 Betrakta begynnelsevärdesproblemet
-$$y' = \sqrt{|y|}, \quad y(0) = 0.$$
+\begin{equation}
+    y' = \sqrt{|y|}, \quad y(0) = 0.
+\end{equation}
 
-\subsection*{1. Analytisk lösning}
+\subsection*{1. Analytisk lösning och icke-entydighet}
+Picards existens- och entydighetssats (Simmons kap.~13) kräver att $f(y) = \sqrt{|y|}$ är lokalt Lipschitzkontinuerlig i en omgivning av $y = 0$, dvs.~att differenskvoten är begränsad:
+\begin{equation}
+    \lim_{y \to 0^+} \frac{|f(y) - f(0)|}{|y - 0|} = \lim_{y \to 0^+} \frac{\sqrt{y}}{y} = \lim_{y \to 0^+} \frac{1}{\sqrt{y}} = \infty.
+\end{equation}
+Eftersom Lipschitzvillkoret fallerar i $y = 0$ upphör entydigheten (Peanos existenssats garanterar endast existens).
 
-Ekvationen saknar entydig lösning i en omgivning av $y = 0$ då Picard existens och entydighetssats inte är tillämpbar. Detta beror på att högerledet $f(t,y) = f(y) = \sqrt{|y|}$ inte är lokalt Lipschitzkontinuerligt i $y = 0$.
-
-För att $f$ ska vara lokalt Lipschitzkontinuerlig i en omgivning kring $0$ krävs att det existerar en ändlig konstant $L \ge 0$ sådan att
-$$|f(y_1) - f(y_2)| \le L|y_1 - y_2|$$
-för alla $y_1, y_2$ i omgivningen. Genom att välja $y_1 = y > 0$ och fixera $y_2 = 0$ fås differenskvoten
-$$\frac{|f(y) - f(0)|}{|y - 0|} = \frac{\sqrt{y} - 0}{y - 0} = \frac{1}{\sqrt{y}}.$$
-Då $y \to 0^+$ växer denna kvot obegränsat:
-$$\lim_{y \to 0^+} \frac{|f(y) - f(0)|}{|y - 0|} = \lim_{y \to 0^+} \frac{1}{\sqrt{y}} = \infty.$$
-Ingen sådan Lipschitzkonstant $L$ kan därmed existera. 
-
-\begin{enumerate}
-    \item \textbf{Den triviala lösningen:}
-    $$y(t) = 0 \quad \text{för alla } t \in \mathbb{R}.$$
-
-    \item \textbf{$y > 0$:}
-    Då $y > 0$ är $\sqrt{|y|} = \sqrt{y}$. Separabla ekvationen blir:
-    \begin{align*}
-        \frac{dy}{\sqrt{y}} &= dt \\
-        2\sqrt{y} &= t - c_2.
-    \end{align*}
-    Eftersom $\sqrt{y} > 0$ måste $t > c_2$. Kvadrering ger:
-    $$y(t) = \frac{1}{4}(t - c_2)^2, \quad t \ge c_2.$$
-
-    \item \textbf{$y < 0$:}
-    Då $y < 0$ är $\sqrt{|y|} = \sqrt{-y}$. Separation av variabler ger:
-    \begin{align*}
-        \frac{dy}{\sqrt{-y}} &= dt \\
-        -2\sqrt{-y} &= t - c_1 \\
-        \sqrt{-y} &= \frac{c_1 - t}{2}.
-    \end{align*}
-    Eftersom $\sqrt{-y} > 0$ måste $t < c_1$. Detta ger:
-    $$y(t) = -\frac{1}{4}(t - c_1)^2, \quad t \le c_1.$$
-
-    \item \textbf{Sammanfattning:}
-    Eftersom $y' = \sqrt{|y|} \ge 0$ är $y(t)$ icke-avtagande. En lösning kan lämna nollinjen bakåt i tiden vid en godtycklig punkt $c_1 \le 0$ och framåt i tiden vid en godtycklig punkt $c_2 \ge 0$:
-    $$y(t) = \begin{cases}
-        -\displaystyle\frac{1}{4}(t - c_1)^2, & t \le c_1, \\[8pt]
-        0, & c_1 < t < c_2, \\[8pt]
-        \displaystyle\frac{1}{4}(t - c_2)^2, & t \ge c_2,
-    \end{cases}$$
-    där $c_1 \le 0 \le c_2$ (där $c_1 = -\infty$ eller $c_2 = \infty$ motsvarar att lösningen förblir noll åt det hållet). Det existerar därmed en tvåparametrig familj av oändligt många lösningar.
-\end{enumerate}
-
-\subsection*{2. Numerisk lösning}
-
-Om Runge--Kutta av ordning 4 appliceras på $y' = \sqrt{|y|}$ med $y(0) = 0$:
+Separation av variabler för $y \ne 0$:
 \begin{itemize}
-    \item Första steget från $t_0 = 0$, $y_0 = 0$ med steglängd $h$:
-    \begin{align*}
-        k_1 &= f(t_0, y_0) = \sqrt{|0|} = 0, \\
-        k_2 &= f\left(t_0 + \frac{h}{2}, y_0 + \frac{h}{2}k_1\right) = \sqrt{|0 + 0|} = 0, \\
-        k_3 &= f\left(t_0 + \frac{h}{2}, y_0 + \frac{h}{2}k_2\right) = \sqrt{|0 + 0|} = 0, \\
-        k_4 &= f(t_0 + h, y_0 + h k_3) = \sqrt{|0 + 0|} = 0.
-    \end{align*}
-    \item Nästa funktionsvärde blir:
-    $$y_1 = y_0 + \frac{h}{6}(k_1 + 2k_2 + 2k_3 + k_4) = 0 + \frac{h}{6}(0) = 0.$$
-    \item Genom induktion gäller att $y_n = 0$ och samtliga $k_i = 0$ för alla diskreta steg $n$, vilket låser metoden i den triviala jämviktslösningen $y(t) \equiv 0$. ??? krav visa
+    \item För $y > 0$: $\int y^{-1/2}\,dy = \int dt \implies 2\sqrt{y} = t - c_2 \implies y(t) = \frac{1}{4}(t - c_2)^2$ ($t \ge c_2$).
+    \item För $y < 0$: $\int (-y)^{-1/2}\,dy = \int dt \implies -2\sqrt{-y} = t - c_1 \implies y(t) = -\frac{1}{4}(t - c_1)^2$ ($t \le c_1$).
 \end{itemize}
+Eftersom $y' \ge 0$ är $y(t)$ icke-avtagande och kan ligga kvar på jämvikten $y \equiv 0$ under ett godtyckligt tidsintervall $[c_1, c_2]$:
+\begin{equation}
+    y(t) = \begin{cases}
+        -\frac{1}{4}(t - c_1)^2, & t \le c_1, \\
+        0, & c_1 < t < c_2, \\
+        \frac{1}{4}(t - c_2)^2, & t \ge c_2,
+    \end{cases}
+    \quad \text{där } c_1 \le 0 \le c_2.
+\end{equation}
+Detta ger en tvåparametrig familj av oändligt många lösningar.
 
-\subsection*{3. Hur länge lösningen fastnar på $y = 0$ givet $y(-1) = -1$}
+\subsection*{2. Numerisk lösning med RK4}
+Med $y_0 = 0$ fås i första RK4-steget:
+\begin{equation}
+    k_1 = f(0) = 0 \implies k_2 = k_3 = k_4 = 0 \implies y_1 = y_0 = 0.
+\end{equation}
+Genom induktion gäller $y_n = 0$ för alla $n$. En standardlösare förblir deterministiskt låst i den stationära lösningen $y(t) \equiv 0$ och kan inte numeriskt detektera förgreningen utan yttre störning.
 
-För $y < 0$ ges differentialekvationen av:
-$$y' = \sqrt{-y}.$$
-
-Separation av variabler ger:
-\begin{align*}
-    \frac{dy}{\sqrt{-y}} &= dt \\
-    -2\sqrt{-y} &= t + C.
-\end{align*}
-
-Insättning av $y(-1) = -1$:
-$$-2\sqrt{1} = -1 + C \implies C = -1.$$
-Detta medför:
-$$-2\sqrt{-y} = t - 1 \implies \sqrt{-y} = \frac{1 - t}{2} \implies y(t) = -\frac{1}{4}(1 - t)^2, \quad t \le 1.$$
-
-Lösningen når $y = 0$ vid $t = 1$.
+\subsection*{3. Hur länge lösningen fastnar vid $y(-1) = -1$}
+För $y < 0$ ger separation av variabler med $y(-1) = -1$:
+\begin{equation}
+    -2\sqrt{-y} = t + C \implies -2\sqrt{1} = -1 + C \implies C = -1,
+\end{equation}
+vilket ger $y(t) = -\frac{1}{4}(1 - t)^2$ för $t \le 1$. Analytiskt nås $y = 0$ vid $t = 1$, varpå lösningen kan kvarstanna i $y \equiv 0$ godtyckligt länge.
 
 \begin{itemize}
-    \item \textbf{Analytiskt:} När banan når $y = 0$ kan den kvarstanna där under ett godtyckligt intervall $t \in [1, 1 + c]$ innan den eventuellt förgrenar sig som $\frac{1}{4}(t - (1+c))^2$.
-    \item \textbf{Numeriskt:} Med startvärdet $y(-1) = -1 + \epsilon$ innebär villkoret $|y| \le 10^{-6}$:
-    $$\frac{1}{4}(1 - t)^2 \le 10^{-6} \implies |1 - t| \le 2 \cdot 10^{-3} = 0{,}002.$$
-    Det tar alltså $t \approx 0{,}998$ tidsenheter att nå gränsen $|y| \le 10^{-6}$.
-    \item När lösaren nått nivån där $y_n \approx 0$ beror varaktigheten inom intervallet på diskretiserings- och avrundningsfel:
+    \item \textbf{Tid till tröskeln $|y| \le 10^{-6}$:}
+    För $y < 0$ ger separation av variabler med $y(-1) = -1$:
+    \[
+    \int (-y)^{-1/2}\,dy = \int dt \implies -2\sqrt{-y} = t - 1 \implies y(t) = -\frac{1}{4}(1 - t)^2.
+    \]
+    Tröskelvillkoret $|y| \le 10^{-6}$ ger:
+    \[
+    \frac{1}{4}(1 - t)^2 \le 10^{-6} \implies |1 - t| \le 2 \cdot 10^{-3} \implies t \approx 0{,}998.
+    \]
+    Tiden från startpunkten $t = -1$ blir därmed $\Delta t = 0{,}998 - (-1) = 1{,}998$.
+
+    \item \textbf{Numeriskt beteende:}
     \begin{itemize}
-        \item Träffas exakt $y_n = 0$ blir derivatan noll och lösaren fastnar permanent i $y \equiv 0$.
-        \item Om ett steg råkar kliva förbi noll och landar på $y_n = \delta > 0$, är derivatan inte längre noll utan ges av $f(t_n, \delta) = \sqrt{\delta}$. Eftersom kvoten mellan derivatan och tillståndet, $\frac{\sqrt{\delta}}{\delta} = \frac{1}{\sqrt{\delta}}$, växer obegränsat då $\delta \to 0^+$, innebär detta att även en liten störning $\delta$ ger upphov till en stor tillväxthastighet i tex Eulers metod. $\Delta y \approx h\sqrt{\delta}$ ökar snabbt i följande steg, vilket tvingar lösningen att bryta sig loss från jämvikten och lämna toleransintervallet $|y| \le 10^{-6}$ efter endast ett fåtal beräkningssteg.
+        \item Om $y_n = 0$ exakt blir alla lutningar noll:
+        \[
+        k_1 = f(t_n, 0) = \sqrt{|0|} = 0 \implies k_2 = k_3 = k_4 = 0 \implies y_{n+1} = y_n = 0,
+        \]
+        vilket låser lösaren permanent i jämvikten.
+        \item Om avrundningsfel ger $y_n = \delta > 0$ fås efter ett Euler-steg (eller motsvarande för RK4):
+        \[
+        y_{n+1} = \delta + h\sqrt{\delta} \implies \frac{y_{n+1}}{y_n} = 1 + \frac{h}{\sqrt{\delta}}.
+        \]
+        Eftersom $\lim_{\delta \to 0^+} \frac{h}{\sqrt{\delta}} = \infty$ växer tillskottet $\Delta y = h\sqrt{\delta} \gg \delta$ explosionsartat, varför lösningen lämnar intervallet $|y| \le 10^{-6}$ på ett fåtal steg.
     \end{itemize}
 \end{itemize}
 
 \section*{Uppgift 4. PANG!}
 
 Betrakta begynnelsevärdesproblemet
-$$y' = y^2, \quad y(0) = \frac{N}{100},$$
-där vi antar $N > 0$ och sätter $y_0 = \frac{N}{100}$.
+\begin{equation}
+    y' = y^2, \quad y(0) = y_0 = \frac{N}{100}.
+\end{equation}
 
 \subsection*{1. Analytisk lösning och singularitet}
+För $y \neq 0$ ger separation av variabler med $y(0) = y_0$:
+\begin{equation}
+    \int y^{-2}\,dy = \int dt \implies -\frac{1}{y} = t - \frac{1}{y_0} \implies y(t) = \frac{y_0}{1 - y_0 t} = \frac{N}{100 - N t}.
+\end{equation}
+Lösningen har en vertikal asymptot (smäller) då nämnaren försvinner:
+\begin{equation}
+    t^* = \frac{1}{y_0} = \frac{100}{N}.
+\end{equation}
+För $N = 82$ är den exakta singularitetstiden $t^* = \frac{100}{82} \approx 1{,}219512$.
 
-Differentialekvationen är separabel. För $y \neq 0$ fås:
-\begin{align*}
-    \frac{dy}{y^2} &= dt \\
-    -\frac{1}{y} &= t + C.
-\end{align*}
-Begynnelsevillkoret $y(0) = y_0$ ger:
-$$-\frac{1}{y_0} = 0 + C \implies C = -\frac{1}{y_0}.$$
-Insättning ger:
-$$-\frac{1}{y} = t - \frac{1}{y_0} \implies \frac{1}{y} = \frac{1}{y_0} - t = \frac{1 - y_0 t}{y_0},$$
-vilket ger lösningen:
-$$y(t) = \frac{y_0}{1 - y_0 t} = \frac{\frac{N}{100}}{1 - \frac{N}{100}t} = \frac{N}{100 - N t}.$$
-
-\textbf{När smäller det?} \\
-Lösningen har en vertikal asymptot då nämnaren blir noll:
-$$100 - N t^* = 0 \implies t^* = \frac{100}{N} = \frac{1}{y_0}.$$
-Då $t \to (t^*)^-$ gäller att $y(t) \to \infty$. Lösningen existerar därmed endast på det öppna intervallet $(-\infty, t^*)$.
-
-??? N person nr
-
-\subsection*{2. Numerisk lösning och uppskattning av $t^*$}
-
-Vid numerisk integration (tex med RK4) kommer lösaren att approximera kurvan fram till singulariteten:
+\subsection*{2. Numerisk singularitet och skattning av $t^*$}
 \begin{itemize}
-    \item \textbf{Numeriskt singularitet:} När $t_n$ närmar sig $t^*$ ökar $y_n$ och därmed $y_n^2$ ännu mer. Inom få steg överskrids gränsen för standardflyttal (float64, $\approx 1{,}8 \cdot 10^{308}$), vilket leder till att den returnerar inf eller NaN.
-    \item \textbf{Uppskattning av $t^*$ via linearisering:} Eftersom den analytiska lösningen uppfyller relationen
-    $$z(t) = \frac{1}{y(t)} = t^* - t,$$
-    är hjälpfuktionen $z(t)$ en rät linje med lutningen $z'(t) = -1$ och sitt nollställe exakt i $t^*$. Då $y(t) \to \infty$ närmar sig $z(t)$ noll linjärt. 
+    \item \textbf{Numeriskt bevis för singularitet:} 
+    Vid numerisk integration (t.ex.\ RK4) växer $y_n$ och derivatan $y'_n = y_n^2$ explosionsartat då $t \to t^*$. Eftersom lösningskurvan blir vertikal kan ett fixt steg $h$ inte följa funktionen. Värdena överskrider snabbt gränsen för standardflyttal (\texttt{float64} $\sim 1{,}8 \cdot 10^{308}$) och genererar \texttt{inf}/\texttt{NaN}, vilket numeriskt påvisar singulariteten.
 
-    För att bestämma nollstället $t^*$ till en funktion $z(t)$ kan Newtons metod formuleras från en beräkningspunkt $t_n$:
-    $$t^* \approx t_n - \frac{z(t_n)}{z'(t_n)}.$$
-    Med $z(t_n) = \frac{1}{y_n}$ ger kedjeregeln derivatan:
-    $$z'(t) = -\frac{y'(t)}{y(t)^2}.$$
-    Eftersom differentialekvationen är $y' = y^2$ blir derivatan identiskt konstant:
-    $$z'(t) = -\frac{y^2}{y^2} = -1.$$
-    Insättning av $z(t_n) = \frac{1}{y_n}$ och $z'(t_n) = -1$ i Newtons metod ger direkt:
-    $$t^* \approx t_n - \frac{\frac{1}{y_n}}{-1} = t_n + \frac{1}{y_n}.$$
-    Eftersom $z(t)$ är en linjär funktion konvergerar Newtons metod exakt på ett enda steg. Den numeriska lösaren kan därmed vid varje tidssteg extrapolera längs tangenten för att förutsäga den exakta singularitetstiden $t^*$, långt innan tillväxten i $y_n$ orsakar överflöde i flyttalsaritmetiken.
+    \item \textbf{Uppskattning av $t^*$:}
+    Genom att integrera framåt med steglängd $h = 0{,}01$ fram till ett tröskelvärde (t.ex.\ $y > 10^5$) avbryts beräkningen vid sista steget:
+    \[
+    t_{\text{stopp}} \approx 1{,}2100.
+    \]
+    Detta ger en direkt numerisk undre uppskattning av singularitetstiden som stämmer väl överens med det analytiska värdet $t^* = \frac{100}{82} \approx 1{,}2195$.
 \end{itemize}
 
-\subsection*{3. Bevis för att $y(0) < 0 \implies y(t) < 0$ för alla $t > 0$}
-
-Betrakta BVP  $y' = f(t, y) = y^2$ med $y(0) = y_0 < 0$.
+\subsection*{3. Bevis: $y(0) < 0 \implies y(t) < 0$ för alla $t > 0$}
+Högerledet $f(y) = y^2$ har kontinuerlig partiell derivata $\frac{\partial f}{\partial y} = 2y$, vilket gör $f$ lokalt Lipschitzkontinuerlig. Enligt Picards entydighetssats (Simmons kap.~13) kan två skilda lösningskurvor aldrig skära varandra:
 \begin{itemize}
-    \item Högerledet $f(t, y) = y^2$ har kontinuerlig partiell derivata $\frac{\partial f}{\partial y} = 2y$ på hela $\mathbb{R}$, vilket medför att $f$ är lokalt Lipschitzkontinuerlig överallt.
-    \item Enligt Picard existens och entydighetssats kan två olika lösningskurvor till begynnelsevärdesproblemet aldrig skära varandra i något $(t, y)$-plan.
-    \item Notera att $y(t) \equiv 0$ är en stationär lösning till differentialekvationen ($0' = 0^2$).
-    \item Om det skulle existera en tidpunkt $t_1 > 0$ sådan att $y(t_1) \ge 0$, måste lösningen enligt satsen om mellanliggande värden passera noll vid någon punkt $t_0 \in (0, t_1]$, dvs.\ $y(t_0) = 0$. 
-    \item Men i punkten $(t_0, 0)$ skulle vår lösning skära den triviala lösningen $y \equiv 0$, vilket motsäger entydigheten enligt Picard. 
+    \item Funktionen $y(t) \equiv 0$ är en stationär lösning ($0' = 0^2$).
+    \item Om det funnes ett $t_1 > 0$ med $y(t_1) \ge 0$, måste $y(t)$ enligt satsen om mellanliggande värden anta $y(t_0) = 0$ för något $t_0 \in (0, t_1]$.
+    \item I punkten $(t_0, 0)$ skulle banan skära $y \equiv 0$, vilket motsäger Picards entydighet. Alltså gäller $y(t) < 0$ för alla $t > 0$.
 \end{itemize}
-Alltså måste $y(t) < 0$ för alla $t > 0$ där lösningen är definierad. 
 
-Analytiskt syns detta direkt:
-$$y(t) = \frac{y_0}{1 - y_0 t}.$$
-Eftersom $y_0 < 0$ är $-y_0 > 0$, vilket innebär att nämnaren $1 - y_0 t > 1 > 0$ för alla $t > 0$. Kvoten förblir därmed strikt negativ och går asymptotiskt mot noll då $t \to \infty$.
+\subsection*{4. Numeriskt felsteg och automatlösare}
+Betrakta $y' = C y^2$ med $y_0 = \epsilon < 0$. Ett Euler-steg med steglängd $h$ ger:
+\begin{equation}
+    y_1 = \epsilon + h C \epsilon^2 = \epsilon (1 + h C \epsilon).
+\end{equation}
+Eftersom $\epsilon < 0$ blir $y_1 > 0$ om faktorn växlar tecken:
+\begin{equation}
+    1 + h C \epsilon < 0 \implies h > \frac{1}{C |\epsilon|}.
+\end{equation}
+För t.ex.\ $C = 50$, $\epsilon = -0{,}10$ och $h = 0{,}5$ ger RK4 ett falskt omslag till $y_1 = 0{,}0704 > 0$, varpå lösningen exploderar mot $+\infty$ istället för att avta mot noll.
 
-\subsection*{4. Numeriskt felsteg ($y(t) > 0$) och automatlösarens skydd}
-
-\textbf{Numeriskt motexempel:} \\
-Betrakta $y' = C y^2$ med $y(0) = \epsilon < 0$. Med Eulers metod och steglängd $h$ beräknas nästa punkt som:
-$$y_1 = y_0 + h \cdot C y_0^2 = \epsilon + h C \epsilon^2 = \epsilon(1 + h C \epsilon).$$
-Eftersom $\epsilon < 0$ krävs för att $y_1 > 0$ att faktorn inom parentes är negativ:
-$$1 + h C \epsilon < 0 \implies h C (-\epsilon) > 1 \implies h > \frac{1}{C |\epsilon|}.$$
-Om konstanten $C$ eller steglängden $h$ väljs så stora att villkoret $h > \frac{1}{C|\epsilon|}$ uppfylls, blir det numeriska tillskottet $\Delta y$ större än startvärdets magnitud, vilket gör att lösaren felaktigt kliver förbi nollan till ett positivt värde $y_1 > 0$ redan efter ett enda steg. Därmed hamnar metoden på en felaktig lösning. Istället för att asymptotiskt avta mot noll accelererar derivatan $y' = C y^2 > 0$ snabbt, och lösningen drar mot $+\infty$  vid en fejk numerisk singularitet.
-
-\vspace{0.5em}
-\noindent\textbf{Strategier för en adaptiv automatlösare:}
-\begin{enumerate}
-    \item \textbf{Adaptiv steglängdskontroll:} Metoden ska uppskatta det lokala trunkeringsfelet genom att jämföra två metoder av olika ordning (tex RK4 och Euler). När $|y'| = C y^2$ växer kraftigt kastas steget och steglängden $h$ skalas ned så att $h \ll \frac{1}{C |y|}$.
-    \item \textbf{Detektering av teckenbyten:} Ekvationen kräver $y' = C y^2 \ge 0$, dvs lösningen måste vara monotont växande, och analytiskt gäller $y(t) < 0$. Om automatlösaren registrerar teckenväxling ($y_n \cdot y_{n+1} < 0$) eller orimlig derivata teckenbyte (dvs derivatan är negativ) ska steget underkännas och minskas.
-    \item \textbf{Implicit tidsstegning:} krav???
-\end{enumerate}
+\paragraph{Automatlösarens skydd:}
+\begin{itemize}
+    \item \textbf{Adaptiv steglängd:} Felet uppskattas via inbäddade metoder (t.ex.\ Runge--Kutta--Fehlberg) och $h$ skalas ned så att $h \ll \frac{1}{C|y|}$.
+    \item \textbf{Invarians- och teckenkontroll:} Steget förkastas omedelbart om $y_n$ byter tecken ($y_n \cdot y_{n+1} \le 0$) eftersom teckenbyte är analytiskt förbjudet.
+\end{itemize}
 
 \section*{Uppgift 5. Inte PANG}
 
-Betrakta BVP
-$$y' = y, \quad y(0) = N.$$
+Betrakta begynnelsevärdesproblemet
+\begin{equation}
+    y' = y, \quad y(0) = N.
+\end{equation}
 
-\subsection*{1. Analytisk lösning och felfortplantning}
+\subsection*{1. Analytisk lösning och globalt fel för RK4}
+Differentialekvationen har den exakta lösningen:
+\begin{equation}
+    y(t) = N e^t \implies y(2^k) = N e^{2^k}.
+\end{equation}
+För $y' = y$ gäller $y^{(v)}(\xi) = N e^\xi$. Det lokala trunkeringsfelet per steg ges av:
+\begin{equation}
+    \epsilon_{\text{lokal}} = -\frac{y^{(v)}(\xi)}{180} h^5 = -\frac{N e^\xi}{180} h^5.
+\end{equation}
+Över $M = \frac{T}{h}$ steg fram till $T = 2^k$ begränsas det globala felet av:
+\begin{equation}
+    |E_M| \le M \cdot \max_{0 \le \xi \le T} |\epsilon_{\text{lokal}}(\xi)| \cdot e^{T - \xi} \le \frac{T}{h} \left(\frac{N e^T}{180} h^5\right) = \frac{N \cdot 2^k e^{2^k}}{180} h^4.
+\end{equation}
+Kravet på två korrekta decimaler ($|E_M| \le 0{,}005$) kräver:
+\begin{equation}
+    \frac{N \cdot 2^k e^{2^k}}{180} h^4 \le 0{,}005 \implies h \le \left(\frac{0{,}9}{N \cdot 2^k}\right)^{1/4} e^{-2^{k-2}}.
+\end{equation}
+Steglängden $h$ måste alltså minskas exponentiellt, vilket gör att antalet steg $M = \frac{2^k}{h} \propto 2^{5k/4} e^{2^{k-2}}$ växer explosionsartat.
 
-Differentialekvationen $y' = y$ med $y(0) = N$ har den exakta analytiska lösningen:
-$$y(t) = N e^t.$$
-Vid tidpunkterna $t_k = 2^k$ för $k = 1, 2, 3, \dots$ ges funktionsvärdet av:
-$$y(2^k) = N e^{2^k}.$$
-Till skillnad från föregående uppgift ($y' = y^2$) inträffar ingen lodrät asymptot, lösningen existerar för alla $t \in \mathbb{R}$. Tillväxten är dock exponentiell, vilket ställer extrema krav på numerisk precision och flyttalsaritmetik då $t$ växer.
-
-\subsection*{2. Teoretisk felanalys (RK4)}
-
-Enligt formelbladet ges RK4 för BVP $y' = f(x, y)$ av stegen:
-\begin{align*}
-    m_1 &= h f(x_k, y_k), \\
-    m_2 &= h f\left(x_k + \frac{h}{2}, y_k + \frac{m_1}{2}\right), \\
-    m_3 &= h f\left(x_k + \frac{h}{2}, y_k + \frac{m_2}{2}\right), \\
-    m_4 &= h f(x_k + h, y_k + m_3),
-\end{align*}
-med uppdateringen:
-$$y_{k+1} = y_k + \frac{1}{6}(m_1 + 2m_2 + 2m_3 + m_4).$$
-
-För $y' = y$ med $y(0) = N$ är den exakta lösningen $y(t) = N e^t$. De successiva derivatorna ges av $y^{(n)}(t) = y(t)$, vilket medför att den femte derivatan är $y^{(v)}(\xi) = y(\xi) = N e^\xi$.
-
-Enligt boken ges det lokala trunkeringsfelet i varje steg av:
-$$\epsilon_{\text{lokal}} = -\frac{y^{(v)}(\xi)}{180} h^5 = -\frac{N e^\xi}{180} h^5, \quad \text{där } x_k \le \xi \le x_{k+1}.$$
-För att nå slutpunkten $T = 2^k$ krävs $M = \frac{T}{h}$ beräkningssteg. Det globala felet vid $T$ utgörs av summan av alla enskilda lokala trunkeringsfel, där varje fel dessutom förstärks exponentiellt av ekvationens  tillväxt ($e^{T - t_j}$ för ett fel genererat vid tidpunkt $t_j$). 
-
-Eftersom varje lokalt fel är $\mathcal{O}(h^5)$ och antalet steg är $M \propto \frac{1}{h}$, blir summan av storleksordningen $M \cdot \mathcal{O}(h^5) = \mathcal{O}(h^4)$. Det totala trunkeringsfelet vid $T = 2^k$ begränsas därmed av:
-$$|E_M| \le M \cdot \max_{0 \le \xi \le T} |\epsilon_{\text{lokal}}(\xi)| \cdot e^{T - \xi} \le \frac{T}{h} \cdot \left(\frac{N e^T}{180} h^5\right) = \frac{N T e^T}{180} h^4.$$
-Med $T = 2^k$ fås:
-$$|E_M| \le \frac{N \cdot 2^k e^{2^k}}{180} h^4 \propto h^4 e^{2^k}.$$
-Det globala felet avtar alltså med ordning 4 med avseende på $h$, men skalas med den jättestora tillväxtfaktorn $e^{2^k}$.
-
-\bigskip
-
-Kravet på \textbf{två korrekta decimaler} innebär att det absoluta felet vid $T = 2^k$ inte får överstiga $0{,}005$:
-$$|y(2^k) - y_{\text{num}}| \le 0{,}005.$$
-Med felgränsen uppskattad via formelbladets ledande felterm fås:
-$$\frac{N e^{2^k}}{180} \cdot 2^k h^4 \lesssim 0{,}005 \implies h^4 \lesssim \frac{0{,}9}{N \cdot 2^k e^{2^k}}.$$
-Steglängden måste alltså minskas exponentiellt snabbt:
-$$h \lesssim \left(\frac{0{,}9}{N \cdot 2^k}\right)^{1/4} e^{-2^{k-2}}.$$
-Antalet beräkningssteg $M = \frac{2^k}{h}$ växer därmed som $\mathcal{O}\left(2^{\frac{5}{4}k} e^{2^{k-2}}\right)$, vilket leder till att beräkningstiden exploderar redan för mindre värden på $k$.
-
-\subsection*{3. Datorns begränsningar}
-
-När beräkningen drivs för $k = 1, 2, 3, \dots$ ger datorn upp av två oberoende skäl:
-
+\subsection*{2. Datorns begränsningar (Varför datorn ger upp)}
+I standard flyttalsformat (\texttt{float64}, $\epsilon_{\text{mach}} \approx 2{,}22 \cdot 10^{-16}$) stoppas beräkningen av två skilda orsaker:
 \begin{enumerate}
-    \item \textbf{Förlust av decimaler (Avrundningsfel p.g.a.\ datorns precision):} \\
-    Datorn sparar tal i standardformatet \texttt{float64} med cirka 16 siffrors noggrannhet ($\epsilon_{\text{mach}} \approx 2{,}22 \cdot 10^{-16}$). När talet $y$ växer, växer också det minsta steget datorn kan skilja mellan tal (ungefär $\epsilon_{\text{mach}} \cdot y$).
+    \item \textbf{Förlust av precision ($k \ge 5$):} 
+    Avståndet mellan två på varandra följande representerbara flyttal vid storleken $y$ är $\text{ulp} \approx \epsilon_{\text{mach}} \cdot y$. För två korrekta decimaler krävs $\epsilon_{\text{mach}} \cdot y \le 0{,}005$:
+    \begin{equation}
+        y \le \frac{0{,}005}{2{,}22 \cdot 10^{-16}} \approx 2{,}25 \cdot 10^{13} \implies 2^k \le \ln\left(\frac{2{,}25 \cdot 10^{13}}{N}\right).
+    \end{equation}
+    För $N = 82$ passeras gränsen redan vid $t \approx 26{,}3$, dvs.\ för alla $k \ge 5$ ($t_5 = 32$). Då är avståndet mellan talen större än toleransen, vilket gör två korrekta decimaler  omöjliga oavsett hur litet $h$ väljs då $|E_M| \le 0{,}005$ inte kan uppnås.
 
-    För att kunna lita på \textbf{två decimaler} måste detta osäkerhetssteg vara mindre än $0{,}005$:
-    $$\epsilon_{\text{mach}} \cdot y < 0{,}005 \implies y < \frac{0{,}005}{2{,}22 \cdot 10^{-16}} \approx 2{,}25 \cdot 10^{13}.$$
-
-    Eftersom lösningen växer exponentiellt som $y \sim e^{2^k}$, når vi denna gräns redan vid:
-    $$2^k > \ln(2{,}25 \cdot 10^{13}) \approx 30{,}7 \implies k \ge 5 \quad (\text{eftersom } 2^5 = 32).$$
-
-    Redan från $k \ge 5$ är avståndet mellan två intilliggande tal i datorn större än $0{,}01$. Datorn kan helt enkelt inte representera två decimaler längre, oavsett hur små steg $h$ vi tar i beräkningen.
-
-    \item \textbf{Talet blir för stort (\texttt{overflow}):} \\
-    Det största talet som float64 klarar av innan det kraschar är cirka $1{,}79 \cdot 10^{308}$. Detta tak nås när:
-    $$e^{2^k} > 1{,}79 \cdot 10^{308} \implies 2^k > \ln(1{,}79 \cdot 10^{308}) \approx 710.$$
-
-    Eftersom $2^9 = 512$ och $2^{10} = 1024$, slår beräkningen i taket och returnerar \texttt{inf} (oändligt) så fort:
-    $$k \ge 10.$$
+    \item \textbf{Aritmetiskt överflöde / \texttt{overflow} ($k \ge 10$):} 
+    Det maximala talet i \texttt{float64} är $y_{\max} \approx 1{,}79 \cdot 10^{308}$. Detta överskrids då:
+    \begin{equation}
+        N e^{2^k} > 1{,}79 \cdot 10^{308} \implies 2^k > \ln\left(\frac{1{,}79 \cdot 10^{308}}{82}\right) \approx 705{,}4.
+    \end{equation}
+    Eftersom $t_9 = 512$ och $t_{10} = 1024$, slår beräkningen i hårdvarutaket vid $k = 10$ och returnerar \texttt{inf}.
 \end{enumerate}
 
-\subsection*{4. Sammanfattning av numeriska resultat per $k$}
-
+\subsection*{3. Resultat}
 \begin{center}
-\begin{tabular}{c r r l}
+\begin{tabular}{c r r c l}
 \hline
-$k$ & $t_k = 2^k$ & $y(t_k) = e^{2^k}$ ($N=1$) & Utfall och begränsning \\
+$k$ & $t_k = 2^k$ & $y_{\text{exakt}}$ & Absolut fel & Status \\
 \hline
-$1$ & $2$ & $7{,}39$ & Uppnås enkelt med måttligt $h$. \\
-$2$ & $4$ & $54{,}60$ & Kräver mindre $h$; beräkningsbart. \\
-$3$ & $8$ & $2{,}98 \cdot 10^3$ & Kräver $h \sim 10^{-2}$; stabil lösning. \\
-$4$ & $16$ & $8{,}89 \cdot 10^6$ & Kräver $h \sim 10^{-3}$; avrundningsfel börjar märkas. \\
-$5$ & $32$ & $7{,}89 \cdot 10^{13}$ & \textbf{Gräns för 2 decimaler:} $\epsilon_{\text{mach}} \cdot y > 0{,}01$. \\
-$6$ & $64$ & $6{,}24 \cdot 10^{27}$ & Endast relativ noggrannhet kan bevaras. \\
-$9$ & $512$ & $1{,}25 \cdot 10^{222}$ & Extrem beräkningstid; nära flyttalsgränsen. \\
-$10$ & $1024$ & $\infty$ & \textbf{Datorn kraschar:} \texttt{overflow} till \texttt{inf}. \\
+$1$ & $2$ & $605{,}9026$ & $1{,}59 \cdot 10^{-6}$ & OK ($100$ steg) \\
+$2$ & $4$ & $4477{,}0483$ & $3{,}70 \cdot 10^{-4}$ & OK ($100$ steg) \\
+$3$ & $8$ & $244438{,}5549$ & $2{,}56 \cdot 10^{-3}$ & OK ($400$ steg) \\
+$4$ & $16$ & $7{,}29 \cdot 10^8$ & $3{,}79 \cdot 10^{-3}$ & OK ($6400$ steg) \\
+$5$ & $32$ & $6{,}47 \cdot 10^{15}$ & -- & Stopp: $\text{ulp} > 0{,}005$ \\
+$10$ & $1024$ & $\infty$ & -- & Krasch: \texttt{overflow} (\texttt{inf}) \\
 \hline
 \end{tabular}
 \end{center}
