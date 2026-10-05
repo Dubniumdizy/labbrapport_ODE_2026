@@ -12,7 +12,7 @@ lägg till vad jag gjort
 5.""""""""""""""""""
 skiljaktig: jag använde mpmath.odefun
 6.""""""""""""""""""""""""""""
-
+RÄKNA PI VID 10³
 7.""""""""""""""""""""""""""""
 kommentera kring sympekticitet i koden
 8.""""""""""""""""""""""""""""
