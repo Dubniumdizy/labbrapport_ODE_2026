@@ -3,7 +3,7 @@
 \usepackage{float}
 
 \title{Rapport}
-\author{Disa Degerholm}
+\author{Disa Degerholm, Hampus Hillding, Anton Fornstedt, Fredrik Sollenberg}
 \date{\today}
 
 \begin{document}
@@ -83,6 +83,16 @@ vilket ger $y(t) = -\frac{1}{4}(1 - t)^2$ för $t \le 1$. Analytiskt nås $y = 0
         Eftersom $\lim_{\delta \to 0^+} \frac{h}{\sqrt{\delta}} = \infty$ växer tillskottet $\Delta y = h\sqrt{\delta} \gg \delta$ explosionsartat, varför lösningen lämnar intervallet $|y| \le 10^{-6}$ på ett fåtal steg.
     \end{itemize}
 \end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{upg31disa.png}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{upg32disa.png}
+\end{figure}
 
 \subsection*{Uppgift 3. Anton Fornstedt}
 
@@ -175,6 +185,11 @@ För t.ex.\ $C = 50$, $\epsilon = -0{,}10$ och $h = 0{,}5$ ger RK4 ett falskt om
     \item \textbf{Adaptiv steglängd:} Felet uppskattas via inbäddade metoder (t.ex.\ Runge--Kutta--Fehlberg) och $h$ skalas ned så att $h \ll \frac{1}{C|y|}$.
     \item \textbf{Invarians- och teckenkontroll:} Steget förkastas omedelbart om $y_n$ byter tecken ($y_n \cdot y_{n+1} \le 0$) eftersom teckenbyte är analytiskt förbjudet.
 \end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{upg4disa.png}
+\end{figure}
 
 \subsection*{Uppgift 4. Anton Fornstedt}
 
@@ -272,20 +287,11 @@ I standard flyttalsformat (\texttt{float64}, $\epsilon_{\text{mach}} \approx 2{,
 \end{enumerate}
 
 \subsection*{3. Resultat}
-\begin{center}
-\begin{tabular}{c r r c l}
-\hline
-$k$ & $t_k = 2^k$ & $y_{\text{exakt}}$ & Absolut fel & Status \\
-\hline
-$1$ & $2$ & $605{,}9026$ & $1{,}59 \cdot 10^{-6}$ & OK ($100$ steg) \\
-$2$ & $4$ & $4477{,}0483$ & $3{,}70 \cdot 10^{-4}$ & OK ($100$ steg) \\
-$3$ & $8$ & $244438{,}5549$ & $2{,}56 \cdot 10^{-3}$ & OK ($400$ steg) \\
-$4$ & $16$ & $7{,}29 \cdot 10^8$ & $3{,}79 \cdot 10^{-3}$ & OK ($6400$ steg) \\
-$5$ & $32$ & $6{,}47 \cdot 10^{15}$ & -- & Stopp: $\text{ulp} > 0{,}005$ \\
-$10$ & $1024$ & $\infty$ & -- & Krasch: \texttt{overflow} (\texttt{inf}) \\
-\hline
-\end{tabular}
-\end{center}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{upg62disa.png}
+\end{figure}
 
 \subsection*{Uppgift 5. Anton Fornstedt}
 
@@ -415,6 +421,11 @@ Skattningen av $\pi$ ur det beräknade nollstället $\hat{t}_{318}$ sker via $\h
     \item \textbf{Numerisk felförstoring:} Integrationstiden $t \approx 1000$ är över $600$ gånger längre än $t \approx \pi/2$. För en enstegsmetod (som RK4) ackumuleras fasfelet linjärt med integrationstiden, vilket ger över $600$ gånger större fasdrift. Dessutom genererar de hundratusentals beräkningsstegen betydligt större ackumulerade flyttalsfel.
     \item \textbf{Slutsats:} Den numeriska fasdriften och avrundningsfelet över 1000 tidsenheter överväger dämpningsfaktorn $1/318{,}5$. Att bestämma $\pi$ vid $10^3$ är därmed avsevärt svårare och ger sämre precision än att beräkna det första nollstället.
 \end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{upg5disa.png}
+\end{figure}
 
 \subsection*{Uppgift 6. Anton Fornstedt}
 
@@ -578,6 +589,17 @@ Superposition av Newtons gravitationslag för Solen och Jupiter ger kraften per 
 \begin{equation}
     \mathbf{r}''(t) = -\frac{\mathbf{r}}{\|\mathbf{r}\|^3} - M_J \frac{\mathbf{r} - \mathbf{r}_J(t)}{\|\mathbf{r} - \mathbf{r}_J(t)\|^3}.
 \end{equation}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{upg81disa.png}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{upg82disa.png}
+\end{figure}
+
 Med hastigheterna $v_x = x'$ och $v_y = y'$ formuleras rörelsen som fyra kopplade första ordningens differentialekvationer:
 \begin{equation}
     \frac{d}{dt}\begin{pmatrix} x \\ y \\ v_x \\ v_y \end{pmatrix} 
