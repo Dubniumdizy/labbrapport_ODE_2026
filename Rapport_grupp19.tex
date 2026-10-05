@@ -1,5 +1,6 @@
 \documentclass{article}
 \input{preambles/preamble_rapport}
+\usepackage{float}
 
 \title{Rapport}
 \author{Disa Degerholm}
@@ -114,10 +115,8 @@ autonom flyttar $\varepsilon$ bara nollgenomgången $t_0$, inte tiden nära noll
     parametrar. 
     \item \textbf{Lös problemet numeriskt med kommentarer:} Både Disa och Hampus fick att $y=0, \forall x\in \mathbb{R}$ oavsett om man använde RK4 eller Euler. Det var annorlunda än Hampus analytiska lösning. Anton fick samma resultat med Euler. Detta kunde förutses a priori: eftersom
     $f(0) = 0$ blir varje explicit stegmetod låst i $y = 0$ om den startar exakt där.
-    \item \textbf{Hur länge fastnar den numeriska lösningen:} Disa trodde att om $y_n$ träffas exakt på 0 så kommer derivatan bli 0 och lösaren fastnar i $y=0$, hon trodde detta möjligen kunde ske om metoder med lägre ordning skulle användas tex Eulers metod. Men då visade Hampus att den faktiskt tillslut ändå växte förbi 0. Enligt Disas analytiska lösning så blev tiden ca 1 tidsenhet på $y=0$ enligt hennes härledning. Anton mätte i stället tiden som lösningen befinner sig \emph{i} intervallet
-    $|y| \leq 10^{-6}$ och fick $\Delta t \approx 0{,}004$, vilket stämmer med det
-    analytiska värdet $4 \cdot 10^{-3}$ och är oberoende av $\varepsilon$. ??? (när nås bara y=0)
-    \end{enumerate}
+    \item \textbf{Hur länge fastnar den numeriska lösningen:} Disa härledde analytiskt via separation av variabler med startvärdet $y(-1) = -1$ att lösningen ges av $y(t) = -\frac{1}{4}(1-t)^2$ för $t \le 1$. Analytiskt nås därmed $y = 0$ vid $t = 1$, varpå lösningen kan kvarstanna i jämvikten $y \equiv 0$ godtyckligt länge eftersom Picard entydighetssats upphör att gälla i $y = 0$. Hon noterade att om en numerisk lösare träffar $y_n = 0$ exakt så blir alla steglutningar noll ($k_i = 0$), vilket låser den i jämvikten. Men som Hampus visade växer den numeriska lösningen ändå vidare i praktiken, vilket förklaras av att flyttalsavrundningar ger ett litet fel $y_n = \delta > 0$ där den relativa tillväxten $y_{n+1}/y_n \approx 1 + h/\sqrt{\delta}$ exploderar då $\delta \to 0^+$ och skjuter lösningen förbi origo. Anton mätte i stället tiden som lösningen befinner sig \emph{i} intervallet $|y| \leq 10^{-6}$ och fick $\Delta t \approx 0{,}004$, vilket stämmer med det analytiska värdet $4 \cdot 10^{-3}$ och är oberoende av $\varepsilon$.
+\end{enumerate}
 
 \section*{Uppgift 4. Titel}
 
@@ -213,15 +212,16 @@ steget och halvera $h$ när $y$ byter tecken.
 
 \begin{enumerate}
     \item \textbf{Lös analytiskt mha personnummer:} Disa löste ODE:n för generellt N och stoppade sedan in sina sista två personnummersiffror. Hampus löste med sina direkt i formeln men båda fick samma svar (om N är samma). Anton gjorde som Hampus. 
-    \item \textbf{När smäller det numeriskt?} Hampus använde Euler igen och Disa använde RK4. Detta gjorde att Disa fick fler iterationer innan overflow (??? why). Det "smällde" ungefär vid 1.1 för både Disa och Hampus vilket stämde överens med det analytiska. Vi ser att det "smäller" då programmet går in i "overflow". Anton (Euler, $h = 10^{-4}$) fick $t \approx 2{,}94260$, alltså \emph{efter} den
-    exakta singulariteten, medan Disa (RK4, tröskel $10^{5}$) stoppade \emph{före}.
-    Euler släpar efter eftersom lösningen är konvex och tangenten ligger under
-    kurvan. Den numeriska smälltiden beror alltså både på metod och på vald
-    tröskel, och man ska inte lita blint på den nära en singularitet.
+    \item \textbf{När smäller det numeriskt?} 
+    Hampus och Anton använde Eulers metod medan Disa använde RK4. För begynnelsevärdesproblemet $y' = y^2$ är lösningen $y(t) = \frac{y_0}{1 - y_0 t}$ strikt konvex ($y'' = 2y y' = 2y^3 > 0$). Eulers metod approximerar kurvan med tangenten $y_{n+1} = y_n + h y_n^2$, vilken på grund av konvexiteten ligger strikt \emph{under} den sanna lösningskurvan. Euler underskattar därför tillväxten kraftigt i varje steg och släpar efter, vilket gör att Euler integrerar förbi den teoretiska singulariteten ($t^* = 1/y_0$) och kraschar först \emph{efter} den exakta tiden (som Anton observerade med $t \approx 2{,}94 > t^*$). 
+
+    \bigskip
+
+    RK4 tar däremot delsteg längre fram i intervallet där lutningen $f(t, y) = y^2$ redan har hunnit växa kraftigt. På grund av den höga ordningen $\mathcal{O}(h^4)$ följer RK4 den explosiva tillväxten mycket mer precist och nådde tröskeln $y \ge 10^5$ strax \emph{före} den analytiska singulariteten $t^* \approx 1{,}1$ innan flyttalsöverflöde (\texttt{overflow}) inträffade. Att Disa kunde ta fler eller färre steg beror helt på vald steglängd $h$ och avbrottströskel. Den numeriska smälltiden beror alltså på metodens ordning och valda stoppvillkor, och man kan inte lita på numeriska lösare i omedelbar närhet av en vertikal asymptot.
     \item \textbf{Visa att om $y(0)<0$ så måste $y(t)<0$ för alla $t>0$:} Både Disa, Hampus och Anton hade samma argument med att f är lokalt Lipschitz kontineruligt överallt och att då y(t)=0 är en lösning kan ingen annan lösning korsa den och blir därmed bara över eller under 0 i sitt y värde.
     \item \textbf{Numeriska exempel:} Hampus testade sig fram till ett stort nog C då han tänkte att ett stort C skulle ge ett $y'$ som var tillräckligt stor hopp för att komma över gränsen. Disa härledde formeln för det istället och kom fram till att $h > \frac{1}{C |\epsilon|}$. Anton härledde samma villkor som Disa men uttryckt i $C$: $C > 1/(h|\varepsilon|)$,
     till exempel $C > 10^{14}$ för $\varepsilon = -10^{-10}$ och $h = 10^{-4}$.
-    \item \textbf{Automatlösare:} Disa tänkte att en adaptiv steglängdskontroll (???) och detektering av teckenbyte (???) skulle kunna hjälpa. Hampus hade samma ideer. Anton föreslog samma teckenkontroll: förkasta steget och halvera $h$ om $y$
+    \item \textbf{Automatlösare:} Disa tänkte att en adaptiv steglängdskontroll (se Disas lösning) och detektering av teckenbyte (se Disas lösning) skulle kunna hjälpa. Hampus hade samma ideer. Anton föreslog samma teckenkontroll: förkasta steget och halvera $h$ om $y$
     byter tecken.
     \end{enumerate}
 
@@ -313,8 +313,6 @@ Det uppmätta felet stämmer med det teoretiska på 3--4 siffror. För $k = 4$
 $8 \cdot 10^{12}$ steg, vilket inte är genomförbart. Dessutom skulle
 avrundningsfelen dominera långt innan dess.
 
-
-
 \subsection*{Uppgift 5. Hampus Hillding}
 
 \subsection*{Uppgift 5. Skillnader och likheter}
@@ -323,8 +321,8 @@ avrundningsfelen dominera långt innan dess.
     \item \textbf{Lös numeriskt med 2 korrekta decimaler:} Hampus gjorde Euler, Disa gjorde RK4. Både tog fram den teoretiska formeln för det totala trunkeringsfelet $|E_n|$. Anton använde Euler och nådde bara $k = 3$, vilket krävde 671 miljoner steg,
     medan Disa med RK4 nådde $k = 4$ med 6\,400 steg. Det visar tydligt skillnaden
     mellan fel $\sim h$ och $\sim h^4$.
-    \item \textbf{Jämför teoretiska och numeriska felen:} ??? (varför får hampus fler decimaler med euler än RK4. loglog plot rätt ordning). Antons asymptotiska felformel $34e^{T} \cdot Th/2$ stämde med det uppmätta felet
-    på 3--4 siffror.
+    \item \textbf{Jämför teoretiska och numeriska felen:} 
+    Eulers metod har global konvergensordning $\mathcal{O}(h)$ medan RK4 har $\mathcal{O}(h^4)$. Disa konstaterade att RK4 för ett givet steg $h$ ger långt fler korrekta decimaler än Euler eftersom varje steghalvering krymper felet med en faktor $2^4 = 16$ istället för bara $2$. Detta förklarar varför Hampus lyckades nå 2 korrekta decimaler med Euler för $k=3$, men för $k=4$ exploderade beräkningstiden ($N \propto 1/h$) och tog för lång tid. Antons asymptotiska felformel $34e^{T} \cdot Th/2$ stämde med det uppmätta felet på 3-4 siffror.
 \end{enumerate}
 
 \section*{Uppgift 6. Titel}
@@ -462,22 +460,56 @@ kostnaden: cirka 640 gånger fler steg.
 
 \begin{enumerate}
     \item \textbf{Analytisk lösning:} Både Hampus, Disa och Anton får att $y(t)=cost(t)$.
-    \item \textbf{Hur många korrekta siffror kan man få innan datorn smälter:} Disa får ca 11 (???) korrekta siffror mha RK4 medan Hampus får 9 korrekt siffror ??? (räkna med första 3:an). Vi ser att datorn smälter då det tar för lång tid att vänta. Vi hittade sen mha mp.math, taylor och RK4 för att få 20 decimaler ???. Anton fick med Euler först 9 korrekta decimaler, men begränsningen kom från
-    avrundningsfel i $t = t + h$. Med $t = i \cdot h$ nåddes 12 decimaler, så Hampus
-    9 siffror kan ha samma orsak. Eulers fel i nollstället blev $\approx \pi h^2/3$,
-    alltså $\sim h^2$ trots att Euler har globalt fel $\sim h$, eftersom felet för
-    svängningar främst är ett fasfel. För 20 decimaler använde Anton RK4 i
-    \texttt{mpmath} med Newton-förfining av nollstället och fick 21 korrekta
-    decimaler med $h = 10^{-5}$.
-    \item \textbf{Hur mycket svårare blir det med skifte:} Dia härledde och insåg att k är ca 318 för att få ca t=1000. Det ger en dämpande effekt med en faktor på 300 men $t_{318}$ är betydligt svårare att få fram än $t=\pi/2$ och tar helt över med sin feltillväxt. Hampus funderar ???. Anton fick däremot samma fel i $\pi$ som för första nollstället
-    ($2{,}62 \cdot 10^{-10}$ för $h = 0{,}01$). Felet i $t^*$ växer linjärt med antalet
-    svängningar, men delas med $318{,}5$, så effekterna tar ut varandra. Det som
-    blir svårare är kostnaden (cirka 640 gånger fler steg), inte precisionen.
+    \item \textbf{Hur många korrekta siffror kan man få innan datorn smälter:} 
+    Att datorn smälter beror på två faktorer: beräkningstiden exploderar ($N \propto 1/h$) och flyttalsavrundningar ($\epsilon_{\text{mach}} \approx 2{,}2 \cdot 10^{-16}$) tar över då felet växer som $\mathcal{O}(\epsilon_{\text{mach}}/h)$. Med standard dubbelprecision (\texttt{float64}) nådde Disa ca 11–12 korrekta siffror med RK4 ($h \sim 10^{-3}$ till $10^{-4}$ kombinerat med Newtons metod för nollstället $t^* = \pi/2$), medan hårdvarugränsen på 53 bitars mantissa förhindrar fler än ca 15–16 siffror. För Euler nådde Hampus ca 9 siffror innan tidsåtgången och avrundningsfelen satte stopp. Anton visade att begränsningen i Euler dels berodde på fasfelet $\approx \pi h^2/3$, dels på ackumulerade avrundningar från tidsuppdateringen $t = t + h$, vilket förbättrades till 12 decimaler med $t = i \cdot h$. För att nå 20 korrekta decimaler eliminerades flyttalsgränsen med godtycklig precision i \texttt{mpmath} (\texttt{dps = 40}), där Disa använde ett Taylor-polynom av grad 30 ($M \ge 15$) kombinerat med Newtons metod, medan Anton använde RK4 med $h = 10^{-5}$ och Newton-förfining.
+    \item \textbf{Hur mycket svårare blir det med skifte:} 
+    Disa visade att nollstället närmast $T = 1000$ ges av $t_k = \pi/2 + k\pi$, vilket ger $k = 318$ och $t_{318} = 318{,}5\pi \approx 1000{,}597$[cite: 3]. Ur formeln $\pi = \hat{t}_{318}/318{,}5$ dämpas felet i nollstället med en teoretisk faktor $318{,}5$[cite: 3]. Däremot växer metodens fasfel och trunkeringsfel linjärt med integrationstiden ($\sim t \cdot h^p$), vilket vid $t \approx 1000$ är en faktor drygt 600 större än vid $t = \pi/2$, samtidigt som det ackumulerade avrundningsfelet ökar med antalet steg. Därmed tar den numeriska feltillväxten överhanden och gör skattningen vid $10^3$ betydligt svårare. Hampus funderar ???. Anton fick däremot samma fel i $\pi$ som för första nollstället ($2{,}62 \cdot 10^{-10}$ för $h = 0{,}01$). Felet i $t^*$ växer linjärt med antalet svängningar, men delas med $318{,}5$, så effekterna tar ut varandra. Det som blir svårare är kostnaden (cirka 640 gånger fler steg), inte precisionen.
 \end{enumerate}
 
 \section*{Uppgift 7. Titel}
 
 \subsection*{Uppgift 7. Disa Degerholm}
+
+\subsection*{1. Rörrelseekvationer och bevarandelagar}
+Betrakta en stjärna fix i origo med massan $M$, där gravitationsparametern
+normeras till $GM = 1$. En planet med massa $m$ har lägesvektorn
+$\mathbf{r}(t) = \begin{pmatrix} x(t) \\ y(t) \end{pmatrix}$.
+Newtons gravitations- och rörelselagar ger accelerationen:
+\begin{equation}
+    \mathbf{r}''(t) = -\frac{\mathbf{r}}{\|\mathbf{r}\|^3}
+    \iff
+    \begin{cases}
+        x''(t) = -\dfrac{x}{(x^2 + y^2)^{3/2}} \\[0.8em]
+        y''(t) = -\dfrac{y}{(x^2 + y^2)^{3/2}}
+    \end{cases}
+\end{equation}
+Genom att införa hastigheterna $v_x = x'$ och $v_y = y'$ formuleras
+problemet som fyra kopplade första ordningens differentialekvationer:
+\begin{equation}
+    \frac{d}{dt}\begin{pmatrix} x \\ y \\ v_x \\ v_y \end{pmatrix}
+    = \begin{pmatrix} v_x \\ v_y \\ -x / (x^2 + y^2)^{3/2} \\ -y / (x^2 + y^2)^{3/2} \end{pmatrix}.
+\end{equation}
+
+Systemet har två analytiska rörelsekonstanter:
+\begin{itemize}
+    \item \textbf{Total mekanisk energi per massenhet ($E$):}
+    \begin{equation}
+        E = \frac{1}{2}(v_x^2 + v_y^2) - \frac{1}{\sqrt{x^2 + y^2}}, \quad \text{där } \frac{dE}{dt} = 0.
+    \end{equation}
+    \item \textbf{Rörelsemängdsmoment per massenhet ($L$):}
+    \begin{equation}
+        L = x v_y - y v_x, \quad \text{där } \frac{dL}{dt} = 0.
+    \end{equation}
+\end{itemize}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{upg71disa.png}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{upg72disa.png}
+\end{figure}
 
 \subsection*{Uppgift 7. Anton Fornstedt}
 
@@ -518,8 +550,8 @@ medan felet med semi-implicit Euler bara oscillerar och aldrig växer.
 \subsection*{Uppgift 7. Skillnader och likheter}
 
 \begin{enumerate}
-    \item \textbf{Härled systemets ODE:} Kolla formel ???
-    \item \textbf{Simulera för olika initialvärden under kort och lång tid:} Disa upptäckte att för lång tid blir det en instabil spiral utåt och för kort tid så syns inte detta. Detta är på grund av att energin ökar på grund av den numeriska härledningen ???.Anton fick samma utåtgående spiral med explicit Euler: på $T = 10\,000$ ökade
+    \item \textbf{Härled systemets ODE:} Alla gjorde samma förutom att Fredrik gjorde ett andra ordningens system medan Disa, Anton och Hampus gjorde ett första ordningens system - men båda kan härledas från varandra.
+    \item \textbf{Simulera för olika initialvärden under kort och lång tid:} Disa upptäckte att för lång tid blir det en instabil spiral utåt och för kort tid så syns inte detta. Detta är på grund av att energin ökar på grund av den numeriska härledningen (se Disas svar). Anton fick samma utåtgående spiral med explicit Euler: på $T = 10\,000$ ökade
     energin från $-0{,}5$ till $-0{,}059$ med $h = 0{,}01$. (Kanske kunde förutspåts från sista delen på uppgift 6??)
     \item \textbf{Använd Semi implcit Euler för att återställa ordningen i systemet:} Check, det gick bra efterosm att ???
 \end{enumerate}
@@ -643,16 +675,11 @@ solsystemet.
 \subsection*{Uppgift 8. Skillnader och likheter}
 
 \begin{enumerate}
-    \item \textbf{Utforska numerisk för att hitta olika planetbanor s.a systemet stämmer:} Är jorden försumbar ???. Anton tog inte med jorden. Jorden väger bara ungefär $1/300$ av Jupiter och
-    påverkar skeppet bara precis i början, medan det är passagen förbi Jupiter som
-    avgör om skeppet kommer ut. Anton började med Hohmann-$\Delta v$ och letade sedan
-    upp rätt startvinkel för Jupiter. Med för stort $h$ gav vissa vinklar helt
-    orimliga energier (till exempel $E = 342$). Det var inte på riktigt, utan
-    berodde på att skeppet kom för nära Jupiter för att stegen skulle hinna med.
-    \item \textbf{Hur vet man att skeppet lämnar solsystemet:} Printar banan över tid och ser skillnaden på energi ??? (hur mycket). Anton tittade på energin: om $E \geq 0$ kommer skeppet inte tillbaka. Han fick
-    $E \approx +0{,}0055$, vilket betyder att skeppet fortsätter bort från solen. Att $h = 10^{-4}$ och $h = 10^{-5}$ gav samma svar
-    visar att man kan lita på resultatet. Med $h = 10^{-3}$ blev $E$ över tio gånger
-    för stort.
+    \item \textbf{Utforska numeriskt för att hitta olika planetbanor så att systemet stämmer:} 
+    Disa modellerade trekropparsproblemet utan jorden genom att sätta $M_S = 1$, $R_J = 5{,}2$ och en massiv planet $M_J = 0{,}08$ med vinkelhastigheten $\omega_J = 5{,}2^{-1{,}5}$ för att få en tydlig och stabil gravitationell avböjning. För att förhindra orimliga energispikar vid närpassagen lades en dämpning $\varepsilon = 10^{-4}$ till i avståndsberäkningen, och integreringen utfördes med semi-implicit Euler för att undvika energidrift. Med starthastigheten $v_0 = 1{,}34$ (vilket ger bunden startenergi $E_0 \approx -0{,}1022 < 0$) och startfasen $\phi_0 = 1{,}78$ passerade sonden strax bakom Jupiter och slungades ut i en hyperbolisk flyktbana med $E_{\text{post}} \approx +0{,}1431 > 0$. Anton tog inte med jorden. Jorden väger bara ungefär $1/300$ av Jupiter och påverkar skeppet bara precis i början, medan det är passagen förbi Jupiter som avgör om skeppet kommer ut. Anton började med Hohmann-$\Delta v$ och letade sedan upp rätt startvinkel för Jupiter. Med för stort $h$ gav vissa vinklar helt orimliga energier (till exempel $E = 342$). Det var inte på riktigt, utan berodde på att skeppet kom för nära Jupiter för att stegen skulle hinna med.
+    
+    \item \textbf{Hur man vet att skeppet lämnar solsystemet:} 
+    Disa följde skeppets energi över tid och såg att den efter passagen ökade från negativ ($E_0 \approx -0{,}10$) till stabilt positiv ($E \approx +0{,}14$). Eftersom energin är positiv övergår banan till en öppen hyperbel med en fart på ca $0{,}54\text{ AU/tidsenhet}$ långt bort från solen, vilket garanterar att skeppet lämnar solsystemet. Anton studerade också energikriteriet ($E \ge 0$ för flykt) och erhöll $E \approx +0{,}0055$. Att $h = 10^{-4}$ och $10^{-5}$ gav identiska svar bekräftar konvergensen, medan $h = 10^{-3}$ gav ett fel på över en tiopotens.
 \end{enumerate}
 
 \end{document}\begin{itemize}
