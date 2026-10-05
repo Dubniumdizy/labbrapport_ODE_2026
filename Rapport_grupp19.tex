@@ -114,6 +114,12 @@ $(t - t_0)^2/4 \leq 10^{-6} \iff |t - t_0| \leq 2 \cdot 10^{-3}$, alltså
 $\Delta t = 4 \cdot 10^{-3}$, så lösningen fastnar inte. Eftersom ekvationen är
 autonom flyttar $\varepsilon$ bara nollgenomgången $t_0$, inte tiden nära noll.
 
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.6\textwidth]{3.png}
+  \caption{Numerisk lösning nära $y = 0$. Streckade linjer: $|y| = 10^{-6}$.}
+\end{figure}
+
 \subsection*{Uppgift 3. Hampus Hillding}
 
 \subsection*{Uppgift 3. Skillnader och likheter}
@@ -553,6 +559,14 @@ Semi-implicit Euler & 1,2 & $-0{,}28$ & $-0{,}2801$ \\
 \end{tabular}
 \end{center}
 
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.45\textwidth]{bana_euler.png}
+  \hfill
+  \includegraphics[width=0.45\textwidth]{bana_symplektisk.png}
+  \caption{Explicit Euler (vänster) och semi-implicit Euler (höger), $h = 0{,}01$, $T = 10\,000$.}
+\end{figure}
+
 Explicit Euler förlorade alltså nästan all bindningsenergi trots litet $h$,
 medan felet med semi-implicit Euler bara oscillerar och aldrig växer.
 
@@ -685,6 +699,12 @@ $10^{-5}$ & $0{,}000592$ & $+0{,}00549$ \\
 \hline
 \end{tabular}
 \end{center}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.7\textwidth]{bana8.png}
+  \caption{Skeppets bana med $\theta = 99{,}75^\circ$ och $h = 10^{-4}$.}
+\end{figure}
 
 Med $h = 10^{-3}$ blir resultatet fel, men för $h = 10^{-4}$ och $10^{-5}$ blir
 svaren nästan lika, så de går att lita på. Minsta avståndet ($\approx 0{,}00059$)
