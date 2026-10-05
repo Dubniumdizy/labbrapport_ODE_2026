@@ -12,580 +12,1042 @@
 
 \section*{Uppgift 3. Existens men inte entydighet}
 
+\subsection*{Uppgift 3. Disa Degerholm}
+
 Betrakta begynnelsevärdesproblemet
-$$y' = \sqrt{|y|}, \quad y(0) = 0.$$
+\begin{equation}
+    y' = \sqrt{|y|}, \quad y(0) = 0.
+\end{equation}
 
-\subsection*{1. Analytisk lösning}
+\subsection*{1. Analytisk lösning och icke-entydighet}
+Picards existens- och entydighetssats (Simmons kap.~13) kräver att $f(y) = \sqrt{|y|}$ är lokalt Lipschitzkontinuerlig i en omgivning av $y = 0$, dvs.~att differenskvoten är begränsad:
+\begin{equation}
+    \lim_{y \to 0^+} \frac{|f(y) - f(0)|}{|y - 0|} = \lim_{y \to 0^+} \frac{\sqrt{y}}{y} = \lim_{y \to 0^+} \frac{1}{\sqrt{y}} = \infty.
+\end{equation}
+Eftersom Lipschitzvillkoret fallerar i $y = 0$ upphör entydigheten (Peanos existenssats garanterar endast existens).
 
-Ekvationen saknar entydig lösning i en omgivning av $y = 0$ då Picard existens och entydighetssats inte är tillämpbar. Detta beror på att högerledet $f(t,y) = f(y) = \sqrt{|y|}$ inte är lokalt Lipschitzkontinuerligt i $y = 0$.
-
-För att $f$ ska vara lokalt Lipschitzkontinuerlig i en omgivning kring $0$ krävs att det existerar en ändlig konstant $L \ge 0$ sådan att
-$$|f(y_1) - f(y_2)| \le L|y_1 - y_2|$$
-för alla $y_1, y_2$ i omgivningen. Genom att välja $y_1 = y > 0$ och fixera $y_2 = 0$ fås differenskvoten
-$$\frac{|f(y) - f(0)|}{|y - 0|} = \frac{\sqrt{y} - 0}{y - 0} = \frac{1}{\sqrt{y}}.$$
-Då $y \to 0^+$ växer denna kvot obegränsat:
-$$\lim_{y \to 0^+} \frac{|f(y) - f(0)|}{|y - 0|} = \lim_{y \to 0^+} \frac{1}{\sqrt{y}} = \infty.$$
-Ingen sådan Lipschitzkonstant $L$ kan därmed existera. 
-
-\begin{enumerate}
-    \item \textbf{Den triviala lösningen:}
-    $$y(t) = 0 \quad \text{för alla } t \in \mathbb{R}.$$
-
-    \item \textbf{$y > 0$:}
-    Då $y > 0$ är $\sqrt{|y|} = \sqrt{y}$. Separabla ekvationen blir:
-    \begin{align*}
-        \frac{dy}{\sqrt{y}} &= dt \\
-        2\sqrt{y} &= t - c_2.
-    \end{align*}
-    Eftersom $\sqrt{y} > 0$ måste $t > c_2$. Kvadrering ger:
-    $$y(t) = \frac{1}{4}(t - c_2)^2, \quad t \ge c_2.$$
-
-    \item \textbf{$y < 0$:}
-    Då $y < 0$ är $\sqrt{|y|} = \sqrt{-y}$. Separation av variabler ger:
-    \begin{align*}
-        \frac{dy}{\sqrt{-y}} &= dt \\
-        -2\sqrt{-y} &= t - c_1 \\
-        \sqrt{-y} &= \frac{c_1 - t}{2}.
-    \end{align*}
-    Eftersom $\sqrt{-y} > 0$ måste $t < c_1$. Detta ger:
-    $$y(t) = -\frac{1}{4}(t - c_1)^2, \quad t \le c_1.$$
-
-    \item \textbf{Sammanfattning:}
-    Eftersom $y' = \sqrt{|y|} \ge 0$ är $y(t)$ icke-avtagande. En lösning kan lämna nollinjen bakåt i tiden vid en godtycklig punkt $c_1 \le 0$ och framåt i tiden vid en godtycklig punkt $c_2 \ge 0$:
-    $$y(t) = \begin{cases}
-        -\displaystyle\frac{1}{4}(t - c_1)^2, & t \le c_1, \\[8pt]
-        0, & c_1 < t < c_2, \\[8pt]
-        \displaystyle\frac{1}{4}(t - c_2)^2, & t \ge c_2,
-    \end{cases}$$
-    där $c_1 \le 0 \le c_2$ (där $c_1 = -\infty$ eller $c_2 = \infty$ motsvarar att lösningen förblir noll åt det hållet). Det existerar därmed en tvåparametrig familj av oändligt många lösningar.
-\end{enumerate}
-
-\subsection*{2. Numerisk lösning}
-
-Om Runge--Kutta av ordning 4 appliceras på $y' = \sqrt{|y|}$ med $y(0) = 0$:
+Separation av variabler för $y \ne 0$:
 \begin{itemize}
-    \item Första steget från $t_0 = 0$, $y_0 = 0$ med steglängd $h$:
-    \begin{align*}
-        k_1 &= f(t_0, y_0) = \sqrt{|0|} = 0, \\
-        k_2 &= f\left(t_0 + \frac{h}{2}, y_0 + \frac{h}{2}k_1\right) = \sqrt{|0 + 0|} = 0, \\
-        k_3 &= f\left(t_0 + \frac{h}{2}, y_0 + \frac{h}{2}k_2\right) = \sqrt{|0 + 0|} = 0, \\
-        k_4 &= f(t_0 + h, y_0 + h k_3) = \sqrt{|0 + 0|} = 0.
-    \end{align*}
-    \item Nästa funktionsvärde blir:
-    $$y_1 = y_0 + \frac{h}{6}(k_1 + 2k_2 + 2k_3 + k_4) = 0 + \frac{h}{6}(0) = 0.$$
-    \item Genom induktion gäller att $y_n = 0$ och samtliga $k_i = 0$ för alla diskreta steg $n$, vilket låser metoden i den triviala jämviktslösningen $y(t) \equiv 0$. ??? krav visa
+    \item För $y > 0$: $\int y^{-1/2}\,dy = \int dt \implies 2\sqrt{y} = t - c_2 \implies y(t) = \frac{1}{4}(t - c_2)^2$ ($t \ge c_2$).
+    \item För $y < 0$: $\int (-y)^{-1/2}\,dy = \int dt \implies -2\sqrt{-y} = t - c_1 \implies y(t) = -\frac{1}{4}(t - c_1)^2$ ($t \le c_1$).
+\end{itemize}
+Eftersom $y' \ge 0$ är $y(t)$ icke-avtagande och kan ligga kvar på jämvikten $y \equiv 0$ under ett godtyckligt tidsintervall $[c_1, c_2]$:
+\begin{equation}
+    y(t) = \begin{cases}
+        -\frac{1}{4}(t - c_1)^2, & t \le c_1, \\
+        0, & c_1 < t < c_2, \\
+        \frac{1}{4}(t - c_2)^2, & t \ge c_2,
+    \end{cases}
+    \quad \text{där } c_1 \le 0 \le c_2.
+\end{equation}
+Detta ger en tvåparametrig familj av oändligt många lösningar.
+
+\subsection*{2. Numerisk lösning med RK4}
+Med $y_0 = 0$ fås i första RK4-steget:
+\begin{equation}
+    k_1 = f(0) = 0 \implies k_2 = k_3 = k_4 = 0 \implies y_1 = y_0 = 0.
+\end{equation}
+Genom induktion gäller $y_n = 0$ för alla $n$. En standardlösare förblir deterministiskt låst i den stationära lösningen $y(t) \equiv 0$ och kan inte numeriskt detektera förgreningen utan yttre störning.
+
+\subsection*{3. Hur länge lösningen fastnar vid $y(-1) = -1$}
+För $y < 0$ ger separation av variabler med $y(-1) = -1$:
+\begin{equation}
+    -2\sqrt{-y} = t + C \implies -2\sqrt{1} = -1 + C \implies C = -1,
+\end{equation}
+vilket ger $y(t) = -\frac{1}{4}(1 - t)^2$ för $t \le 1$. Analytiskt nås $y = 0$ vid $t = 1$, varpå lösningen kan kvarstanna i $y \equiv 0$ godtyckligt länge.
+
+\begin{itemize}
+    \item \textbf{Tid till tröskeln $|y| \le 10^{-6}$:}
+    För $y < 0$ ger separation av variabler med $y(-1) = -1$:
+    \[
+    \int (-y)^{-1/2}\,dy = \int dt \implies -2\sqrt{-y} = t - 1 \implies y(t) = -\frac{1}{4}(1 - t)^2.
+    \]
+    Tröskelvillkoret $|y| \le 10^{-6}$ ger:
+    \[
+    \frac{1}{4}(1 - t)^2 \le 10^{-6} \implies |1 - t| \le 2 \cdot 10^{-3} \implies t \approx 0{,}998.
+    \]
+    Tiden från startpunkten $t = -1$ blir därmed $\Delta t = 0{,}998 - (-1) = 1{,}998$.
+
+    \item \textbf{Numeriskt beteende:}
+    \begin{itemize}
+        \item Om $y_n = 0$ exakt blir alla lutningar noll:
+        \[
+        k_1 = f(t_n, 0) = \sqrt{|0|} = 0 \implies k_2 = k_3 = k_4 = 0 \implies y_{n+1} = y_n = 0,
+        \]
+        vilket låser lösaren permanent i jämvikten.
+        \item Om avrundningsfel ger $y_n = \delta > 0$ fås efter ett Euler-steg (eller motsvarande för RK4):
+        \[
+        y_{n+1} = \delta + h\sqrt{\delta} \implies \frac{y_{n+1}}{y_n} = 1 + \frac{h}{\sqrt{\delta}}.
+        \]
+        Eftersom $\lim_{\delta \to 0^+} \frac{h}{\sqrt{\delta}} = \infty$ växer tillskottet $\Delta y = h\sqrt{\delta} \gg \delta$ explosionsartat, varför lösningen lämnar intervallet $|y| \le 10^{-6}$ på ett fåtal steg.
+    \end{itemize}
 \end{itemize}
 
-\subsection*{3. Hur länge lösningen fastnar på $y = 0$ givet $y(-1) = -1$}
+\subsection*{Uppgift 3. Anton Fornstedt}
 
-För $y < 0$ ges differentialekvationen av:
-$$y' = \sqrt{-y}.$$
+\textbf{Analytisk lösning.} Förutom $y \equiv 0$ löser
+$y(t) = 0$ för $0 \leq t \leq c$ och $y(t) = (t-c)^2/4$ för $t > c$
+problemet för varje $c \geq 0$, så det finns oändligt många lösningar.
+Picard--Lindelöf garanterar ingen entydighet eftersom $f(y) = \sqrt{|y|}$
+inte är Lipschitz nära $0$: $|f(y) - f(0)|/|y| = 1/\sqrt{|y|} \to \infty$.
 
-Separation av variabler ger:
-\begin{align*}
-    \frac{dy}{\sqrt{-y}} &= dt \\
-    -2\sqrt{-y} &= t + C.
-\end{align*}
+\medskip
+\textbf{Numerisk lösning.} Euler ger $y_1 = 0 + h\sqrt{0} = 0$, och likaså
+alla följande steg, så den numeriska lösningen blir $y \equiv 0$ oavsett $h$.
 
-Insättning av $y(-1) = -1$:
-$$-2\sqrt{1} = -1 + C \implies C = -1.$$
-Detta medför:
-$$-2\sqrt{-y} = t - 1 \implies \sqrt{-y} = \frac{1 - t}{2} \implies y(t) = -\frac{1}{4}(1 - t)^2, \quad t \le 1.$$
+\medskip
+\textbf{Hur länge lösningen fastnar.} Med $y(-1) = -1 + \varepsilon$ och
+$h = 10^{-6}$ låg lösningen i $|y| \leq 10^{-6}$ under $\Delta t \approx 0{,}003998$,
+både för $\varepsilon = 0$ och $\varepsilon = 0{,}1$. Analytiskt gäller
+$(t - t_0)^2/4 \leq 10^{-6} \iff |t - t_0| \leq 2 \cdot 10^{-3}$, alltså
+$\Delta t = 4 \cdot 10^{-3}$, så lösningen fastnar inte. Eftersom ekvationen är
+autonom flyttar $\varepsilon$ bara nollgenomgången $t_0$, inte tiden nära noll.
 
-Lösningen når $y = 0$ vid $t = 1$.
+\subsection*{Uppgift 3. Hampus Hillding}
+
+\subsection*{Uppgift 3. Skillnader och likheter}
+
+\begin{enumerate}
+    \item \textbf{Skillnader för härledning till ODE:n:} Disa tittade på Lipschitz kontinuitet i punkten y=0 medan Hampus löste ODE:n direkt. Detta gjorde att när Hampus tittade på sin numeriska lösning antog funktionen 0 inte bara i ett värde utan flera medan Disa hittade det. Anton löste ODE:n direkt som Hampus, men använde även Lipschitz-argumentet
+    som Disa. Han fick en lösningsfamilj med en parameter $c \geq 0$ (bara
+    $t \geq 0$), medan Disa även lät lösningen komma in från $t < 0$ och fick två
+    parametrar. 
+    \item \textbf{Lös problemet numeriskt med kommentarer:} Både Disa och Hampus fick att $y=0, \forall x\in \mathbb{R}$ oavsett om man använde RK4 eller Euler. Det var annorlunda än Hampus analytiska lösning. Anton fick samma resultat med Euler. Detta kunde förutses a priori: eftersom
+    $f(0) = 0$ blir varje explicit stegmetod låst i $y = 0$ om den startar exakt där.
+    \item \textbf{Hur länge fastnar den numeriska lösningen:} Disa trodde att om $y_n$ träffas exakt på 0 så kommer derivatan bli 0 och lösaren fastnar i $y=0$, hon trodde detta möjligen kunde ske om metoder med lägre ordning skulle användas tex Eulers metod. Men då visade Hampus att den faktiskt tillslut ändå växte förbi 0. Enligt Disas analytiska lösning så blev tiden ca 1 tidsenhet på $y=0$ enligt hennes härledning. Anton mätte i stället tiden som lösningen befinner sig \emph{i} intervallet
+    $|y| \leq 10^{-6}$ och fick $\Delta t \approx 0{,}004$, vilket stämmer med det
+    analytiska värdet $4 \cdot 10^{-3}$ och är oberoende av $\varepsilon$. ??? (när nås bara y=0)
+    \end{enumerate}
+
+\section*{Uppgift 4. Titel}
+
+\subsection*{Uppgift 4. Disa Degerholm}
+
+Betrakta begynnelsevärdesproblemet
+\begin{equation}
+    y' = y^2, \quad y(0) = y_0 = \frac{N}{100}.
+\end{equation}
+
+\subsection*{1. Analytisk lösning och singularitet}
+För $y \neq 0$ ger separation av variabler med $y(0) = y_0$:
+\begin{equation}
+    \int y^{-2}\,dy = \int dt \implies -\frac{1}{y} = t - \frac{1}{y_0} \implies y(t) = \frac{y_0}{1 - y_0 t} = \frac{N}{100 - N t}.
+\end{equation}
+Lösningen har en vertikal asymptot (smäller) då nämnaren försvinner:
+\begin{equation}
+    t^* = \frac{1}{y_0} = \frac{100}{N}.
+\end{equation}
+För $N = 82$ är den exakta singularitetstiden $t^* = \frac{100}{82} \approx 1{,}219512$.
+
+\subsection*{2. Numerisk singularitet och skattning av $t^*$}
+\begin{itemize}
+    \item \textbf{Numeriskt bevis för singularitet:} 
+    Vid numerisk integration (t.ex.\ RK4) växer $y_n$ och derivatan $y'_n = y_n^2$ explosionsartat då $t \to t^*$. Eftersom lösningskurvan blir vertikal kan ett fixt steg $h$ inte följa funktionen. Värdena överskrider snabbt gränsen för standardflyttal (\texttt{float64} $\sim 1{,}8 \cdot 10^{308}$) och genererar \texttt{inf}/\texttt{NaN}, vilket numeriskt påvisar singulariteten.
+
+    \item \textbf{Uppskattning av $t^*$:}
+    Genom att integrera framåt med steglängd $h = 0{,}01$ fram till ett tröskelvärde (t.ex.\ $y > 10^5$) avbryts beräkningen vid sista steget:
+    \[
+    t_{\text{stopp}} \approx 1{,}2100.
+    \]
+    Detta ger en direkt numerisk undre uppskattning av singularitetstiden som stämmer väl överens med det analytiska värdet $t^* = \frac{100}{82} \approx 1{,}2195$.
+\end{itemize}
+
+\subsection*{3. Bevis: $y(0) < 0 \implies y(t) < 0$ för alla $t > 0$}
+Högerledet $f(y) = y^2$ har kontinuerlig partiell derivata $\frac{\partial f}{\partial y} = 2y$, vilket gör $f$ lokalt Lipschitzkontinuerlig. Enligt Picards entydighetssats (Simmons kap.~13) kan två skilda lösningskurvor aldrig skära varandra:
+\begin{itemize}
+    \item Funktionen $y(t) \equiv 0$ är en stationär lösning ($0' = 0^2$).
+    \item Om det funnes ett $t_1 > 0$ med $y(t_1) \ge 0$, måste $y(t)$ enligt satsen om mellanliggande värden anta $y(t_0) = 0$ för något $t_0 \in (0, t_1]$.
+    \item I punkten $(t_0, 0)$ skulle banan skära $y \equiv 0$, vilket motsäger Picards entydighet. Alltså gäller $y(t) < 0$ för alla $t > 0$.
+\end{itemize}
+
+\subsection*{4. Numeriskt felsteg och automatlösare}
+Betrakta $y' = C y^2$ med $y_0 = \epsilon < 0$. Ett Euler-steg med steglängd $h$ ger:
+\begin{equation}
+    y_1 = \epsilon + h C \epsilon^2 = \epsilon (1 + h C \epsilon).
+\end{equation}
+Eftersom $\epsilon < 0$ blir $y_1 > 0$ om faktorn växlar tecken:
+\begin{equation}
+    1 + h C \epsilon < 0 \implies h > \frac{1}{C |\epsilon|}.
+\end{equation}
+För t.ex.\ $C = 50$, $\epsilon = -0{,}10$ och $h = 0{,}5$ ger RK4 ett falskt omslag till $y_1 = 0{,}0704 > 0$, varpå lösningen exploderar mot $+\infty$ istället för att avta mot noll.
+
+\paragraph{Automatlösarens skydd:}
+\begin{itemize}
+    \item \textbf{Adaptiv steglängd:} Felet uppskattas via inbäddade metoder (t.ex.\ Runge--Kutta--Fehlberg) och $h$ skalas ned så att $h \ll \frac{1}{C|y|}$.
+    \item \textbf{Invarians- och teckenkontroll:} Steget förkastas omedelbart om $y_n$ byter tecken ($y_n \cdot y_{n+1} \le 0$) eftersom teckenbyte är analytiskt förbjudet.
+\end{itemize}
+
+\subsection*{Uppgift 4. Anton Fornstedt}
+
+\textbf{Analytisk lösning.} Med $y(0) = N/100 = 0{,}34$ ger separation av
+variabler $y(t) = 1/(50/17 - t)$, som smäller vid $t^* = 50/17 \approx 2{,}94118$.
+
+\medskip
+\textbf{Numeriskt.} Euler med $h = 10^{-4}$ (avbrott då $y > 10^{10}$)
+smäller vid $t \approx 2{,}94260$, alltså något senare än analytiskt. Det
+beror på att lösningen är konvex, så tangenten (Eulersteget) hamnar under
+kurvan.
+
+\medskip
+\textbf{$y(0) < 0 \Rightarrow y(t) < 0$.} Antag att $y(t_2) \geq 0$ för något
+$t_2 > 0$. Enligt satsen om mellanliggande värden finns då $t_1$ med
+$y(t_1) = 0$. Men $y \equiv 0$ är också en lösning genom $(t_1, 0)$, och
+eftersom $y^2$ är lokalt Lipschitz ger Picard--Lindelöf att lösningen är
+entydig. Alltså är $y \equiv 0$, vilket motsäger $y(0) < 0$.
+
+\medskip
+\textbf{Numeriskt teckenbyte.} För $y' = Cy^2$ ger Euler
+$y_{n+1} = y_n(1 + hCy_n)$. Med $y_0 = \varepsilon < 0$ byter lösningen tecken
+redan i första steget om
+\[
+  C > \frac{1}{h|\varepsilon|},
+\]
+till exempel $C > 10^{14}$ för $\varepsilon = -10^{-10}$ och $h = 10^{-4}$.
+Därefter exploderar den numeriska lösningen, trots att den exakta lösningen
+aldrig blir positiv. En automatlösare kan undvika detta genom att förkasta
+steget och halvera $h$ när $y$ byter tecken.
+
+\subsection*{Uppgift 4. Hampus Hillding}
+
+\subsection*{Uppgift 4. Skillnader och likheter}
+
+\begin{enumerate}
+    \item \textbf{Lös analytiskt mha personnummer:} Disa löste ODE:n för generellt N och stoppade sedan in sina sista två personnummersiffror. Hampus löste med sina direkt i formeln men båda fick samma svar (om N är samma). Anton gjorde som Hampus. 
+    \item \textbf{När smäller det numeriskt?} Hampus använde Euler igen och Disa använde RK4. Detta gjorde att Disa fick fler iterationer innan overflow (??? why). Det "smällde" ungefär vid 1.1 för både Disa och Hampus vilket stämde överens med det analytiska. Vi ser att det "smäller" då programmet går in i "overflow". Anton (Euler, $h = 10^{-4}$) fick $t \approx 2{,}94260$, alltså \emph{efter} den
+    exakta singulariteten, medan Disa (RK4, tröskel $10^{5}$) stoppade \emph{före}.
+    Euler släpar efter eftersom lösningen är konvex och tangenten ligger under
+    kurvan. Den numeriska smälltiden beror alltså både på metod och på vald
+    tröskel, och man ska inte lita blint på den nära en singularitet.
+    \item \textbf{Visa att om $y(0)<0$ så måste $y(t)<0$ för alla $t>0$:} Både Disa, Hampus och Anton hade samma argument med att f är lokalt Lipschitz kontineruligt överallt och att då y(t)=0 är en lösning kan ingen annan lösning korsa den och blir därmed bara över eller under 0 i sitt y värde.
+    \item \textbf{Numeriska exempel:} Hampus testade sig fram till ett stort nog C då han tänkte att ett stort C skulle ge ett $y'$ som var tillräckligt stor hopp för att komma över gränsen. Disa härledde formeln för det istället och kom fram till att $h > \frac{1}{C |\epsilon|}$. Anton härledde samma villkor som Disa men uttryckt i $C$: $C > 1/(h|\varepsilon|)$,
+    till exempel $C > 10^{14}$ för $\varepsilon = -10^{-10}$ och $h = 10^{-4}$.
+    \item \textbf{Automatlösare:} Disa tänkte att en adaptiv steglängdskontroll (???) och detektering av teckenbyte (???) skulle kunna hjälpa. Hampus hade samma ideer. Anton föreslog samma teckenkontroll: förkasta steget och halvera $h$ om $y$
+    byter tecken.
+    \end{enumerate}
+
+\section*{Uppgift 5. Titel}
+
+\subsection*{Uppgift 5. Disa Degerholm}
+
+Betrakta begynnelsevärdesproblemet
+\begin{equation}
+    y' = y, \quad y(0) = N.
+\end{equation}
+
+\subsection*{1. Analytisk lösning och globalt fel för RK4}
+Differentialekvationen har den exakta lösningen:
+\begin{equation}
+    y(t) = N e^t \implies y(2^k) = N e^{2^k}.
+\end{equation}
+För $y' = y$ gäller $y^{(v)}(\xi) = N e^\xi$. Det lokala trunkeringsfelet per steg ges av:
+\begin{equation}
+    \epsilon_{\text{lokal}} = -\frac{y^{(v)}(\xi)}{180} h^5 = -\frac{N e^\xi}{180} h^5.
+\end{equation}
+Över $M = \frac{T}{h}$ steg fram till $T = 2^k$ begränsas det globala felet av:
+\begin{equation}
+    |E_M| \le M \cdot \max_{0 \le \xi \le T} |\epsilon_{\text{lokal}}(\xi)| \cdot e^{T - \xi} \le \frac{T}{h} \left(\frac{N e^T}{180} h^5\right) = \frac{N \cdot 2^k e^{2^k}}{180} h^4.
+\end{equation}
+Kravet på två korrekta decimaler ($|E_M| \le 0{,}005$) kräver:
+\begin{equation}
+    \frac{N \cdot 2^k e^{2^k}}{180} h^4 \le 0{,}005 \implies h \le \left(\frac{0{,}9}{N \cdot 2^k}\right)^{1/4} e^{-2^{k-2}}.
+\end{equation}
+Steglängden $h$ måste alltså minskas exponentiellt, vilket gör att antalet steg $M = \frac{2^k}{h} \propto 2^{5k/4} e^{2^{k-2}}$ växer explosionsartat.
+
+\subsection*{2. Datorns begränsningar (Varför datorn ger upp)}
+I standard flyttalsformat (\texttt{float64}, $\epsilon_{\text{mach}} \approx 2{,}22 \cdot 10^{-16}$) stoppas beräkningen av två skilda orsaker:
+\begin{enumerate}
+    \item \textbf{Förlust av precision ($k \ge 5$):} 
+    Avståndet mellan två på varandra följande representerbara flyttal vid storleken $y$ är $\text{ulp} \approx \epsilon_{\text{mach}} \cdot y$. För två korrekta decimaler krävs $\epsilon_{\text{mach}} \cdot y \le 0{,}005$:
+    \begin{equation}
+        y \le \frac{0{,}005}{2{,}22 \cdot 10^{-16}} \approx 2{,}25 \cdot 10^{13} \implies 2^k \le \ln\left(\frac{2{,}25 \cdot 10^{13}}{N}\right).
+    \end{equation}
+    För $N = 82$ passeras gränsen redan vid $t \approx 26{,}3$, dvs.\ för alla $k \ge 5$ ($t_5 = 32$). Då är avståndet mellan talen större än toleransen, vilket gör två korrekta decimaler  omöjliga oavsett hur litet $h$ väljs då $|E_M| \le 0{,}005$ inte kan uppnås.
+
+    \item \textbf{Aritmetiskt överflöde / \texttt{overflow} ($k \ge 10$):} 
+    Det maximala talet i \texttt{float64} är $y_{\max} \approx 1{,}79 \cdot 10^{308}$. Detta överskrids då:
+    \begin{equation}
+        N e^{2^k} > 1{,}79 \cdot 10^{308} \implies 2^k > \ln\left(\frac{1{,}79 \cdot 10^{308}}{82}\right) \approx 705{,}4.
+    \end{equation}
+    Eftersom $t_9 = 512$ och $t_{10} = 1024$, slår beräkningen i hårdvarutaket vid $k = 10$ och returnerar \texttt{inf}.
+\end{enumerate}
+
+\subsection*{3. Resultat}
+\begin{center}
+\begin{tabular}{c r r c l}
+\hline
+$k$ & $t_k = 2^k$ & $y_{\text{exakt}}$ & Absolut fel & Status \\
+\hline
+$1$ & $2$ & $605{,}9026$ & $1{,}59 \cdot 10^{-6}$ & OK ($100$ steg) \\
+$2$ & $4$ & $4477{,}0483$ & $3{,}70 \cdot 10^{-4}$ & OK ($100$ steg) \\
+$3$ & $8$ & $244438{,}5549$ & $2{,}56 \cdot 10^{-3}$ & OK ($400$ steg) \\
+$4$ & $16$ & $7{,}29 \cdot 10^8$ & $3{,}79 \cdot 10^{-3}$ & OK ($6400$ steg) \\
+$5$ & $32$ & $6{,}47 \cdot 10^{15}$ & -- & Stopp: $\text{ulp} > 0{,}005$ \\
+$10$ & $1024$ & $\infty$ & -- & Krasch: \texttt{overflow} (\texttt{inf}) \\
+\hline
+\end{tabular}
+\end{center}
+
+\subsection*{Uppgift 5. Anton Fornstedt}
+
+Problemet löstes med Eulers metod, där $h$ halverades från $0{,}1$ tills
+$|y_n - 34e^{T}| < 0{,}005$. Det teoretiska felet fås ur
+$(1+h)^{T/h} = e^{(T/h)\ln(1+h)} \approx e^{T}(1 - Th/2)$, vilket ger
+\[
+  \text{fel}(T) \approx 34\, e^{T} \cdot \frac{T h}{2}.
+\]
+
+\begin{center}
+\begin{tabular}{c c c r r c c}
+\hline
+$k$ & $T$ & $h$ & Antal steg & $y_n$ & Fel & Teoretiskt fel \\
+\hline
+1 & 2 & $1{,}22 \cdot 10^{-5}$ & 163\,840     & 251{,}22484     & 0{,}00307 & 0{,}00307 \\
+2 & 4 & $7{,}63 \cdot 10^{-7}$ & 5\,242\,880   & 1\,856{,}33427  & 0{,}00283 & 0{,}00283 \\
+3 & 8 & $1{,}19 \cdot 10^{-8}$ & 671\,088\,640 & 101\,352{,}56673 & 0{,}00483 & 0{,}00483 \\
+\hline
+\end{tabular}
+\end{center}
+
+Det uppmätta felet stämmer med det teoretiska på 3--4 siffror. För $k = 4$
+($T = 16$) skulle det krävas $h \lesssim 2 \cdot 10^{-12}$, alltså omkring
+$8 \cdot 10^{12}$ steg, vilket inte är genomförbart. Dessutom skulle
+avrundningsfelen dominera långt innan dess.
+
+
+
+\subsection*{Uppgift 5. Hampus Hillding}
+
+\subsection*{Uppgift 5. Skillnader och likheter}
+
+\begin{enumerate}
+    \item \textbf{Lös numeriskt med 2 korrekta decimaler:} Hampus gjorde Euler, Disa gjorde RK4. Både tog fram den teoretiska formeln för det totala trunkeringsfelet $|E_n|$. Anton använde Euler och nådde bara $k = 3$, vilket krävde 671 miljoner steg,
+    medan Disa med RK4 nådde $k = 4$ med 6\,400 steg. Det visar tydligt skillnaden
+    mellan fel $\sim h$ och $\sim h^4$.
+    \item \textbf{Jämför teoretiska och numeriska felen:} ??? (varför får hampus fler decimaler med euler än RK4. loglog plot rätt ordning). Antons asymptotiska felformel $34e^{T} \cdot Th/2$ stämde med det uppmätta felet
+    på 3--4 siffror.
+\end{enumerate}
+
+\section*{Uppgift 6. Titel}
+
+\subsection*{Uppgift 6. Disa Degerholm}
+
+
+Betrakta begynnelsevärdesproblemet
+\begin{equation}
+    y'' + y = 0, \quad y(0) = 1, \quad y'(0) = 0.
+\end{equation}
+
+\subsection*{1. Analytisk lösning och kvalitativ analys}
+Karakteristiska ekvationen $r^2 + 1 = 0 \implies r = \pm i$ ger $y(t) = c_1 \cos(t) + c_2 \sin(t)$. Begynnelsevillkoren ger $c_1 = 1, c_2 = 0$, dvs.\ den unika analytiska lösningen:
+\begin{equation}
+    y(t) = \cos(t).
+\end{equation}
+
+\paragraph{Kvalitativ definition av $\pi$ (Simmons kap.~4.24):}
+Låt $s(t)$ och $c(t)$ vara lösningarna till $y'' + y = 0$ med startvärdena $s(0) = 0, s'(0) = 1$ respektive $c(0) = 1, c'(0) = 0$.
+\begin{itemize}
+    \item Eftersom $(y')'' + y' = 0$ gäller $s'(t) = c(t)$ och $c'(t) = -s(t)$.
+    \item Energin är konstant bevarad:
+    \begin{equation}
+        \frac{d}{dt}\big(s(t)^2 + c(t)^2\big) = 2s(t)s'(t) + 2c(t)c'(t) = 2s(t)c(t) - 2c(t)s(t) = 0,
+    \end{equation}
+    vilket med startvärdena ger $s(t)^2 + c(t)^2 \equiv 1$.
+    \item Kurvan $s(t)$ stiger från origo med avtagande lutning ($s'' = -s < 0$) och når en topp vid $s = 1$ där $s' = c = 0$. Den första positiva skärningspunkten för $s(t) = 0$ definieras som $\pi$. Av symmetri nås toppen vid $t^* = \pi/2$ där hastigheten är noll:
+    \begin{equation}
+        c(t^*) = 0 \implies t^* = \frac{\pi}{2} \iff \pi = 2t^*.
+    \end{equation}
+    \item Enligt separationssatsen (Simmons kap.~4.24/4.25) alternerar nollställena för $s(t)$ och $c(t)$ strikt, varför nollstället $t^*$ är isolerat och unikt på $(0, \pi)$.
+\end{itemize}
+
+\subsection*{2. Omskrivning till första ordningens system}
+Med $v(t) = y'(t)$ fås $v'(t) = y''(t) = -y(t)$:
+\begin{equation}
+    \begin{cases}
+        y'(t) = v(t) \\
+        v'(t) = -y(t)
+    \end{cases}
+    \quad \text{med} \quad
+    \begin{pmatrix} y(0) \\ v(0) \end{pmatrix} = \begin{pmatrix} 1 \\ 0 \end{pmatrix}.
+\end{equation}
+
+\subsection*{3. Numerisk skattning av första nollstället $t^* = \pi/2$}
+När lösaren identifierar ett steg där $y_n > 0$ och $y_{n+1} \le 0$ bestäms $t^*$ via ett linjärt Newton-steg längs tangenten:
+\begin{equation}
+    t^* \approx t_n - \frac{y_n}{y'_n} = t_n - \frac{y_n}{v_n} \implies \pi \approx 2t^*.
+\end{equation}
 
 \begin{itemize}
-    \item \textbf{Analytiskt:} När banan når $y = 0$ kan den kvarstanna där under ett godtyckligt intervall $t \in [1, 1 + c]$ innan den eventuellt förgrenar sig som $\frac{1}{4}(t - (1+c))^2$.
-    \item \textbf{Numeriskt:} Med startvärdet $y(-1) = -1 + \epsilon$ innebär villkoret $|y| \le 10^{-6}$:
-    $$\frac{1}{4}(1 - t)^2 \le 10^{-6} \implies |1 - t| \le 2 \cdot 10^{-3} = 0{,}002.$$
-    Det tar alltså $t \approx 0{,}998$ tidsenheter att nå gränsen $|y| \le 10^{-6}$.
-    \item När lösaren nått nivån där $y_n \approx 0$ beror varaktigheten inom intervallet på diskretiserings- och avrundningsfel:
+    \item \textbf{Eulers metod (Varför datorn smälter):}
+    Att nå maskinprecision ($\sim 16$ siffror) med Eulers metod kräver $N \sim 10^{16}$ steg eftersom metodens globala trunkeringsfel är $\mathcal{O}(h)$, vilket för $16$ siffror kräver en steglängd $h \approx 10^{-16}$ och därmed $N = T/h \approx T/10^{-16} \sim 10^{16}$ beräkningssteg. Detta är beräkningsmässigt orimligt och havererar i flyttalsaritmetiken då varje operation medför ett relativt avrundningsfel $\sim \epsilon_{\text{mach}} \approx 2{,}22 \cdot 10^{-16}$, vilket över alla steg ackumuleras som $N \cdot \epsilon_{\text{mach}} = (T/h)\epsilon_{\text{mach}} \propto \frac{\epsilon_{\text{mach}}}{h}$, en felterm som exploderar då $h \to 0$.
+    
+    \item \textbf{RK4:}
+    Med global konvergensordning $\mathcal{O}(h^4)$ reduceras felet med en faktor $16$ per halvering av $h$, vilket ger hög noggrannhet med måttligt antal steg (t.ex.\ $h = 10^{-3}$).
+\end{itemize}
+
+\subsection*{4. Skattning med 20 korrekta decimaler}
+Standard flyttal (\texttt{float64}) har 53 bitars mantissa ($\epsilon_{\text{mach}} \approx 2{,}22 \cdot 10^{-16}$) och är begränsat till $\sim 15$--$17$ decimaler. Att nå 20 säkra decimaler löses genom:
+\begin{enumerate}
+    \item Godtycklig flyttalsprecision (\texttt{mpmath} satt till 40 siffrors intern precision som säkerhetsmarginal mot ackumulerade avrundningsfel).
+    \item \textbf{Taylor-polynom och Newtons metod:}
+    För att undvika att ackumulera trunkerings- och fasfel från tusentals små tidssteg med stegmetoder (som RK4), utnyttjas att ODE:ns derivator är kända analytiskt vid $t = 0$. Hela lösningskurvan fram till nollstället ersätts då med ett enda analytiskt Taylor-polynom:
+    \begin{equation}
+        y_M(t) = \sum_{k=0}^{M} \frac{(-1)^k}{(2k)!} t^{2k}, \quad y'_M(t) = \sum_{k=1}^{M} \frac{(-1)^k}{(2k-1)!} t^{2k-1}.
+    \end{equation}
+    Genom att välja $M = 16$ (polynomgrad 32) begränsas seriens trunkeringsfel av resttermen $|R_{16}(t)| \le \frac{t^{34}}{34!} < 10^{-38}$ vid $t \approx 1{,}57$, vilket gör approximationsfelet helt försumbart jämfört med kravet på $10^{-20}$. Nollstället $t^* = \pi/2$ beräknas därefter snabbt och med kvadratisk konvergens via Newtons metod direkt på polynomet:
+    \begin{equation}
+        t \leftarrow t - \frac{y_M(t)}{y'_M(t)}.
+    \end{equation}
+\end{enumerate}
+
+\subsection*{5. Skattning av $\pi$ nära $t \approx 10^3$}
+Nollställena är $t_k = \frac{\pi}{2} + k\pi = \left(k + \frac{1}{2}\right)\pi$. Närmast $T = 1000$ ges av:
+\begin{equation}
+    k = \text{round}\left(\frac{1000 - \pi/2}{\pi}\right) = 318 \implies t_{318} = 318{,}5\pi \approx 1000{,}597.
+\end{equation}
+Skattningen av $\pi$ ur det beräknade nollstället $\hat{t}_{318}$ sker via $\hat{\pi} = \frac{\hat{t}_{318}}{318{,}5}$.
+
+\paragraph{Jämförelse mellan teoretiskt fel och beräkningsfel:}
+\begin{itemize}
+    \item \textbf{Teoretisk dämpning:}
+    Eftersom nollställena ges av $t_k = (k + 0{,}5)\pi$ skattas $\pi$ via $\hat{\pi} = \frac{\hat{t}_k}{k + 0{,}5}$. För $k = 318$ ger ett numeriskt beräkningsfel $\delta t = |\hat{t}_{318} - t_{318}|$ därmed direkt felet i $\pi$:
+    \begin{equation}
+        \delta \pi = \left| \frac{\hat{t}_{318}}{318{,}5} - \frac{t_{318}}{318{,}5} \right| = \frac{\delta t}{318{,}5}.
+    \end{equation}
+    Divisionen med $k + 0{,}5$ dämpar alltså felet i $\pi$ med en faktor drygt $300$.
+    \item \textbf{Numerisk felförstoring:} Integrationstiden $t \approx 1000$ är över $600$ gånger längre än $t \approx \pi/2$. För en enstegsmetod (som RK4) ackumuleras fasfelet linjärt med integrationstiden, vilket ger över $600$ gånger större fasdrift. Dessutom genererar de hundratusentals beräkningsstegen betydligt större ackumulerade flyttalsfel.
+    \item \textbf{Slutsats:} Den numeriska fasdriften och avrundningsfelet över 1000 tidsenheter överväger dämpningsfaktorn $1/318{,}5$. Att bestämma $\pi$ vid $10^3$ är därmed avsevärt svårare och ger sämre precision än att beräkna det första nollstället.
+\end{itemize}
+
+\subsection*{Uppgift 6. Anton Fornstedt}
+
+Den analytiska lösningen är $y = \cos t$, så första nollstället är $\pi/2$.
+Systemet $u' = v$, $v' = -u$ löstes tills $u$ bytte tecken, och nollstället
+skattades därefter. Att räkna tiden som $t = t + h$ gav ackumulerade
+avrundningsfel (felet stannade vid ca $10^{-10}$), så tiden räknades i stället
+som $t = i \cdot h$.
+
+\begin{center}
+\begin{tabular}{c c c c}
+\hline
+$h$ & Euler + lin.\ interp. & RK4 + lin.\ interp. & RK4 + Newton \\
+\hline
+$10^{-1}$ & $1{,}02 \cdot 10^{-2}$  & $2{,}61 \cdot 10^{-5}$  & $2{,}66 \cdot 10^{-6}$ \\
+$10^{-2}$ & $1{,}05 \cdot 10^{-4}$  & $2{,}08 \cdot 10^{-8}$  & $2{,}62 \cdot 10^{-10}$ \\
+$10^{-3}$ & $1{,}05 \cdot 10^{-6}$  & $3{,}20 \cdot 10^{-11}$ & $2{,}62 \cdot 10^{-14}$ \\
+$10^{-4}$ & $1{,}05 \cdot 10^{-8}$  & $1{,}09 \cdot 10^{-14}$ & $2{,}62 \cdot 10^{-18}$ \\
+$10^{-5}$ & $1{,}05 \cdot 10^{-10}$ & $2{,}06 \cdot 10^{-17}$ & $2{,}62 \cdot 10^{-22}$ \\
+$10^{-6}$ & $9{,}64 \cdot 10^{-13}$ & $2{,}54 \cdot 10^{-20}$ & -- \\
+$10^{-7}$ & $9{,}19 \cdot 10^{-14}$ & -- & -- \\
+\hline
+\end{tabular}
+\end{center}
+
+Euler ger fel $\approx \pi h^2/3$ och når som bäst 12 korrekta decimaler.
+Med RK4 begränsas resultatet av den linjära interpolationen ($\sim h^3$).
+Genom att i stället förfina nollstället med Newton,
+$\delta = -u/v$, följt av ett RK4-steg av längd $\delta$, fås felet
+$\approx \pi h^4/120$. Med \texttt{mpmath} (40 siffror) gav $h = 10^{-5}$
+21 korrekta decimaler.
+
+\medskip
+\textbf{Nollstället nära $t = 1000$.} Det ligger vid $t^* = 318{,}5\pi$, så
+$\pi \approx t^*/318{,}5$. Felet i $\pi$ blev detsamma som för första
+nollstället ($2{,}62 \cdot 10^{-10}$ för $h = 0{,}01$). Felet i $t^*$ växer
+linjärt med tiden men delas med $318{,}5$. Det som blir svårare är
+kostnaden: cirka 640 gånger fler steg.
+
+\subsection*{Uppgift 6. Hampus Hillding}
+
+\subsection*{Uppgift 6. Skillnader och likheter}
+
+\begin{enumerate}
+    \item \textbf{Analytisk lösning:} Både Hampus, Disa och Anton får att $y(t)=cost(t)$.
+    \item \textbf{Hur många korrekta siffror kan man få innan datorn smälter:} Disa får ca 11 (???) korrekta siffror mha RK4 medan Hampus får 9 korrekt siffror ??? (räkna med första 3:an). Vi ser att datorn smälter då det tar för lång tid att vänta. Vi hittade sen mha mp.math, taylor och RK4 för att få 20 decimaler ???. Anton fick med Euler först 9 korrekta decimaler, men begränsningen kom från
+    avrundningsfel i $t = t + h$. Med $t = i \cdot h$ nåddes 12 decimaler, så Hampus
+    9 siffror kan ha samma orsak. Eulers fel i nollstället blev $\approx \pi h^2/3$,
+    alltså $\sim h^2$ trots att Euler har globalt fel $\sim h$, eftersom felet för
+    svängningar främst är ett fasfel. För 20 decimaler använde Anton RK4 i
+    \texttt{mpmath} med Newton-förfining av nollstället och fick 21 korrekta
+    decimaler med $h = 10^{-5}$.
+    \item \textbf{Hur mycket svårare blir det med skifte:} Dia härledde och insåg att k är ca 318 för att få ca t=1000. Det ger en dämpande effekt med en faktor på 300 men $t_{318}$ är betydligt svårare att få fram än $t=\pi/2$ och tar helt över med sin feltillväxt. Hampus funderar ???. Anton fick däremot samma fel i $\pi$ som för första nollstället
+    ($2{,}62 \cdot 10^{-10}$ för $h = 0{,}01$). Felet i $t^*$ växer linjärt med antalet
+    svängningar, men delas med $318{,}5$, så effekterna tar ut varandra. Det som
+    blir svårare är kostnaden (cirka 640 gånger fler steg), inte precisionen.
+\end{enumerate}
+
+\section*{Uppgift 7. Titel}
+
+\subsection*{Uppgift 7. Disa Degerholm}
+
+\subsection*{Uppgift 7. Anton Fornstedt}
+
+\textbf{Härledning.} Med $GM = 1$ och $r = \sqrt{x^2 + y^2}$ ger Newtons
+gravitationslag
+\[
+  x'' = -\frac{x}{r^3}, \qquad y'' = -\frac{y}{r^3},
+\]
+som skrevs om till ett första ordningens system i $(x, y, v_x, v_y)$. Med start
+i $(1, 0)$ ger $v_y = 1$ en cirkelbana, eftersom cirkelhastigheten är
+$\sqrt{GM/r} = 1$. Flykthastigheten är $\sqrt{2GM/r} = \sqrt{2}$.
+Energin $E = \tfrac{1}{2}(v_x^2 + v_y^2) - 1/r$ ska vara konstant. 
+
+\medskip
+\textbf{Explicit mot semi-implicit Euler.} Med explicit Euler spiralar
+planeten utåt och energin växer stadigt. I semi-implicit (symplektisk) Euler
+uppdateras först hastigheten och sedan positionen med den \emph{nya}
+hastigheten. Då förblir banan sluten och energin håller sig nära sitt
+startvärde ($h = 0{,}01$, $T = 10\,000$):
+
+\begin{center}
+\begin{tabular}{l c c c}
+\hline
+Metod & $v_y(0)$ & $E(0)$ & $E(10\,000)$ \\
+\hline
+Explicit Euler      & 1   & $-0{,}5$  & $-0{,}0590$ \\
+Semi-implicit Euler & 1   & $-0{,}5$  & $-0{,}49995$ \\
+Semi-implicit Euler & 1,2 & $-0{,}28$ & $-0{,}2801$ \\
+\hline
+\end{tabular}
+\end{center}
+
+Explicit Euler förlorade alltså nästan all bindningsenergi trots litet $h$,
+medan felet med semi-implicit Euler bara oscillerar och aldrig växer.
+
+\subsection*{Uppgift 7. Hampus Hillding}
+
+\subsection*{Uppgift 7. Skillnader och likheter}
+
+\begin{enumerate}
+    \item \textbf{Härled systemets ODE:} Kolla formel ???
+    \item \textbf{Simulera för olika initialvärden under kort och lång tid:} Disa upptäckte att för lång tid blir det en instabil spiral utåt och för kort tid så syns inte detta. Detta är på grund av att energin ökar på grund av den numeriska härledningen ???.Anton fick samma utåtgående spiral med explicit Euler: på $T = 10\,000$ ökade
+    energin från $-0{,}5$ till $-0{,}059$ med $h = 0{,}01$. (Kanske kunde förutspåts från sista delen på uppgift 6??)
+    \item \textbf{Använd Semi implcit Euler för att återställa ordningen i systemet:} Check, det gick bra efterosm att ???
+\end{enumerate}
+
+\section*{Uppgift 8. Titel}
+
+\subsection*{Uppgift 8. Disa Degerholm}
+
+
+\subsection*{1. Modellering och rörelseekvationer i trekropparsproblemet}
+Systemet modelleras som ett planärt, cirkulärt begränsat trekropparsproblem bestående av Solen fix i origo ($M_S = 1$), Jupiter ($M_J = 0{,}08$) i cirkulär bana, samt en rymdsond med försumbar massa ($m \to 0$). Jordens gravitationella påverkan försummas då dess influensradie är försumbar i förhållande till solens gravitationsfält.
+
+Astronomiska enheter väljs så att $G = 1$, längdenheten är $1\text{ AU}$ och $G M_S = 1$. Keplers tredje lag ger Jupiters vinkelhastighet vid banradien $R_J = 5{,}2\text{ AU}$:
+\begin{equation}
+    \omega_J = \sqrt{\frac{G M_S}{R_J^3}} = R_J^{-3/2} = 5{,}2^{-3/2} \approx 0{,}0843\text{ rad/tidsenhet}.
+\end{equation}
+Jupiters banvektor ges av:
+\begin{equation}
+    \mathbf{r}_J(t) = \begin{pmatrix} x_J(t) \\ y_J(t) \end{pmatrix} = \begin{pmatrix} R_J \cos(\omega_J t + \phi_0) \\ R_J \sin(\omega_J t + \phi_0) \end{pmatrix},
+\end{equation}
+där fasvinkeln $\phi_0$ anger Jupiters position vid $t = 0$.
+
+Superposition av Newtons gravitationslag för Solen och Jupiter ger kraften per massenhet på sonden vid $\mathbf{r}(t) = \begin{pmatrix} x(t) \\ y(t) \end{pmatrix}$:
+\begin{equation}
+    \mathbf{r}''(t) = -\frac{\mathbf{r}}{\|\mathbf{r}\|^3} - M_J \frac{\mathbf{r} - \mathbf{r}_J(t)}{\|\mathbf{r} - \mathbf{r}_J(t)\|^3}.
+\end{equation}
+Med hastigheterna $v_x = x'$ och $v_y = y'$ formuleras rörelsen som fyra kopplade första ordningens differentialekvationer:
+\begin{equation}
+    \frac{d}{dt}\begin{pmatrix} x \\ y \\ v_x \\ v_y \end{pmatrix} 
+    = \begin{pmatrix} v_x \\ v_y \\ -\dfrac{x}{(x^2+y^2)^{3/2}} - M_J \dfrac{x - x_J}{\big((x-x_J)^2 + (y-y_J)^2\big)^{3/2}} \\[1em] -\dfrac{y}{(x^2+y^2)^{3/2}} - M_J \dfrac{y - y_J}{\big((x-x_J)^2 + (y-y_J)^2\big)^{3/2}} \end{pmatrix}.
+\end{equation}
+
+\subsection*{2. Flyktvillkor och energiprincip}
+Sondens specifika mekaniska energi relativt Solen definieras av:
+\begin{equation}
+    E_{\text{helio}}(t) = \frac{1}{2}\|\mathbf{v}(t)\|^2 - \frac{1}{\|\mathbf{r}(t)\|}.
+\end{equation}
+Banans geometri bestäms av energins tecken:
+\begin{itemize}
+    \item \textbf{Bunden bana ($E < 0$):} Flykthastigheten vid $r = 1\text{ AU}$ ges av $v_{\text{esc}} = \sqrt{2} \approx 1{,}414$. Startfarten sätts till $v_0 = 1{,}34 < \sqrt{2}$, vilket ger en bunden startellips med $E_0 = \frac{1}{2}(1{,}34)^2 - 1 = -0{,}1022 < 0$. Sonden kan därmed inte lämna solsystemet på egen hand.
+    \item \textbf{Hyperbolisk flykt ($E > 0$):} Efter närpassagen vid en tidpunkt $t_{\text{post}}$ där sonden avlägsnat sig från Jupiters närfält gäller:
+    \begin{equation}
+        E_{\text{post}} = \frac{1}{2}\|\mathbf{v}(t_{\text{post}})\|^2 - \frac{1}{\|\mathbf{r}(t_{\text{post}})\|} > 0.
+    \end{equation}
+    Ett positivt energivärde ($E_{\text{post}} > 0$) garanterar en öppen hyperbolisk flyktbana med asymptotisk resthastighet vid oändligheten.
+\end{itemize}
+
+\subsection*{3. Gravitationsslunga (Gravitational Slingshot)}
+En gravitationsslunga fungerar som en elastisk stöt där sonden lånar rörelseenergi av planeten.
+
+\paragraph{1. Relativ rörelse kring Jupiter}
+Låt sondens hastighet i solsystemet före och efter mötet vara $\mathbf{v}_{\text{in}}$ respektive $\mathbf{v}_{\text{ut}}$, och Jupiters banhastighet vara $\mathbf{v}_J$. I Jupiters eget vilosystem är sondens relativa hastigheter:
+\begin{equation}
+    \mathbf{v}_{\text{rel, in}} = \mathbf{v}_{\text{in}} - \mathbf{v}_J, \qquad \mathbf{v}_{\text{rel, ut}} = \mathbf{v}_{\text{ut}} - \mathbf{v}_J.
+\end{equation}
+Eftersom gravitationsfältet kring Jupiter är konservativt ändras inte farten under passagen, utan banan vrids bara en vinkel $\delta$:
+\begin{equation}
+    \|\mathbf{v}_{\text{rel, ut}}\| = \|\mathbf{v}_{\text{rel, in}}\| = v_{\text{rel}}.
+\end{equation}
+
+\paragraph{2. Hastighetsökning i solsystemet}
+När sonden lämnar Jupiter transformeras hastigheten tillbaka till solens koordinatsystem genom att lägga till $\mathbf{v}_J$:
+\begin{equation}
+    \mathbf{v}_{\text{ut}} = \mathbf{v}_J + \mathbf{v}_{\text{rel, ut}}.
+\end{equation}
+Sondens nya rörelseenergi per massenhet beräknas via skalärprodukten:
+\begin{equation}
+    \frac{1}{2}\|\mathbf{v}_{\text{ut}}\|^2 = \frac{1}{2}\|\mathbf{v}_J + \mathbf{v}_{\text{rel, ut}}\|^2 = \frac{1}{2}\|\mathbf{v}_J\|^2 + \frac{1}{2}v_{\text{rel}}^2 + \mathbf{v}_J \cdot \mathbf{v}_{\text{rel, ut}}.
+\end{equation}
+Termen $\mathbf{v}_J \cdot \mathbf{v}_{\text{rel, ut}} = \|\mathbf{v}_J\| v_{\text{rel}} \cos \theta$ (där $\theta$ är vinkeln mellan $\mathbf{v}_J$ och $\mathbf{v}_{\text{rel, ut}}$) avgör energiändringen:
+\begin{itemize} 
+    \item Passerar sonden \emph{framför} planeten pekar uthastigheten mot planetens rörelseriktning ($\cos \theta < 0$), vilket bromsar sonden.
+    \item Passerar sonden \emph{bakom} planeten vinklas uthastigheten med planetens rörelseriktning ($\cos \theta > 0$), vilket ger ett positivt tillskott av rörelseenergi.
+\end{itemize}
+
+\paragraph{3. Numeriskt resultat}
+Med startvinkeln $\phi_0 = 1{,}78\text{ rad}$ styrs sonden så att den passerar strax bakom Jupiter. Därmed ökar den specifika energin från en bunden bana vid start till en permanent flyktbana:
+\begin{equation}
+    E_0 \approx -0{,}10 < 0 \implies E_{\text{post}} \approx +0{,}14 > 0.
+\end{equation}
+Eftersom $E_{\text{post}} > 0$ är banan en öppen hyperbel som garanterar att skeppet lämnar solsystemet.
+
+\subsection*{Uppgift 8. Anton Fornstedt}
+
+\textbf{Modell.} Solen ligger i origo ($GM = 1$). Jupiter går runt solen i en
+cirkel med radien $5{,}2$, vinkelhastigheten $\omega = 5{,}2^{-3/2} \approx 0{,}0843$
+och massan $1/1000$. Jupiter startar i vinkeln $\theta$. Skeppet startar i
+$(1, 0)$ med hastigheten $(0,\, 1 + \Delta v)$ och dras av både solen och Jupiter:
+\[
+  \mathbf{r}'' = -\frac{\mathbf{r}}{r^3}
+  - \frac{1}{1000}\,\frac{\mathbf{r} - \mathbf{r}_J(t)}{|\mathbf{r} - \mathbf{r}_J(t)|^3}.
+\]
+Jordens dragning togs inte med. Systemet löstes med semi-implicit Euler, som
+i uppgift 7. Som $\Delta v$ användes den fart som behövs för att nå ut till
+Jupiters bana (Hohmann), $\Delta v = \sqrt{2 \cdot 5{,}2/6{,}2} - 1 \approx 0{,}295$.
+
+\medskip
+\textbf{Resultat.} Genom att testa olika startvinklar med $h = 10^{-3}$ hittades
+$\theta = 99{,}75^\circ$. Sedan kördes samma vinkel med mindre $h$:
+
+\begin{center}
+\begin{tabular}{c c c}
+\hline
+$h$ & Minsta avstånd till Jupiters centrum & $E$ \\
+\hline
+$10^{-3}$ & $0{,}00102$  & $+0{,}0624$ \\
+$10^{-4}$ & $0{,}000584$ & $+0{,}00539$ \\
+$10^{-5}$ & $0{,}000592$ & $+0{,}00549$ \\
+\hline
+\end{tabular}
+\end{center}
+
+Med $h = 10^{-3}$ blir resultatet fel, men för $h = 10^{-4}$ och $10^{-5}$ blir
+svaren nästan lika, så de går att lita på. Minsta avståndet ($\approx 0{,}00059$)
+är större än Jupiters radie ($\approx 0{,}00048$), så skeppet passerar ungefär
+$15\,000$~km ovanför ytan och krockar inte. Eftersom $E > 0$ lämnar skeppet
+solsystemet.
+
+\subsection*{Uppgift 8. Hampus Hillding}
+
+\subsection*{Uppgift 8. Skillnader och likheter}
+
+\begin{enumerate}
+    \item \textbf{Utforska numerisk för att hitta olika planetbanor s.a systemet stämmer:} Är jorden försumbar ???. Anton tog inte med jorden. Jorden väger bara ungefär $1/300$ av Jupiter och
+    påverkar skeppet bara precis i början, medan det är passagen förbi Jupiter som
+    avgör om skeppet kommer ut. Anton började med Hohmann-$\Delta v$ och letade sedan
+    upp rätt startvinkel för Jupiter. Med för stort $h$ gav vissa vinklar helt
+    orimliga energier (till exempel $E = 342$). Det var inte på riktigt, utan
+    berodde på att skeppet kom för nära Jupiter för att stegen skulle hinna med.
+    \item \textbf{Hur vet man att skeppet lämnar solsystemet:} Printar banan över tid och ser skillnaden på energi ??? (hur mycket). Anton tittade på energin: om $E \geq 0$ kommer skeppet inte tillbaka. Han fick
+    $E \approx +0{,}0055$, vilket betyder att skeppet fortsätter bort från solen. Att $h = 10^{-4}$ och $h = 10^{-5}$ gav samma svar
+    visar att man kan lita på resultatet. Med $h = 10^{-3}$ blev $E$ över tio gånger
+    för stort.
+\end{enumerate}
+
+\end{document}\begin{itemize}
+    \item För $y > 0$: $\int y^{-1/2}\,dy = \int dt \implies 2\sqrt{y} = t - c_2 \implies y(t) = \frac{1}{4}(t - c_2)^2$ ($t \ge c_2$).
+    \item För $y < 0$: $\int (-y)^{-1/2}\,dy = \int dt \implies -2\sqrt{-y} = t - c_1 \implies y(t) = -\frac{1}{4}(t - c_1)^2$ ($t \le c_1$).
+\end{itemize}
+Eftersom $y' \ge 0$ är $y(t)$ icke-avtagande och kan ligga kvar på jämvikten $y \equiv 0$ under ett godtyckligt tidsintervall $[c_1, c_2]$:
+\begin{equation}
+    y(t) = \begin{cases}
+        -\frac{1}{4}(t - c_1)^2, & t \le c_1, \\
+        0, & c_1 < t < c_2, \\
+        \frac{1}{4}(t - c_2)^2, & t \ge c_2,
+    \end{cases}
+    \quad \text{där } c_1 \le 0 \le c_2.
+\end{equation}
+Detta ger en tvåparametrig familj av oändligt många lösningar.
+
+\subsection*{2. Numerisk lösning med RK4}
+Med $y_0 = 0$ fås i första RK4-steget:
+\begin{equation}
+    k_1 = f(0) = 0 \implies k_2 = k_3 = k_4 = 0 \implies y_1 = y_0 = 0.
+\end{equation}
+Genom induktion gäller $y_n = 0$ för alla $n$. En standardlösare förblir deterministiskt låst i den stationära lösningen $y(t) \equiv 0$ och kan inte numeriskt detektera förgreningen utan yttre störning.
+
+\subsection*{3. Hur länge lösningen fastnar vid $y(-1) = -1$}
+För $y < 0$ ger separation av variabler med $y(-1) = -1$:
+\begin{equation}
+    -2\sqrt{-y} = t + C \implies -2\sqrt{1} = -1 + C \implies C = -1,
+\end{equation}
+vilket ger $y(t) = -\frac{1}{4}(1 - t)^2$ för $t \le 1$. Analytiskt nås $y = 0$ vid $t = 1$, varpå lösningen kan kvarstanna i $y \equiv 0$ godtyckligt länge.
+
+\begin{itemize}
+    \item \textbf{Tid till tröskeln $|y| \le 10^{-6}$:}
+    För $y < 0$ ger separation av variabler med $y(-1) = -1$:
+    \[
+    \int (-y)^{-1/2}\,dy = \int dt \implies -2\sqrt{-y} = t - 1 \implies y(t) = -\frac{1}{4}(1 - t)^2.
+    \]
+    Tröskelvillkoret $|y| \le 10^{-6}$ ger:
+    \[
+    \frac{1}{4}(1 - t)^2 \le 10^{-6} \implies |1 - t| \le 2 \cdot 10^{-3} \implies t \approx 0{,}998.
+    \]
+    Tiden från startpunkten $t = -1$ blir därmed $\Delta t = 0{,}998 - (-1) = 1{,}998$.
+
+    \item \textbf{Numeriskt beteende:}
     \begin{itemize}
-        \item Träffas exakt $y_n = 0$ blir derivatan noll och lösaren fastnar permanent i $y \equiv 0$.
-        \item Om ett steg råkar kliva förbi noll och landar på $y_n = \delta > 0$, är derivatan inte längre noll utan ges av $f(t_n, \delta) = \sqrt{\delta}$. Eftersom kvoten mellan derivatan och tillståndet, $\frac{\sqrt{\delta}}{\delta} = \frac{1}{\sqrt{\delta}}$, växer obegränsat då $\delta \to 0^+$, innebär detta att även en liten störning $\delta$ ger upphov till en stor tillväxthastighet i tex Eulers metod. $\Delta y \approx h\sqrt{\delta}$ ökar snabbt i följande steg, vilket tvingar lösningen att bryta sig loss från jämvikten och lämna toleransintervallet $|y| \le 10^{-6}$ efter endast ett fåtal beräkningssteg.
+        \item Om $y_n = 0$ exakt blir alla lutningar noll:
+        \[
+        k_1 = f(t_n, 0) = \sqrt{|0|} = 0 \implies k_2 = k_3 = k_4 = 0 \implies y_{n+1} = y_n = 0,
+        \]
+        vilket låser lösaren permanent i jämvikten.
+        \item Om avrundningsfel ger $y_n = \delta > 0$ fås efter ett Euler-steg (eller motsvarande för RK4):
+        \[
+        y_{n+1} = \delta + h\sqrt{\delta} \implies \frac{y_{n+1}}{y_n} = 1 + \frac{h}{\sqrt{\delta}}.
+        \]
+        Eftersom $\lim_{\delta \to 0^+} \frac{h}{\sqrt{\delta}} = \infty$ växer tillskottet $\Delta y = h\sqrt{\delta} \gg \delta$ explosionsartat, varför lösningen lämnar intervallet $|y| \le 10^{-6}$ på ett fåtal steg.
     \end{itemize}
 \end{itemize}
 
 \section*{Uppgift 4. PANG!}
 
 Betrakta begynnelsevärdesproblemet
-$$y' = y^2, \quad y(0) = \frac{N}{100},$$
-där vi antar $N > 0$ och sätter $y_0 = \frac{N}{100}$.
+\begin{equation}
+    y' = y^2, \quad y(0) = y_0 = \frac{N}{100}.
+\end{equation}
 
 \subsection*{1. Analytisk lösning och singularitet}
+För $y \neq 0$ ger separation av variabler med $y(0) = y_0$:
+\begin{equation}
+    \int y^{-2}\,dy = \int dt \implies -\frac{1}{y} = t - \frac{1}{y_0} \implies y(t) = \frac{y_0}{1 - y_0 t} = \frac{N}{100 - N t}.
+\end{equation}
+Lösningen har en vertikal asymptot (smäller) då nämnaren försvinner:
+\begin{equation}
+    t^* = \frac{1}{y_0} = \frac{100}{N}.
+\end{equation}
+För $N = 82$ är den exakta singularitetstiden $t^* = \frac{100}{82} \approx 1{,}219512$.
 
-Differentialekvationen är separabel. För $y \neq 0$ fås:
-\begin{align*}
-    \frac{dy}{y^2} &= dt \\
-    -\frac{1}{y} &= t + C.
-\end{align*}
-Begynnelsevillkoret $y(0) = y_0$ ger:
-$$-\frac{1}{y_0} = 0 + C \implies C = -\frac{1}{y_0}.$$
-Insättning ger:
-$$-\frac{1}{y} = t - \frac{1}{y_0} \implies \frac{1}{y} = \frac{1}{y_0} - t = \frac{1 - y_0 t}{y_0},$$
-vilket ger lösningen:
-$$y(t) = \frac{y_0}{1 - y_0 t} = \frac{\frac{N}{100}}{1 - \frac{N}{100}t} = \frac{N}{100 - N t}.$$
-
-\textbf{När smäller det?} \\
-Lösningen har en vertikal asymptot då nämnaren blir noll:
-$$100 - N t^* = 0 \implies t^* = \frac{100}{N} = \frac{1}{y_0}.$$
-Då $t \to (t^*)^-$ gäller att $y(t) \to \infty$. Lösningen existerar därmed endast på det öppna intervallet $(-\infty, t^*)$.
-
-??? N person nr
-
-\subsection*{2. Numerisk lösning och uppskattning av $t^*$}
-
-Vid numerisk integration (tex med RK4) kommer lösaren att approximera kurvan fram till singulariteten:
+\subsection*{2. Numerisk singularitet och skattning av $t^*$}
 \begin{itemize}
-    \item \textbf{Numeriskt singularitet:} När $t_n$ närmar sig $t^*$ ökar $y_n$ och därmed $y_n^2$ ännu mer. Inom få steg överskrids gränsen för standardflyttal (float64, $\approx 1{,}8 \cdot 10^{308}$), vilket leder till att den returnerar inf eller NaN.
-    \item \textbf{Uppskattning av $t^*$ via linearisering:} Eftersom den analytiska lösningen uppfyller relationen
-    $$z(t) = \frac{1}{y(t)} = t^* - t,$$
-    är hjälpfuktionen $z(t)$ en rät linje med lutningen $z'(t) = -1$ och sitt nollställe exakt i $t^*$. Då $y(t) \to \infty$ närmar sig $z(t)$ noll linjärt. 
+    \item \textbf{Numeriskt bevis för singularitet:} 
+    Vid numerisk integration (t.ex.\ RK4) växer $y_n$ och derivatan $y'_n = y_n^2$ explosionsartat då $t \to t^*$. Eftersom lösningskurvan blir vertikal kan ett fixt steg $h$ inte följa funktionen. Värdena överskrider snabbt gränsen för standardflyttal (\texttt{float64} $\sim 1{,}8 \cdot 10^{308}$) och genererar \texttt{inf}/\texttt{NaN}, vilket numeriskt påvisar singulariteten.
 
-    För att bestämma nollstället $t^*$ till en funktion $z(t)$ kan Newtons metod formuleras från en beräkningspunkt $t_n$:
-    $$t^* \approx t_n - \frac{z(t_n)}{z'(t_n)}.$$
-    Med $z(t_n) = \frac{1}{y_n}$ ger kedjeregeln derivatan:
-    $$z'(t) = -\frac{y'(t)}{y(t)^2}.$$
-    Eftersom differentialekvationen är $y' = y^2$ blir derivatan identiskt konstant:
-    $$z'(t) = -\frac{y^2}{y^2} = -1.$$
-    Insättning av $z(t_n) = \frac{1}{y_n}$ och $z'(t_n) = -1$ i Newtons metod ger direkt:
-    $$t^* \approx t_n - \frac{\frac{1}{y_n}}{-1} = t_n + \frac{1}{y_n}.$$
-    Eftersom $z(t)$ är en linjär funktion konvergerar Newtons metod exakt på ett enda steg. Den numeriska lösaren kan därmed vid varje tidssteg extrapolera längs tangenten för att förutsäga den exakta singularitetstiden $t^*$, långt innan tillväxten i $y_n$ orsakar överflöde i flyttalsaritmetiken.
+    \item \textbf{Uppskattning av $t^*$:}
+    Genom att integrera framåt med steglängd $h = 0{,}01$ fram till ett tröskelvärde (t.ex.\ $y > 10^5$) avbryts beräkningen vid sista steget:
+    \[
+    t_{\text{stopp}} \approx 1{,}2100.
+    \]
+    Detta ger en direkt numerisk undre uppskattning av singularitetstiden som stämmer väl överens med det analytiska värdet $t^* = \frac{100}{82} \approx 1{,}2195$.
 \end{itemize}
 
-\subsection*{3. Bevis för att $y(0) < 0 \implies y(t) < 0$ för alla $t > 0$}
-
-Betrakta BVP  $y' = f(t, y) = y^2$ med $y(0) = y_0 < 0$.
+\subsection*{3. Bevis: $y(0) < 0 \implies y(t) < 0$ för alla $t > 0$}
+Högerledet $f(y) = y^2$ har kontinuerlig partiell derivata $\frac{\partial f}{\partial y} = 2y$, vilket gör $f$ lokalt Lipschitzkontinuerlig. Enligt Picards entydighetssats (Simmons kap.~13) kan två skilda lösningskurvor aldrig skära varandra:
 \begin{itemize}
-    \item Högerledet $f(t, y) = y^2$ har kontinuerlig partiell derivata $\frac{\partial f}{\partial y} = 2y$ på hela $\mathbb{R}$, vilket medför att $f$ är lokalt Lipschitzkontinuerlig överallt.
-    \item Enligt Picard existens och entydighetssats kan två olika lösningskurvor till begynnelsevärdesproblemet aldrig skära varandra i något $(t, y)$-plan.
-    \item Notera att $y(t) \equiv 0$ är en stationär lösning till differentialekvationen ($0' = 0^2$).
-    \item Om det skulle existera en tidpunkt $t_1 > 0$ sådan att $y(t_1) \ge 0$, måste lösningen enligt satsen om mellanliggande värden passera noll vid någon punkt $t_0 \in (0, t_1]$, dvs.\ $y(t_0) = 0$. 
-    \item Men i punkten $(t_0, 0)$ skulle vår lösning skära den triviala lösningen $y \equiv 0$, vilket motsäger entydigheten enligt Picard. 
+    \item Funktionen $y(t) \equiv 0$ är en stationär lösning ($0' = 0^2$).
+    \item Om det funnes ett $t_1 > 0$ med $y(t_1) \ge 0$, måste $y(t)$ enligt satsen om mellanliggande värden anta $y(t_0) = 0$ för något $t_0 \in (0, t_1]$.
+    \item I punkten $(t_0, 0)$ skulle banan skära $y \equiv 0$, vilket motsäger Picards entydighet. Alltså gäller $y(t) < 0$ för alla $t > 0$.
 \end{itemize}
-Alltså måste $y(t) < 0$ för alla $t > 0$ där lösningen är definierad. 
 
-Analytiskt syns detta direkt:
-$$y(t) = \frac{y_0}{1 - y_0 t}.$$
-Eftersom $y_0 < 0$ är $-y_0 > 0$, vilket innebär att nämnaren $1 - y_0 t > 1 > 0$ för alla $t > 0$. Kvoten förblir därmed strikt negativ och går asymptotiskt mot noll då $t \to \infty$.
+\subsection*{4. Numeriskt felsteg och automatlösare}
+Betrakta $y' = C y^2$ med $y_0 = \epsilon < 0$. Ett Euler-steg med steglängd $h$ ger:
+\begin{equation}
+    y_1 = \epsilon + h C \epsilon^2 = \epsilon (1 + h C \epsilon).
+\end{equation}
+Eftersom $\epsilon < 0$ blir $y_1 > 0$ om faktorn växlar tecken:
+\begin{equation}
+    1 + h C \epsilon < 0 \implies h > \frac{1}{C |\epsilon|}.
+\end{equation}
+För t.ex.\ $C = 50$, $\epsilon = -0{,}10$ och $h = 0{,}5$ ger RK4 ett falskt omslag till $y_1 = 0{,}0704 > 0$, varpå lösningen exploderar mot $+\infty$ istället för att avta mot noll.
 
-\subsection*{4. Numeriskt felsteg ($y(t) > 0$) och automatlösarens skydd}
-
-\textbf{Numeriskt motexempel:} \\
-Betrakta $y' = C y^2$ med $y(0) = \epsilon < 0$. Med Eulers metod och steglängd $h$ beräknas nästa punkt som:
-$$y_1 = y_0 + h \cdot C y_0^2 = \epsilon + h C \epsilon^2 = \epsilon(1 + h C \epsilon).$$
-Eftersom $\epsilon < 0$ krävs för att $y_1 > 0$ att faktorn inom parentes är negativ:
-$$1 + h C \epsilon < 0 \implies h C (-\epsilon) > 1 \implies h > \frac{1}{C |\epsilon|}.$$
-Om konstanten $C$ eller steglängden $h$ väljs så stora att villkoret $h > \frac{1}{C|\epsilon|}$ uppfylls, blir det numeriska tillskottet $\Delta y$ större än startvärdets magnitud, vilket gör att lösaren felaktigt kliver förbi nollan till ett positivt värde $y_1 > 0$ redan efter ett enda steg. Därmed hamnar metoden på en felaktig lösning. Istället för att asymptotiskt avta mot noll accelererar derivatan $y' = C y^2 > 0$ snabbt, och lösningen drar mot $+\infty$  vid en fejk numerisk singularitet.
-
-\vspace{0.5em}
-\noindent\textbf{Strategier för en adaptiv automatlösare:}
-\begin{enumerate}
-    \item \textbf{Adaptiv steglängdskontroll:} Metoden ska uppskatta det lokala trunkeringsfelet genom att jämföra två metoder av olika ordning (tex RK4 och Euler). När $|y'| = C y^2$ växer kraftigt kastas steget och steglängden $h$ skalas ned så att $h \ll \frac{1}{C |y|}$.
-    \item \textbf{Detektering av teckenbyten:} Ekvationen kräver $y' = C y^2 \ge 0$, dvs lösningen måste vara monotont växande, och analytiskt gäller $y(t) < 0$. Om automatlösaren registrerar teckenväxling ($y_n \cdot y_{n+1} < 0$) eller orimlig derivata teckenbyte (dvs derivatan är negativ) ska steget underkännas och minskas.
-    \item \textbf{Implicit tidsstegning:} krav???
-\end{enumerate}
+\paragraph{Automatlösarens skydd:}
+\begin{itemize}
+    \item \textbf{Adaptiv steglängd:} Felet uppskattas via inbäddade metoder (t.ex.\ Runge--Kutta--Fehlberg) och $h$ skalas ned så att $h \ll \frac{1}{C|y|}$.
+    \item \textbf{Invarians- och teckenkontroll:} Steget förkastas omedelbart om $y_n$ byter tecken ($y_n \cdot y_{n+1} \le 0$) eftersom teckenbyte är analytiskt förbjudet.
+\end{itemize}
 
 \section*{Uppgift 5. Inte PANG}
 
-Betrakta BVP
-$$y' = y, \quad y(0) = N.$$
+Betrakta begynnelsevärdesproblemet
+\begin{equation}
+    y' = y, \quad y(0) = N.
+\end{equation}
 
-\subsection*{1. Analytisk lösning och felfortplantning}
+\subsection*{1. Analytisk lösning och globalt fel för RK4}
+Differentialekvationen har den exakta lösningen:
+\begin{equation}
+    y(t) = N e^t \implies y(2^k) = N e^{2^k}.
+\end{equation}
+För $y' = y$ gäller $y^{(v)}(\xi) = N e^\xi$. Det lokala trunkeringsfelet per steg ges av:
+\begin{equation}
+    \epsilon_{\text{lokal}} = -\frac{y^{(v)}(\xi)}{180} h^5 = -\frac{N e^\xi}{180} h^5.
+\end{equation}
+Över $M = \frac{T}{h}$ steg fram till $T = 2^k$ begränsas det globala felet av:
+\begin{equation}
+    |E_M| \le M \cdot \max_{0 \le \xi \le T} |\epsilon_{\text{lokal}}(\xi)| \cdot e^{T - \xi} \le \frac{T}{h} \left(\frac{N e^T}{180} h^5\right) = \frac{N \cdot 2^k e^{2^k}}{180} h^4.
+\end{equation}
+Kravet på två korrekta decimaler ($|E_M| \le 0{,}005$) kräver:
+\begin{equation}
+    \frac{N \cdot 2^k e^{2^k}}{180} h^4 \le 0{,}005 \implies h \le \left(\frac{0{,}9}{N \cdot 2^k}\right)^{1/4} e^{-2^{k-2}}.
+\end{equation}
+Steglängden $h$ måste alltså minskas exponentiellt, vilket gör att antalet steg $M = \frac{2^k}{h} \propto 2^{5k/4} e^{2^{k-2}}$ växer explosionsartat.
 
-Differentialekvationen $y' = y$ med $y(0) = N$ har den exakta analytiska lösningen:
-$$y(t) = N e^t.$$
-Vid tidpunkterna $t_k = 2^k$ för $k = 1, 2, 3, \dots$ ges funktionsvärdet av:
-$$y(2^k) = N e^{2^k}.$$
-Till skillnad från föregående uppgift ($y' = y^2$) inträffar ingen lodrät asymptot, lösningen existerar för alla $t \in \mathbb{R}$. Tillväxten är dock exponentiell, vilket ställer extrema krav på numerisk precision och flyttalsaritmetik då $t$ växer.
-
-\subsection*{2. Teoretisk felanalys (RK4)}
-
-Enligt formelbladet ges RK4 för BVP $y' = f(x, y)$ av stegen:
-\begin{align*}
-    m_1 &= h f(x_k, y_k), \\
-    m_2 &= h f\left(x_k + \frac{h}{2}, y_k + \frac{m_1}{2}\right), \\
-    m_3 &= h f\left(x_k + \frac{h}{2}, y_k + \frac{m_2}{2}\right), \\
-    m_4 &= h f(x_k + h, y_k + m_3),
-\end{align*}
-med uppdateringen:
-$$y_{k+1} = y_k + \frac{1}{6}(m_1 + 2m_2 + 2m_3 + m_4).$$
-
-För $y' = y$ med $y(0) = N$ är den exakta lösningen $y(t) = N e^t$. De successiva derivatorna ges av $y^{(n)}(t) = y(t)$, vilket medför att den femte derivatan är $y^{(v)}(\xi) = y(\xi) = N e^\xi$.
-
-Enligt boken ges det lokala trunkeringsfelet i varje steg av:
-$$\epsilon_{\text{lokal}} = -\frac{y^{(v)}(\xi)}{180} h^5 = -\frac{N e^\xi}{180} h^5, \quad \text{där } x_k \le \xi \le x_{k+1}.$$
-För att nå slutpunkten $T = 2^k$ krävs $M = \frac{T}{h}$ beräkningssteg. Det globala felet vid $T$ utgörs av summan av alla enskilda lokala trunkeringsfel, där varje fel dessutom förstärks exponentiellt av ekvationens  tillväxt ($e^{T - t_j}$ för ett fel genererat vid tidpunkt $t_j$). 
-
-Eftersom varje lokalt fel är $\mathcal{O}(h^5)$ och antalet steg är $M \propto \frac{1}{h}$, blir summan av storleksordningen $M \cdot \mathcal{O}(h^5) = \mathcal{O}(h^4)$. Det totala trunkeringsfelet vid $T = 2^k$ begränsas därmed av:
-$$|E_M| \le M \cdot \max_{0 \le \xi \le T} |\epsilon_{\text{lokal}}(\xi)| \cdot e^{T - \xi} \le \frac{T}{h} \cdot \left(\frac{N e^T}{180} h^5\right) = \frac{N T e^T}{180} h^4.$$
-Med $T = 2^k$ fås:
-$$|E_M| \le \frac{N \cdot 2^k e^{2^k}}{180} h^4 \propto h^4 e^{2^k}.$$
-Det globala felet avtar alltså med ordning 4 med avseende på $h$, men skalas med den jättestora tillväxtfaktorn $e^{2^k}$.
-
-\bigskip
-
-Kravet på \textbf{två korrekta decimaler} innebär att det absoluta felet vid $T = 2^k$ inte får överstiga $0{,}005$:
-$$|y(2^k) - y_{\text{num}}| \le 0{,}005.$$
-Med felgränsen uppskattad via formelbladets ledande felterm fås:
-$$\frac{N e^{2^k}}{180} \cdot 2^k h^4 \lesssim 0{,}005 \implies h^4 \lesssim \frac{0{,}9}{N \cdot 2^k e^{2^k}}.$$
-Steglängden måste alltså minskas exponentiellt snabbt:
-$$h \lesssim \left(\frac{0{,}9}{N \cdot 2^k}\right)^{1/4} e^{-2^{k-2}}.$$
-Antalet beräkningssteg $M = \frac{2^k}{h}$ växer därmed som $\mathcal{O}\left(2^{\frac{5}{4}k} e^{2^{k-2}}\right)$, vilket leder till att beräkningstiden exploderar redan för mindre värden på $k$.
-
-\subsection*{3. Datorns begränsningar}
-
-När beräkningen drivs för $k = 1, 2, 3, \dots$ ger datorn upp av två oberoende skäl:
-
+\subsection*{2. Datorns begränsningar (Varför datorn ger upp)}
+I standard flyttalsformat (\texttt{float64}, $\epsilon_{\text{mach}} \approx 2{,}22 \cdot 10^{-16}$) stoppas beräkningen av två skilda orsaker:
 \begin{enumerate}
-    \item \textbf{Förlust av decimaler (Avrundningsfel p.g.a.\ datorns precision):} \\
-    Datorn sparar tal i standardformatet \texttt{float64} med cirka 16 siffrors noggrannhet ($\epsilon_{\text{mach}} \approx 2{,}22 \cdot 10^{-16}$). När talet $y$ växer, växer också det minsta steget datorn kan skilja mellan tal (ungefär $\epsilon_{\text{mach}} \cdot y$).
+    \item \textbf{Förlust av precision ($k \ge 5$):} 
+    Avståndet mellan två på varandra följande representerbara flyttal vid storleken $y$ är $\text{ulp} \approx \epsilon_{\text{mach}} \cdot y$. För två korrekta decimaler krävs $\epsilon_{\text{mach}} \cdot y \le 0{,}005$:
+    \begin{equation}
+        y \le \frac{0{,}005}{2{,}22 \cdot 10^{-16}} \approx 2{,}25 \cdot 10^{13} \implies 2^k \le \ln\left(\frac{2{,}25 \cdot 10^{13}}{N}\right).
+    \end{equation}
+    För $N = 82$ passeras gränsen redan vid $t \approx 26{,}3$, dvs.\ för alla $k \ge 5$ ($t_5 = 32$). Då är avståndet mellan talen större än toleransen, vilket gör två korrekta decimaler  omöjliga oavsett hur litet $h$ väljs då $|E_M| \le 0{,}005$ inte kan uppnås.
 
-    För att kunna lita på \textbf{två decimaler} måste detta osäkerhetssteg vara mindre än $0{,}005$:
-    $$\epsilon_{\text{mach}} \cdot y < 0{,}005 \implies y < \frac{0{,}005}{2{,}22 \cdot 10^{-16}} \approx 2{,}25 \cdot 10^{13}.$$
-
-    Eftersom lösningen växer exponentiellt som $y \sim e^{2^k}$, når vi denna gräns redan vid:
-    $$2^k > \ln(2{,}25 \cdot 10^{13}) \approx 30{,}7 \implies k \ge 5 \quad (\text{eftersom } 2^5 = 32).$$
-
-    Redan från $k \ge 5$ är avståndet mellan två intilliggande tal i datorn större än $0{,}01$. Datorn kan helt enkelt inte representera två decimaler längre, oavsett hur små steg $h$ vi tar i beräkningen.
-
-    \item \textbf{Talet blir för stort (\texttt{overflow}):} \\
-    Det största talet som float64 klarar av innan det kraschar är cirka $1{,}79 \cdot 10^{308}$. Detta tak nås när:
-    $$e^{2^k} > 1{,}79 \cdot 10^{308} \implies 2^k > \ln(1{,}79 \cdot 10^{308}) \approx 710.$$
-
-    Eftersom $2^9 = 512$ och $2^{10} = 1024$, slår beräkningen i taket och returnerar \texttt{inf} (oändligt) så fort:
-    $$k \ge 10.$$
+    \item \textbf{Aritmetiskt överflöde / \texttt{overflow} ($k \ge 10$):} 
+    Det maximala talet i \texttt{float64} är $y_{\max} \approx 1{,}79 \cdot 10^{308}$. Detta överskrids då:
+    \begin{equation}
+        N e^{2^k} > 1{,}79 \cdot 10^{308} \implies 2^k > \ln\left(\frac{1{,}79 \cdot 10^{308}}{82}\right) \approx 705{,}4.
+    \end{equation}
+    Eftersom $t_9 = 512$ och $t_{10} = 1024$, slår beräkningen i hårdvarutaket vid $k = 10$ och returnerar \texttt{inf}.
 \end{enumerate}
 
-\subsection*{4. Sammanfattning av numeriska resultat per $k$}
-
+\subsection*{3. Resultat}
 \begin{center}
-\begin{tabular}{c r r l}
+\begin{tabular}{c r r c l}
 \hline
-$k$ & $t_k = 2^k$ & $y(t_k) = e^{2^k}$ ($N=1$) & Utfall och begränsning \\
+$k$ & $t_k = 2^k$ & $y_{\text{exakt}}$ & Absolut fel & Status \\
 \hline
-$1$ & $2$ & $7{,}39$ & Uppnås enkelt med måttligt $h$. \\
-$2$ & $4$ & $54{,}60$ & Kräver mindre $h$; beräkningsbart. \\
-$3$ & $8$ & $2{,}98 \cdot 10^3$ & Kräver $h \sim 10^{-2}$; stabil lösning. \\
-$4$ & $16$ & $8{,}89 \cdot 10^6$ & Kräver $h \sim 10^{-3}$; avrundningsfel börjar märkas. \\
-$5$ & $32$ & $7{,}89 \cdot 10^{13}$ & \textbf{Gräns för 2 decimaler:} $\epsilon_{\text{mach}} \cdot y > 0{,}01$. \\
-$6$ & $64$ & $6{,}24 \cdot 10^{27}$ & Endast relativ noggrannhet kan bevaras. \\
-$9$ & $512$ & $1{,}25 \cdot 10^{222}$ & Extrem beräkningstid; nära flyttalsgränsen. \\
-$10$ & $1024$ & $\infty$ & \textbf{Datorn kraschar:} \texttt{overflow} till \texttt{inf}. \\
+$1$ & $2$ & $605{,}9026$ & $1{,}59 \cdot 10^{-6}$ & OK ($100$ steg) \\
+$2$ & $4$ & $4477{,}0483$ & $3{,}70 \cdot 10^{-4}$ & OK ($100$ steg) \\
+$3$ & $8$ & $244438{,}5549$ & $2{,}56 \cdot 10^{-3}$ & OK ($400$ steg) \\
+$4$ & $16$ & $7{,}29 \cdot 10^8$ & $3{,}79 \cdot 10^{-3}$ & OK ($6400$ steg) \\
+$5$ & $32$ & $6{,}47 \cdot 10^{15}$ & -- & Stopp: $\text{ulp} > 0{,}005$ \\
+$10$ & $1024$ & $\infty$ & -- & Krasch: \texttt{overflow} (\texttt{inf}) \\
 \hline
 \end{tabular}
 \end{center}
 
-\section*{6. Vad är $\pi$?}
+\section*{Uppgift 6. Vad är $\pi$?}
 
-\begin{example}{Analytisk lösning och kvalitativ analys}
-    Betrakta BVP:
-    $$y'' + y = 0, \quad y(0) = 1, \quad y'(0) = 0.$$
-    
-    Enligt Simmons kapitel 4.24 betecknas lösningen till detta problem med $c(x)$, definierad via ODE:n och dess begynnelsevillkor. Eftersom $y'' = -y$ är andraderivatan negativ så länge $y > 0$, vilket innebär att lutningen $y'$ avtar monotont från $0$. Kurvan böjer därmed nedåt mot $x$-axeln tills den skär axeln vid en punkt.
-    
-    Via karakteristiska ekvationen $r^2 + 1 = 0 \implies r = \pm i$ ges den allmänna lösningen av $y(t) = c_1 \cos(t) + c_2 \sin(t)$. Med $y(0) = 1$ och $y'(0) = 0$ erhålls den unika lösningen:
-    $$y(t) = \cos(t).$$
-\end{example}
+Betrakta begynnelsevärdesproblemet
+\begin{equation}
+    y'' + y = 0, \quad y(0) = 1, \quad y'(0) = 0.
+\end{equation}
 
-\begin{defi}{Kvalitativ definition av $\pi$}
-    I stället för att utgå från cirklar kan talet $\pi$ definieras direkt ur svängningsekvationen:
-    $$y'' = -y$$
-    Ekvationen beskriver ett system där accelerationen ($y''$) hela tiden drar tillbaka mot noll med en kraft proportionell mot $y$. Vi inför två grundläggande lösningar utifrån hur de startar vid $t = 0$:
-    \begin{itemize}
-        \item $s(t)$ startar i noll med hastighet ett: $s(0) = 0$ och $s'(0) = 1$.
-        \item $c(t)$ startar i ett i vila: $c(0) = 1$ och $c'(0) = 0$.
-    \end{itemize}
+\subsection*{1. Analytisk lösning och kvalitativ analys}
+Karakteristiska ekvationen $r^2 + 1 = 0 \implies r = \pm i$ ger $y(t) = c_1 \cos(t) + c_2 \sin(t)$. Begynnelsevillkoren ger $c_1 = 1, c_2 = 0$, dvs.\ den unika analytiska lösningen:
+\begin{equation}
+    y(t) = \cos(t).
+\end{equation}
 
-    Om man deriverar ekvationen $y'' + y = 0$ ser man att hastigheten $y'$ också lyder under exakt samma rörelse: $(y')'' = -(y')$. Eftersom $s'(t)$ startar med samma värde och derivata som $c(t)$, tvingas dem att vara identiska: $s'(t) = c(t)$ och $c'(t) = -s(t)$.
+\paragraph{Kvalitativ definition av $\pi$ (Simmons kap.~4.24):}
+Låt $s(t)$ och $c(t)$ vara lösningarna till $y'' + y = 0$ med startvärdena $s(0) = 0, s'(0) = 1$ respektive $c(0) = 1, c'(0) = 0$.
+\begin{itemize}
+    \item Eftersom $(y')'' + y' = 0$ gäller $s'(t) = c(t)$ och $c'(t) = -s(t)$.
+    \item Energin är konstant bevarad:
+    \begin{equation}
+        \frac{d}{dt}\big(s(t)^2 + c(t)^2\big) = 2s(t)s'(t) + 2c(t)c'(t) = 2s(t)c(t) - 2c(t)s(t) = 0,
+    \end{equation}
+    vilket med startvärdena ger $s(t)^2 + c(t)^2 \equiv 1$.
+    \item Kurvan $s(t)$ stiger från origo med avtagande lutning ($s'' = -s < 0$) och når en topp vid $s = 1$ där $s' = c = 0$. Den första positiva skärningspunkten för $s(t) = 0$ definieras som $\pi$. Av symmetri nås toppen vid $t^* = \pi/2$ där hastigheten är noll:
+    \begin{equation}
+        c(t^*) = 0 \implies t^* = \frac{\pi}{2} \iff \pi = 2t^*.
+    \end{equation}
+    \item Enligt separationssatsen (Simmons kap.~4.24/4.25) alternerar nollställena för $s(t)$ och $c(t)$ strikt, varför nollstället $t^*$ är isolerat och unikt på $(0, \pi)$.
+\end{itemize}
 
-    \bigskip
-
-    Totala energin i detta system kan skrivas som summan av läge och hastighet i kvadrat, $s(t)^2 + c(t)^2$. Deriverar vi denna summa m.a.p.\ tiden fås noll:
-    $$\frac{d}{dt}\big(s(t)^2 + c(t)^2\big) = 2s(t)\underbrace{s'(t)}_{c(t)} + 2c(t)\underbrace{c'(t)}_{-s(t)} = 0$$
-    Energin är alltså konstant bevarad längs rörelsen. Med startvärdena $0^2 + 1^2 = 1$ gäller alltid $s(t)^2 + c(t)^2 = 1$, vilket garanterar att varken läge eller hastighet någonsin kan bli större än $1$ eller mindre än $-1$.
-
-    \bigskip
-
-    Kurvan för $s(t)$ rör sig uppåt från origo. Men så fort $s(t) > 0$ drar accelerationen $s''(t) = -s(t)$ nedåt, vilket bromsar farten tills den når noll ($s'(t) = c(t) = 0$) vid en topp på höjden $1$. Därefter dras kurvan ned mot tidsaxeln och skär den i en punkt. Denna första positiva skärningspunkt definieras som talet $\pi$.
-
-    Eftersom kurvan är helt symmetrisk ligger toppen exakt halvvägs dit, alltså vid $t = \pi/2$. Där är hastigheten noll, vilket innebär att $c(\pi/2) = 0$. Vi kan därför lika gärna definiera $\pi/2$ som det första nollstället $t^* > 0$ för lösningen $c(t)$:
-    $$c(t^*) = 0 \implies t^* = \frac{\pi}{2} \iff \pi = 2t^*$$
-
-    Enligt Sturms separationssats kan två oberoende lösningar aldrig passera noll samtidigt, i stället turas nollställena för läget $s(t)$ och hastigheten $c(t)$ om i en regelbunden följd.
-\end{defi}
-
-\begin{theorem}{Sats från boken}
-    Låt $y_1(x)$ och $y_2(x)$ vara två linjärt oberoende lösningar till den homogena linjära differentialekvationen av andra ordningen:
-    $$y'' + P(x)y' + Q(x)y = 0$$
-    Då är nollställena till dessa funktioner isolerade och alternerar strikt, i den meningen att $y_1(x)$ har exakt ett nollställe mellan två på varandra följande nollställen till $y_2(x)$, och omvänt.
-\end{theorem}
-
-\section*{Numerisk lösning och skattning av $\pi$}
-
-\begin{defi}{Från 2:a ordningens ODE till ett 1:a ordningens system}
-    För att skriva om ekvationen $y'' + y = 0$ till en första ordningens ODE inför vi en hjälpparameter för hastigheten:
-    $$v(t) = y'(t)$$
-    Deriverar vi $v(t)$ får vi $v'(t) = y''(t)$. Eftersom $y'' = -y$ kan vi formulera om den ursprungliga andragradsekvationen till ett ekvivalent system av två kopplade första ordningens ekvationer:
-    $$\begin{cases}
+\subsection*{2. Omskrivning till första ordningens system}
+Med $v(t) = y'(t)$ fås $v'(t) = y''(t) = -y(t)$:
+\begin{equation}
+    \begin{cases}
         y'(t) = v(t) \\
         v'(t) = -y(t)
     \end{cases}
-    \quad \text{med begynnelsevillkoren} \quad
-    \begin{cases}
-        y(0) = 1 \\
-        v(0) = 0
-    \end{cases}$$
-    I vektorform låter vi tillståndsvektorn vara $\mathbf{u}(t) = \begin{pmatrix} y(t) \\ v(t) \end{pmatrix}$. Då kan systemet skrivas:
-    $$\mathbf{u}'(t) = \mathbf{f}(t, \mathbf{u}(t)) = \begin{pmatrix} v(t) \\ -y(t) \end{pmatrix}, \quad \mathbf{u}(0) = \begin{pmatrix} 1 \\ 0 \end{pmatrix}$$
-\end{defi}
+    \quad \text{med} \quad
+    \begin{pmatrix} y(0) \\ v(0) \end{pmatrix} = \begin{pmatrix} 1 \\ 0 \end{pmatrix}.
+\end{equation}
 
-\begin{example}{Eulers explicita framåtmetod (Uppvärmning)}
-    \textbf{Varför smälter datorn med Euler?}
-    För att vinna en enda extra korrekt decimal måste felet minska med en faktor $10$, vilket med en metod av ordning 1 kräver att steglängden minskas med en faktor $10$ (och antalet steg ökar med $10$). 
+\subsection*{3. Numerisk skattning av första nollstället $t^* = \pi/2$}
+När lösaren identifierar ett steg där $y_n > 0$ och $y_{n+1} \le 0$ bestäms $t^*$ via ett linjärt Newton-steg längs tangenten:
+\begin{equation}
+    t^* \approx t_n - \frac{y_n}{y'_n} = t_n - \frac{y_n}{v_n} \implies \pi \approx 2t^*.
+\end{equation}
+
+\begin{itemize}
+    \item \textbf{Eulers metod (Varför datorn smälter):}
+    Att nå maskinprecision ($\sim 16$ siffror) med Eulers metod kräver $N \sim 10^{16}$ steg eftersom metodens globala trunkeringsfel är $\mathcal{O}(h)$, vilket för $16$ siffror kräver en steglängd $h \approx 10^{-16}$ och därmed $N = T/h \approx T/10^{-16} \sim 10^{16}$ beräkningssteg. Detta är beräkningsmässigt orimligt och havererar i flyttalsaritmetiken då varje operation medför ett relativt avrundningsfel $\sim \epsilon_{\text{mach}} \approx 2{,}22 \cdot 10^{-16}$, vilket över alla steg ackumuleras som $N \cdot \epsilon_{\text{mach}} = (T/h)\epsilon_{\text{mach}} \propto \frac{\epsilon_{\text{mach}}}{h}$, en felterm som exploderar då $h \to 0$.
     
-    För att erhålla 10 korrekta siffror krävs $h \approx 10^{-10}$, vilket motsvarar $10^{10}$ beräkningssteg. Vill man nå maskinprecision ($\sim 16$ siffror) krävs $N \sim 10^{16}$ steg. Vid så enormt många flyttalsoperationer hinner datorn inte bli klar på rimlig tid, och det ackumulerade avrundningsfelet från flyttalsaritmetiken $\epsilon_{\text{mach}}$ börjar dessutom dominera över trunkeringsfelet:
-    $$E_{\text{tot}} \sim c_1 h + c_2 \frac{\epsilon_{\text{mach}}}{h}$$
-    Dessutom växer energin fel för Eulers framåtmetod ($y_{n+1}^2 + v_{n+1}^2 = (1 + h^2)(y_n^2 + v_n^2)$), vilket gör att lösningen spiraliserar utåt och ger stora fasfel. ???
-\end{example}
+    \item \textbf{RK4:}
+    Med global konvergensordning $\mathcal{O}(h^4)$ reduceras felet med en faktor $16$ per halvering av $h$, vilket ger hög noggrannhet med måttligt antal steg (t.ex.\ $h = 10^{-3}$).
+\end{itemize}
 
-\begin{prf}{Härledning av energitillväxt för Eulers metod}
-    För systemet $y' = v$, $v' = -y$ definieras den exakta energin som $E = y^2 + v^2$.
+\subsection*{4. Skattning med 20 korrekta decimaler}
+Standard flyttal (\texttt{float64}) har 53 bitars mantissa ($\epsilon_{\text{mach}} \approx 2{,}22 \cdot 10^{-16}$) och är begränsat till $\sim 15$--$17$ decimaler. Att nå 20 säkra decimaler löses genom:
+\begin{enumerate}
+    \item Godtycklig flyttalsprecision (\texttt{mpmath} satt till 40 siffrors intern precision som säkerhetsmarginal mot ackumulerade avrundningsfel).
+    \item \textbf{Taylor-polynom och Newtons metod:}
+    För att undvika att ackumulera trunkerings- och fasfel från tusentals små tidssteg med stegmetoder (som RK4), utnyttjas att ODE:ns derivator är kända analytiskt vid $t = 0$. Hela lösningskurvan fram till nollstället ersätts då med ett enda analytiskt Taylor-polynom:
+    \begin{equation}
+        y_M(t) = \sum_{k=0}^{M} \frac{(-1)^k}{(2k)!} t^{2k}, \quad y'_M(t) = \sum_{k=1}^{M} \frac{(-1)^k}{(2k-1)!} t^{2k-1}.
+    \end{equation}
+    Genom att välja $M = 16$ (polynomgrad 32) begränsas seriens trunkeringsfel av resttermen $|R_{16}(t)| \le \frac{t^{34}}{34!} < 10^{-38}$ vid $t \approx 1{,}57$, vilket gör approximationsfelet helt försumbart jämfört med kravet på $10^{-20}$. Nollstället $t^* = \pi/2$ beräknas därefter snabbt och med kvadratisk konvergens via Newtons metod direkt på polynomet:
+    \begin{equation}
+        t \leftarrow t - \frac{y_M(t)}{y'_M(t)}.
+    \end{equation}
+\end{enumerate}
 
-    Ett steg med Eulers framåtmetod lyder:
-    $$y_{n+1} = y_n + h v_n, \qquad v_{n+1} = v_n - h y_n$$
+\subsection*{5. Skattning av $\pi$ nära $t \approx 10^3$}
+Nollställena är $t_k = \frac{\pi}{2} + k\pi = \left(k + \frac{1}{2}\right)\pi$. Närmast $T = 1000$ ges av:
+\begin{equation}
+    k = \text{round}\left(\frac{1000 - \pi/2}{\pi}\right) = 318 \implies t_{318} = 318{,}5\pi \approx 1000{,}597.
+\end{equation}
+Skattningen av $\pi$ ur det beräknade nollstället $\hat{t}_{318}$ sker via $\hat{\pi} = \frac{\hat{t}_{318}}{318{,}5}$.
 
-    Kvadrering och summering ger direkt:
+\paragraph{Jämförelse mellan teoretiskt fel och beräkningsfel:}
+\begin{itemize}
+    \item \textbf{Teoretisk dämpning:}
+    Eftersom nollställena ges av $t_k = (k + 0{,}5)\pi$ skattas $\pi$ via $\hat{\pi} = \frac{\hat{t}_k}{k + 0{,}5}$. För $k = 318$ ger ett numeriskt beräkningsfel $\delta t = |\hat{t}_{318} - t_{318}|$ därmed direkt felet i $\pi$:
+    \begin{equation}
+        \delta \pi = \left| \frac{\hat{t}_{318}}{318{,}5} - \frac{t_{318}}{318{,}5} \right| = \frac{\delta t}{318{,}5}.
+    \end{equation}
+    Divisionen med $k + 0{,}5$ dämpar alltså felet i $\pi$ med en faktor drygt $300$.
+    \item \textbf{Numerisk felförstoring:} Integrationstiden $t \approx 1000$ är över $600$ gånger längre än $t \approx \pi/2$. För en enstegsmetod (som RK4) ackumuleras fasfelet linjärt med integrationstiden, vilket ger över $600$ gånger större fasdrift. Dessutom genererar de hundratusentals beräkningsstegen betydligt större ackumulerade flyttalsfel.
+    \item \textbf{Slutsats:} Den numeriska fasdriften och avrundningsfelet över 1000 tidsenheter överväger dämpningsfaktorn $1/318{,}5$. Att bestämma $\pi$ vid $10^3$ är därmed avsevärt svårare och ger sämre precision än att beräkna det första nollstället.
+\end{itemize}
+
+\section*{Uppgift 7. Newton!}
+
+\subsection*{1. Rörelseekvationer och bevarandelagar}
+Betrakta en stjärna fix i origo med massan $M$, där gravitationsparametern normeras till $G M = 1$. En planet med massa $m$ har lägesvektorn $\mathbf{r}(t) = \begin{pmatrix} x(t) \\ y(t) \end{pmatrix}$.
+Newtons gravitations- och rörelselagar ger accelerationen:
+\begin{equation}
+    \mathbf{r}''(t) = -\frac{\mathbf{r}}{\|\mathbf{r}\|^3} 
+    \iff 
+    \begin{cases}
+        x''(t) = -\dfrac{x}{(x^2 + y^2)^{3/2}} \\[0.8em]
+        y''(t) = -\dfrac{y}{(x^2 + y^2)^{3/2}}
+    \end{cases}
+\end{equation}
+Genom att införa hastigheterna $v_x = x'$ och $v_y = y'$ formuleras problemet som fyra kopplade första ordningens differentialekvationer:
+\begin{equation}
+    \frac{d}{dt}\begin{pmatrix} x \\ y \\ v_x \\ v_y \end{pmatrix} 
+    = \begin{pmatrix} v_x \\ v_y \\ -x / (x^2 + y^2)^{3/2} \\ -y / (x^2 + y^2)^{3/2} \end{pmatrix}.
+\end{equation}
+
+Systemet har två analytiska rörelsekonstanter:
+\begin{itemize}
+    \item \textbf{Total mekanisk energi per massenhet ($E$):} 
+    \begin{equation}
+        E = \frac{1}{2}(v_x^2 + v_y^2) - \frac{1}{\sqrt{x^2 + y^2}}, \quad \text{där } \frac{dE}{dt} = 0.
+    \end{equation}
+    \item \textbf{Rörelsemängdsmoment per massenhet ($L$):} 
+    \begin{equation}
+        L = x v_y - y v_x, \quad \text{där } \frac{dL}{dt} = 0.
+    \end{equation}
+\end{itemize}
+
+\subsection*{2. Numerisk stabilitet över lång tid: Forward Euler vs Semi-implicit Euler}
+Systemet integreras från startvärdena $\mathbf{r}(0) = (1, 0)$ och $\mathbf{v}(0) = (0, 1)$ ($E_0 = -0{,}5 < 0$, bunden elliptisk bana) med tidssteg $\Delta t = 0{,}005$:
+
+\begin{itemize}
+    \item \textbf{Forward Euler (Explicita framåtmetoden):} 
+    Ett tidssteg med steglängden $h$ uppdaterar tillståndet enligt:
+    \begin{equation}
+        y_{n+1} = y_n + h v_n, \qquad v_{n+1} = v_n - h y_n.
+    \end{equation}
+    Systemets mekaniska energi $E_n = y_n^2 + v_n^2$ efter ett steg blir:
     \begin{align*}
-        y_{n+1}^2 + v_{n+1}^2 &= (y_n + h v_n)^2 + (v_n - h y_n)^2 \\
+        E_{n+1} &= y_{n+1}^2 + v_{n+1}^2 = (y_n + h v_n)^2 + (v_n - h y_n)^2 \\
         &= (y_n^2 + 2h y_n v_n + h^2 v_n^2) + (v_n^2 - 2h y_n v_n + h^2 y_n^2) \\
         &= (y_n^2 + v_n^2) + h^2(y_n^2 + v_n^2) \\
-        &= (1 + h^2)(y_n^2 + v_n^2)
+        &= (1 + h^2)(y_n^2 + v_n^2) = (1 + h^2)E_n.
     \end{align*}
-    Eftersom $1 + h^2 > 1$ för varje $h > 0$ växer energin strikt monotont i varje steg.
-\end{prf}
-
-\begin{example}{Bättre metoder: RK4}
-    För att uppnå hög noggrannhet effektivt används metoder av högre ordning. Den klassiska 4:e ordningens Runge--Kutta-metoden  beräknar fyra olika lutningar per tidssteg för att väga samman en fjärde ordningens approximation:
-    \begin{align*}
-        \mathbf{k}_1 &= \mathbf{f}(t_n, \mathbf{u}_n) \\
-        \mathbf{k}_2 &= \mathbf{f}\left(t_n + \frac{h}{2}, \mathbf{u}_n + \frac{h}{2}\mathbf{k}_1\right) \\
-        \mathbf{k}_3 &= \mathbf{f}\left(t_n + \frac{h}{2}, \mathbf{u}_n + \frac{h}{2}\mathbf{k}_2\right) \\
-        \mathbf{k}_4 &= \mathbf{f}(t_n + h, \mathbf{u}_n + h\mathbf{k}_3) \\
-        \mathbf{u}_{n+1} &= \mathbf{u}_n + \frac{h}{6}(\mathbf{k}_1 + 2\mathbf{k}_2 + 2\mathbf{k}_3 + \mathbf{k}_4)
-    \end{align*}
-    RK4 har ett lokalt trunkeringsfel $\mathcal{O}(h^5)$ och ett globalt fel $\mathcal{O}(h^4)$. En halvering av $h$ minskar felet med en faktor $2^4 = 16$.
-\end{example}
-
-\begin{defi}{Rotfinnande av nollstället $t^* = \pi/2$}
-    Den numeriska ODE-lösaren tar steg med längd $h$. Nollstället inträffar i allmänhet inte exakt vid ett beräkningssteg $t_n$, utan i ett intervall $[t_n, t_{n+1}]$ där lösningen byter tecken ($y_n > 0$ och $y_{n+1} < 0$).
-
-    För att skatta det exakta nollstället $t^*$ med samma höga noggrannhet kan man:
-
-    \bigskip
-
-    \textbf{Newtons metod:} Utgå från $t_n$ och tillämpa:
-        $$t^{(m+1)} = t^{(m)} - \frac{y(t^{(m)})}{y'(t^{(m)})} = t^{(m)} - \frac{y(t^{(m)})}{v(t^{(m)})}$$
-        där funktionsvärden och derivator utvärderas via högordnings approximation.
-
-        När $t^*$ har bestämts erhålls approximationen av $\pi$ genom relationen $\pi = 2t^*$.
-\end{defi}
-
-\begin{theorem}{Att finna 20 korrekta decimaler}
-    För att erhålla 20 korrekta decimaler stöter man på ett hinder:
-    \textbf{Flyttalens precision:} Standardiserad dubbelprecision float64, vilket endast motsvarar ca 15–17 signifikanta decimaler ($\epsilon_{\text{mach}} \approx 2{,}22 \times 10^{-16}$). Oavsett hur liten steglängd $h$ man väljer sätter maskinavrundningen stopp vid $\sim 15$ decimaler. 
-    \emph{Lösning:} Genom att utnyttja ekvationens derivator kan lösningen utvecklas som ett Taylor-polynom av hög grad ($M \ge 15$) kring $t = 0$:
-    $$y(t) \approx \sum_{k=0}^M \frac{(-1)^k}{(2k)!} t^{2k}$$
-    $$|R_M(t)| = \left| \frac{y^{(2M+2)}(\xi)}{(2M+2)!} \, t^{2M+2} \right| \le \frac{t^{2M+2}}{(2M+2)!}, \quad \text{där } \xi \in (0, t)$$
-    varefter det första nollstället $t^* = \pi/2$ (och därmed $\pi = 2t^*$) snabbt och med godtycklig noggrannhet beräknas via Newtons metod direkt på polynomet i ett system med hög precision (med \ \texttt{mpmath} i Python).
-\end{theorem}
-
-\begin{example}{Skattning av $\pi$ nära $10^3$: Teoretiskt fel vs beräkningsfel}
-    Nollställena till $y(t) = \cos(t)$ ges generellt av:
-    $$t_k = \frac{\pi}{2} + k\pi, \quad k \in \mathbb{Z}$$
-    För att finna roten närmast $T = 1000$ bestäms index $k$:
-    $$k \approx \frac{1000 - \pi/2}{\pi} \approx \frac{1000 - 1{,}5708}{3{,}14159} \approx 317{,}81 \implies k = 318$$
-    Den 318:e roten ligger vid:
-    $$t_{318} = \frac{\pi}{2} + 318\pi = \frac{637}{2}\pi \approx 1000{,}597$$
-
-    Om vi bestämmer detta nollställe numeriskt, betecknat $\hat{t}_{318}$, skattas $\pi$ via:
-    $$\hat{\pi} = \frac{\hat{t}_{318}}{k + 1/2} = \frac{\hat{t}_{318}}{318{,}5}$$
-
-    \textbf{Jämförelse av fel och svårighetsgrad vid $t \approx 1000$:}
-    \begin{itemize}
-        \item \textbf{Teoretisk dämpning:}
-        Eftersom $\pi = \frac{t_k}{k + 1/2}$ ger felet $\delta t$ i nollstället ett fel i $\pi$ på:
-        $$\delta \pi = \frac{\delta t}{k + 1/2} \approx \frac{\delta t}{318{,}5}$$
-        Formeln minskar alltså felet med en faktor drygt $300$.
-
-        \item \textbf{Numerisk feltillväxt:}
-        Integrationstiden $t \approx 1000$ är över $600$ gånger längre än $t \approx \pi/2$. Detta gör att metodens fasfel ackumuleras och blir hundratals gånger större, samtidigt som fler beräkningssteg bygger upp datorns avrundningsfel.
-
-        \item \textbf{Slutsats:}
-        Den teoretiska dämpningen räcker inte för att motverka det kraftigt ökade beräkningsfelet över den långa tiden. Att bestämma roten vid $10^3$ är därför betydligt svårare och ger sämre precision än att beräkna det första nollstället.
-    \end{itemize}
-\end{example}
-
-\section*{7. Newton!}
-
-\begin{example}{Härledning av rörelseekvationerna i kartesiska koordinater}
-Betrakta en stjärna, solen, med fix massa $M$ belägen i origo $(0,0)$. En planet med massa $m$ har positionsvektorn $\mathbf{r}(t) = \begin{pmatrix} x(t) \\ y(t) \end{pmatrix}$. 
-
-Avståndet $r$ från stjärnan till planeten ges av den euklidiska normen:
-$$r = \|\mathbf{r}\| = \sqrt{x^2 + y^2}$$
-Enhetsvektorn från origo mot planeten är:
-$$\hat{\mathbf{r}} = \frac{\mathbf{r}}{r} = \frac{1}{\sqrt{x^2 + y^2}} \begin{pmatrix} x \\ y \end{pmatrix}$$
-
-Enligt Newtons universella gravitationslag (Simmons kapitel 21) ges kraften av:
-$$\mathbf{F} = - \frac{G M m}{r^2} \hat{\mathbf{r}} = - \frac{k m}{r^3} \mathbf{r}, \quad \text{där } k = G M$$
-Newtons andra rörelselag ger $\mathbf{F} = m \mathbf{r}''(t)$:
-$$m \mathbf{r}''(t) = - \frac{k m}{r^3} \mathbf{r} \implies \mathbf{r}''(t) = - \frac{k}{r^3} \mathbf{r}$$
-Genom val av massor och gravitationskonstant så att $k = G M = 1$ (då vi enligt uppgift "kan välja massor så att ekvationerna blir så enkla som möjligt") reduceras ekvationen till:
-$$\mathbf{r}''(t) = - \frac{\mathbf{r}}{(x^2 + y^2)^{3/2}}$$
-
-Projektion på de kartesiska axlarna ger systemet av andra ordningens differentialekvationer:
-$$\begin{cases}
-x''(t) = -\dfrac{x}{(x^2 + y^2)^{3/2}} \\[1em]
-y''(t) = -\dfrac{y}{(x^2 + y^2)^{3/2}}
-\end{cases}$$
-
-Inför hastighetsvariablerna $v_x = x'$ och $v_y = y'$ för att erhålla ett ekvivalent system av fyra första ordningens differentialekvationer:
-$$\frac{d}{dt} \begin{pmatrix} x \\ y \\ v_x \\ v_y \end{pmatrix} = \begin{pmatrix} v_x \\ v_y \\ -\dfrac{x}{(x^2 + y^2)^{3/2}} \\ -\dfrac{y}{(x^2 + y^2)^{3/2}} \end{pmatrix}$$
-\end{example}
-
-\begin{defi}{Härledning av bevarandelagar och Keplers lagar (Simmons kap.\ 21)}
-Enligt Simmons kapitel 21 uppvisar centralkraftsfältet två fundamentala bevarande egenskaper:
-
-\begin{enumerate}
-    \item \textbf{Bevarande av rörelsemängdsmoment och Keplers andra lag:}
-    Eftersom kraften är rent radiell saknas vinkelkomponent ($F_\theta = 0$). Vinkelmomentet per massenhet ges av kryssprodukten $h = x v_y - y v_x = r^2 \frac{d\theta}{dt}$. Tidsderivatan av $h$ längs lösningsbanan är:
-    $$\frac{dh}{dt} = \frac{d}{dt}(x v_y - y v_x) = x' v_y + x y'' - (y' v_x + y x'') = v_x v_y + x\left(-\frac{y}{r^3}\right) - v_y v_x - y\left(-\frac{x}{r^3}\right) = 0$$
-    Därmed är $h$ konstant:
-    $$r^2 \frac{d\theta}{dt} = h = \text{konstant}$$
-    Den svepta arean är $dA = \frac{1}{2} r^2 d\theta$, vilket ger areahastigheten:
-    $$\frac{dA}{dt} = \frac{1}{2} r^2 \frac{d\theta}{dt} = \frac{1}{2} h = \text{konstant}$$
-    Integration över ett tidsintervall ger $A(t_2) - A(t_1) = \frac{1}{2} h (t_2 - t_1)$, vilket utgör Keplers andra lag: \emph{radievektorn sveper över lika stora areor under lika tidsintervall}.
-
-    \item \textbf{Bevarande av total mekanisk energi:}
-    Den kinetiska energin per massenhet är $T = \frac{1}{2}(v_x^2 + v_y^2)$. Potentialen beräknas som arbetet från $r$ till $\infty$:
-    $$V(r) = -\int_r^\infty \frac{k}{s^2} \, ds = -\frac{k}{r} = -\frac{1}{\sqrt{x^2 + y^2}}$$
-    Total energi per massenhet definieras som:
-    $$E = \frac{1}{2}(v_x^2 + v_y^2) - \frac{1}{\sqrt{x^2 + y^2}}$$
-    Tidsderivatan längs en bana ger:
-    $$\frac{dE}{dt} = v_x x'' + v_y y'' + \frac{x v_x + y v_y}{(x^2 + y^2)^{3/2}} = v_x\left(-\frac{x}{r^3}\right) + v_y\left(-\frac{y}{r^3}\right) + \frac{x v_x + y v_y}{r^3} = 0$$
-    Energin $E$ är därmed en rörelsekonstant.
-
-    \item \textbf{Banans geometri, excentricitet och Keplers första lag:}
-    Via variabelsubstitutionen $z = 1/r$ transformerar Simmons ekvationen till $\frac{d^2z}{d\theta^2} + z = \frac{k}{h^2}$, med lösningen $r(\theta) = \frac{h^2/k}{1 + e \cos\theta}$. Excentriciteten $e$ ges analytiskt direkt av energin:
-    $$e = \sqrt{1 + \frac{2 E h^2}{k^2}}$$
-    \begin{itemize}
-        \item $E < 0 \implies e < 1$: Sluten elliptisk bana (Keplers första lag).
-        \item $E = 0 \implies e = 1$: Parabolisk flyktbana.
-        \item $E > 0 \implies e > 1$: Hyperbolisk flyktbana.
-    \end{itemize}
-\end{enumerate}
-\end{defi}
-
-\begin{example}{Analys av numerisk långtidsintegration}
-\begin{itemize}
-    \item \textbf{Eulers framåtmetod:}
-    Uppdateringen $\mathbf{r}_{n+1} = \mathbf{r}_n + \Delta t \, \mathbf{v}_n$ och $\mathbf{v}_{n+1} = \mathbf{v}_n + \Delta t \, \mathbf{a}(\mathbf{r}_n)$ är inte energibevarande. Energin tillförs numeriskt i varje steg ($dE/dt > 0$), vilket gör att planeten artificiellt ökar sin bana och spiraliserar utåt.
+    Eftersom förstoringsfaktorn uppfyller $1 + h^2 > 1$ för varje $h > 0$, multipliceras energin med ett tal större än 1 i varje enskilt steg. Energin växer därmed monotont ($E_n = (1 + h^2)^n E_0$), vilket tvingar lösningen att spiralisera utåt och ger stora numeriska fasfel.
     
-    \item \textbf{Semi-implicit Euler (enligt ledtråd):}
-    För att återställa bevarandet används den symplektiska metoden:
-    $$\begin{cases}
-    \mathbf{v}_{n+1} = \mathbf{v}_n + \Delta t \cdot \mathbf{a}(\mathbf{r}_n) \\[0.5em]
-    \mathbf{r}_{n+1} = \mathbf{r}_n + \Delta t \cdot \mathbf{v}_{n+1}
-    \end{cases}$$
-    Genom att uppdatera hastigheten först och direkt använda den nya hastigheten för att flytta planeten, slutar metoden att läcka energi. Energin växer inte okontrollerat med tiden, utan svänger bara fram och tillbaka i ett smalt, stabilt intervall nära det korrekta värdet. Därför håller sig planetens bana stabil och stängd även om simuleringen körs under mycket lång tid.
+    \item \textbf{Semi-implicit Euler (Symplektisk integrator):}
+    Genom att uppdatera hastigheten före positionen:
+    \begin{equation}
+        \begin{cases}
+            \mathbf{v}_{n+1} = \mathbf{v}_n + \Delta t \cdot \mathbf{a}(\mathbf{r}_n) \\[0.3em]
+            \mathbf{r}_{n+1} = \mathbf{r}_n + \Delta t \cdot \mathbf{v}_{n+1}
+        \end{cases}
+    \end{equation}
+    bevaras fasrumsarean och en modifierad skugghamiltonian exakt. Energin uppvisar ingen sekulär drift utan oscillerar strikt inom ett begränsat intervall $\mathcal{O}(\Delta t)$. Banan förblir därmed sluten och stabil över godtyckligt långa integrationstider.
 \end{itemize}
-\end{example}
-
-stablitiet över lång tid
 
 \section*{8. Newton revisited (something for nothing)}
 
-\begin{example}{Härledning av rymdsondens rörelseekvation i tre-kropparsproblemet}
-Betrakta ett planärt, cirkulärt begränsat tre-kropparsproblem (CR3BP) bestående av Solen (massa $M_S$), Jupiter (massa $M_J$) och en rymdsond med försumbar massa $m \to 0$.
+\subsection*{1. Modellering och rörelseekvationer i trekropparsproblemet}
+Systemet modelleras som ett planärt, cirkulärt begränsat trekropparsproblem bestående av Solen fix i origo ($M_S = 1$), Jupiter ($M_J = 0{,}08$) i cirkulär bana, samt en rymdsond med försumbar massa ($m \to 0$). Jordens gravitationella påverkan försummas då dess influensradie är försumbar i förhållande till solens gravitationsfält.
 
-\paragraph{1. Gravitationslagen i vektorform}
-Låt en kropp med massa $M$ befinna sig vid positionsvektorn $\mathbf{r}_{\text{kropp}}$. Enligt Newtons universella gravitationslag ges gravitationskraften $\mathbf{F}$ på en partikel med massa $m$ vid positionen $\mathbf{r}$ av:
-$$\mathbf{F} = - \frac{G M m}{\|\mathbf{r} - \mathbf{r}_{\text{kropp}}\|^2} \hat{\mathbf{u}}$$
-där enhetsvektorn $\hat{\mathbf{u}}$ riktad från den massiva kroppen mot partikeln definieras som:
-$$\hat{\mathbf{u}} = \frac{\mathbf{r} - \mathbf{r}_{\text{kropp}}}{\|\mathbf{r} - \mathbf{r}_{\text{kropp}}\|}$$
-Insättning ger kraftvektorn:
-$$\mathbf{F} = - \frac{G M m}{\|\mathbf{r} - \mathbf{r}_{\text{kropp}}\|^3} (\mathbf{r} - \mathbf{r}_{\text{kropp}})$$
+Astronomiska enheter väljs så att $G = 1$, längdenheten är $1\text{ AU}$ och $G M_S = 1$. Keplers tredje lag ger Jupiters vinkelhastighet vid banradien $R_J = 5{,}2\text{ AU}$:
+\begin{equation}
+    \omega_J = \sqrt{\frac{G M_S}{R_J^3}} = R_J^{-3/2} = 5{,}2^{-3/2} \approx 0{,}0843\text{ rad/tidsenhet}.
+\end{equation}
+Jupiters banvektor ges av:
+\begin{equation}
+    \mathbf{r}_J(t) = \begin{pmatrix} x_J(t) \\ y_J(t) \end{pmatrix} = \begin{pmatrix} R_J \cos(\omega_J t + \phi_0) \\ R_J \sin(\omega_J t + \phi_0) \end{pmatrix},
+\end{equation}
+där fasvinkeln $\phi_0$ anger Jupiters position vid $t = 0$.
 
-\paragraph{2. Krafter på rymdsonden}
-Placera Solen fix i origo, $\mathbf{r}_S = \mathbf{0}$. Låt Jupiter följa en föreskriven banvektor $\mathbf{r}_J(t)$. Rymdsonden vid position $\mathbf{r}(t)$ påverkas av gravitationskrafter från respektive himlakropp:
-\begin{align*}
-\mathbf{F}_{\text{Sol}} &= - \frac{G M_S m}{\|\mathbf{r} - \mathbf{0}\|^3} (\mathbf{r} - \mathbf{0}) = - \frac{G M_S m}{\|\mathbf{r}\|^3} \mathbf{r} \\[0.8em]
-\mathbf{F}_{\text{Jup}} &= - \frac{G M_J m}{\|\mathbf{r} - \mathbf{r}_J(t)\|^3} \big(\mathbf{r} - \mathbf{r}_J(t)\big)
-\end{align*}
+Superposition av Newtons gravitationslag för Solen och Jupiter ger kraften per massenhet på sonden vid $\mathbf{r}(t) = \begin{pmatrix} x(t) \\ y(t) \end{pmatrix}$:
+\begin{equation}
+    \mathbf{r}''(t) = -\frac{\mathbf{r}}{\|\mathbf{r}\|^3} - M_J \frac{\mathbf{r} - \mathbf{r}_J(t)}{\|\mathbf{r} - \mathbf{r}_J(t)\|^3}.
+\end{equation}
+Med hastigheterna $v_x = x'$ och $v_y = y'$ formuleras rörelsen som fyra kopplade första ordningens differentialekvationer:
+\begin{equation}
+    \frac{d}{dt}\begin{pmatrix} x \\ y \\ v_x \\ v_y \end{pmatrix} 
+    = \begin{pmatrix} v_x \\ v_y \\ -\dfrac{x}{(x^2+y^2)^{3/2}} - M_J \dfrac{x - x_J}{\big((x-x_J)^2 + (y-y_J)^2\big)^{3/2}} \\[1em] -\dfrac{y}{(x^2+y^2)^{3/2}} - M_J \dfrac{y - y_J}{\big((x-x_J)^2 + (y-y_J)^2\big)^{3/2}} \end{pmatrix}.
+\end{equation}
 
-\paragraph{3. Newtons andra rörelselag och superposition}
-Den totala kraften på sonden är summan av de individuella krafterna:
-$$\mathbf{F}_{\text{tot}} = \mathbf{F}_{\text{Sol}} + \mathbf{F}_{\text{Jup}} = m \mathbf{r}''(t)$$
-Division med sondens massa $m$ ger accelerationen (kraft per massenhet):
-$$\mathbf{r}''(t) = - \frac{G M_S}{\|\mathbf{r}\|^3} \mathbf{r} - \frac{G M_J}{\|\mathbf{r} - \mathbf{r}_J(t)\|^3} \big(\mathbf{r} - \mathbf{r}_J(t)\big)$$
-
-\paragraph{4. Val av måttsystem (astronomiska enheter)}
-För att förenkla ekvationerna väljs enheter sådana att:
+\subsection*{2. Flyktvillkor och energiprincip}
+Sondens specifika mekaniska energi relativt Solen definieras av:
+\begin{equation}
+    E_{\text{helio}}(t) = \frac{1}{2}\|\mathbf{v}(t)\|^2 - \frac{1}{\|\mathbf{r}(t)\|}.
+\end{equation}
+Banans geometri bestäms av energins tecken:
 \begin{itemize}
-    \item Längdenhet: $1\text{ AU}$ (astronomisk enhet).
-    \item Solens massa sätts som massenhet: $M_S = 1$.
-    \item Tidsenheten väljs så att gravitationskonstanten uppfyller $G = 1$, vilket ger gravitationsparametern $G M_S = 1$.
-\end{itemize}
-Jupiters massa uttrycks därmed som ett dimensionslöst förhållande till solmassan, $G M_J = 1 \cdot M_J = M_J$. 
-
-Insättning av $G M_S = 1$ och $G M_J = M_J$ ger den sökta rörelseekvationen:
-$$\mathbf{r}''(t) = -\frac{\mathbf{r}}{\|\mathbf{r}\|^3} - M_J \frac{\mathbf{r} - \mathbf{r}_J(t)}{\|\mathbf{r} - \mathbf{r}_J(t)\|^3}$$
-\end{example}
-
-\begin{example}{Modellering och rörelseekvationer i tre-kropparsproblemet}
-Betrakta ett planärt tre-kropparssystem bestående av solen med massa $M_S = 1$, en massiv planet (Jupiter) med massa $M_J$, samt en rymdsond med försumbar massa. 
-
-Enhetssystemet väljs enligt astronomiska enheter:
-\begin{itemize}
-    \item Längdenhet: $1\text{ AU}$ (avståndet från solen till jorden).
-    \item Gravitationsparameter: $G M_S = 1$.
-    \item Tidsenhet: Vald så att jordens omloppstid är $T = 2\pi$ tidsenheter.
+    \item \textbf{Bunden bana ($E < 0$):} Flykthastigheten vid $r = 1\text{ AU}$ ges av $v_{\text{esc}} = \sqrt{2} \approx 1{,}414$. Startfarten sätts till $v_0 = 1{,}34 < \sqrt{2}$, vilket ger en bunden startellips med $E_0 = \frac{1}{2}(1{,}34)^2 - 1 = -0{,}1022 < 0$. Sonden kan därmed inte lämna solsystemet på egen hand.
+    \item \textbf{Hyperbolisk flykt ($E > 0$):} Efter närpassagen vid en tidpunkt $t_{\text{post}}$ där sonden avlägsnat sig från Jupiters närfält gäller:
+    \begin{equation}
+        E_{\text{post}} = \frac{1}{2}\|\mathbf{v}(t_{\text{post}})\|^2 - \frac{1}{\|\mathbf{r}(t_{\text{post}})\|} > 0.
+    \end{equation}
+    Ett positivt energivärde ($E_{\text{post}} > 0$) garanterar en öppen hyperbolisk flyktbana med asymptotisk resthastighet vid oändligheten.
 \end{itemize}
 
-Solen placeras fix i origo $\mathbf{r}_S = \mathbf{0}$. Jupiter rör sig i en cirkulär bana med radie $R_J = 5{,}2\text{ AU}$ och vinkelhastighet $\omega_J = \sqrt{G M_S / R_J^3} = R_J^{-3/2}$:
-$$\mathbf{r}_J(t) = \begin{pmatrix} x_J(t) \\ y_J(t) \end{pmatrix} = \begin{pmatrix} R_J \cos(\omega_J t + \phi_0) \\ R_J \sin(\omega_J t + \phi_0) \end{pmatrix}$$
-där $\phi_0$ anger Jupiters fasvinkel vid starttidpunkten $t = 0$.
+\subsection*{3. Gravitationsslunga (Gravitational Slingshot)}
+En gravitationsslunga fungerar som en elastisk stöt där sonden lånar rörelseenergi av planeten.
 
-Låt $\mathbf{r}(t) = \begin{pmatrix} x(t) \\ y(t) \end{pmatrix}$ beteckna rymdsondens positionsvektor. Den resulterande gravitationskraften per massenhet från solen och Jupiter ger rörelseekvationen:
-$$\mathbf{r}''(t) = -\frac{\mathbf{r}}{\|\mathbf{r}\|^3} - M_J \frac{\mathbf{r} - \mathbf{r}_J(t)}{\|\mathbf{r} - \mathbf{r}_J(t)\|^3}$$
+\paragraph{1. Relativ rörelse kring Jupiter}
+Låt sondens hastighet i solsystemet före och efter mötet vara $\mathbf{v}_{\text{in}}$ respektive $\mathbf{v}_{\text{ut}}$, och Jupiters banhastighet vara $\mathbf{v}_J$. I Jupiters eget vilosystem är sondens relativa hastigheter:
+\begin{equation}
+    \mathbf{v}_{\text{rel, in}} = \mathbf{v}_{\text{in}} - \mathbf{v}_J, \qquad \mathbf{v}_{\text{rel, ut}} = \mathbf{v}_{\text{ut}} - \mathbf{v}_J.
+\end{equation}
+Eftersom gravitationsfältet kring Jupiter är konservativt ändras inte farten under passagen, utan banan vrids bara en vinkel $\delta$:
+\begin{equation}
+    \|\mathbf{v}_{\text{rel, ut}}\| = \|\mathbf{v}_{\text{rel, in}}\| = v_{\text{rel}}.
+\end{equation}
 
-Inför hastighetsvektorn $\mathbf{v} = \mathbf{r}' = \begin{pmatrix} v_x \\ v_y \end{pmatrix}$. Systemet omvandlas till ett första ordningens system med fyra kopplade ekvationer:
-$$\frac{d}{dt} \begin{pmatrix} x \\ y \\ v_x \\ v_y \end{pmatrix} = \begin{pmatrix} v_x \\ v_y \\ -\dfrac{x}{(x^2 + y^2)^{3/2}} - M_J \dfrac{x - x_J}{\big((x - x_J)^2 + (y - y_J)^2\big)^{3/2}} \\[1em] -\dfrac{y}{(x^2 + y^2)^{3/2}} - M_J \dfrac{y - y_J}{\big((x - x_J)^2 + (y - y_J)^2\big)^{3/2}} \end{pmatrix}$$
-\end{example}
-
-\begin{defi}{Flykthastighet och kvasibevis för utträde ur solsystemet}
-Enligt Simmons kapitel 21 definieras rymdsondens specifika mekaniska energi i solens gravitationsfält av:
-$$E_{\text{helio}}(t) = \frac{1}{2} \|\mathbf{v}(t)\|^2 - \frac{1}{\|\mathbf{r}(t)\|}$$
-
-Banans geometri styrs av tecknet på $E_{\text{helio}}$:
-\begin{itemize}
-    \item \textbf{Bunden ellips ($E < 0$):} Skeppet förblir gravitationellt bundet till solen. Flykthastigheten från solen vid avståndet $r$ ges av villkoret $E_{\text{helio}} = 0$:
-    $$v_{\text{esc}}(r) = \sqrt{\frac{2}{r}}$$
-    Vid jordens omloppsbana ($r = 1\text{ AU}$) krävs hastigheten $v_{\text{esc}} = \sqrt{2} \approx 1{,}414$. Om sondens starthastighet vid jorden uppfyller $\|\mathbf{v}_0\| < \sqrt{2}$ (dvs.\ ett begränsat $\Delta v$) är $E_0 < 0$. Skeppets ursprungliga Hohmann-liknande bana kan därmed teoretiskt aldrig nå oändligheten på egen hand.
-    
-    \item \textbf{Hyperbolisk flyktbana ($E > 0$):} 
-    För att verifiera att skeppet lämnar solsystemet beräknas dess energi efter passagen förbi Jupiter vid en tidpunkt $t_{\text{post}}$ där avståndet till Jupiter är tillräckligt stort ($\|\mathbf{r} - \mathbf{r}_J\| \gg 0$):
-    $$E_{\text{post}} = \frac{1}{2} \|\mathbf{v}(t_{\text{post}})\|^2 - \frac{1}{\|\mathbf{r}(t_{\text{post}})\|} > 0$$
-    När $E_{\text{post}} > 0$ är banan en öppen hyperbel med asymptotisk resthastighet vid oändligheten $v_\infty = \sqrt{2 E_{\text{post}}} > 0$. Skeppet är därmed obundet och lämnar solsystemet.
+\paragraph{2. Hastighetsökning i solsystemet}
+När sonden lämnar Jupiter transformeras hastigheten tillbaka till solens koordinatsystem genom att lägga till $\mathbf{v}_J$:
+\begin{equation}
+    \mathbf{v}_{\text{ut}} = \mathbf{v}_J + \mathbf{v}_{\text{rel, ut}}.
+\end{equation}
+Sondens nya rörelseenergi per massenhet beräknas via skalärprodukten:
+\begin{equation}
+    \frac{1}{2}\|\mathbf{v}_{\text{ut}}\|^2 = \frac{1}{2}\|\mathbf{v}_J + \mathbf{v}_{\text{rel, ut}}\|^2 = \frac{1}{2}\|\mathbf{v}_J\|^2 + \frac{1}{2}v_{\text{rel}}^2 + \mathbf{v}_J \cdot \mathbf{v}_{\text{rel, ut}}.
+\end{equation}
+Termen $\mathbf{v}_J \cdot \mathbf{v}_{\text{rel, ut}} = \|\mathbf{v}_J\| v_{\text{rel}} \cos \theta$ (där $\theta$ är vinkeln mellan $\mathbf{v}_J$ och $\mathbf{v}_{\text{rel, ut}}$) avgör energiändringen:
+\begin{itemize} 
+    \item Passerar sonden \emph{framför} planeten pekar uthastigheten mot planetens rörelseriktning ($\cos \theta < 0$), vilket bromsar sonden.
+    \item Passerar sonden \emph{bakom} planeten vinklas uthastigheten med planetens rörelseriktning ($\cos \theta > 0$), vilket ger ett positivt tillskott av rörelseenergi.
 \end{itemize}
-\end{defi}
 
-\begin{example}{Mekanismen för gravitationsslunga (Gravitational Slingshot)}
-I Jupiters rörliga referensram bevaras energins storlek vid en elastisk hyperbolisk passage:
-$$\|\mathbf{v}_{\text{in}} - \mathbf{v}_J\| = \|\mathbf{v}_{\text{ut}} - \mathbf{v}_J\|$$
-Passagen roterar den relativa hastighetsvektorn med en vinkel $\delta$. I solens fixerade referensram transformeras hastigheten efter passagen enligt:
-$$\mathbf{v}_{\text{ut}} = \mathbf{v}_J + \mathbf{v}_{\text{rel, ut}}$$
-Genom att rikta passagen bakom Jupiters rörelseriktning adderas en komponent av Jupiters banhastighet $\mathbf{v}_J$ till sondens heliocentriska hastighet. Den resulterande ökningen i rörelseenergi tas direkt ur Jupiters banrörelse, vilket lyfter sondens heliocentriska energi från $E < 0$ till $E > 0$.
-\end{example}
+\paragraph{3. Numeriskt resultat}
+Med startvinkeln $\phi_0 = 1{,}78\text{ rad}$ styrs sonden så att den passerar strax bakom Jupiter. Därmed ökar den specifika energin från en bunden bana vid start till en permanent flyktbana:
+\begin{equation}
+    E_0 \approx -0{,}10 < 0 \implies E_{\text{post}} \approx +0{,}14 > 0.
+\end{equation}
+Eftersom $E_{\text{post}} > 0$ är banan en öppen hyperbel som garanterar att skeppet lämnar solsystemet.
 
 \end{document}
