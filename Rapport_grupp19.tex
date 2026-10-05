@@ -1,5 +1,6 @@
 \documentclass{article}
 \input{preambles/preamble_rapport}
+\usepackage{float}
 
 \title{Rapport}
 \author{Disa Degerholm}
@@ -83,6 +84,16 @@ vilket ger $y(t) = -\frac{1}{4}(1 - t)^2$ för $t \le 1$. Analytiskt nås $y = 0
     \end{itemize}
 \end{itemize}
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{upg31disa.png}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{upg32disa.png}
+\end{figure}
+
 \subsection*{Uppgift 3. Hampus Hillding}
 
 \subsection*{Uppgift 3. Skillnader och likheter}
@@ -150,6 +161,11 @@ För t.ex.\ $C = 50$, $\epsilon = -0{,}10$ och $h = 0{,}5$ ger RK4 ett falskt om
     \item \textbf{Adaptiv steglängd:} Felet uppskattas via inbäddade metoder (t.ex.\ Runge--Kutta--Fehlberg) och $h$ skalas ned så att $h \ll \frac{1}{C|y|}$.
     \item \textbf{Invarians- och teckenkontroll:} Steget förkastas omedelbart om $y_n$ byter tecken ($y_n \cdot y_{n+1} \le 0$) eftersom teckenbyte är analytiskt förbjudet.
 \end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{upg4disa.png}
+\end{figure}
 
 \subsection*{Uppgift 4. Hampus Hillding}
 
@@ -224,6 +240,11 @@ $10$ & $1024$ & $\infty$ & -- & Krasch: \texttt{overflow} (\texttt{inf}) \\
 \hline
 \end{tabular}
 \end{center}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{upg62disa.png}
+\end{figure}
 
 \subsection*{Uppgift 5. Hampus Hillding}
 
@@ -325,6 +346,11 @@ Skattningen av $\pi$ ur det beräknade nollstället $\hat{t}_{318}$ sker via $\h
     \item \textbf{Slutsats:} Den numeriska fasdriften och avrundningsfelet över 1000 tidsenheter överväger dämpningsfaktorn $1/318{,}5$. Att bestämma $\pi$ vid $10^3$ är därmed avsevärt svårare och ger sämre precision än att beräkna det första nollstället.
 \end{itemize}
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{upg5disa.png}
+\end{figure}
+
 \subsection*{Uppgift 6. Hampus Hillding}
 
 \subsection*{Uppgift 6. Skillnader och likheter}
@@ -339,6 +365,75 @@ Skattningen av $\pi$ ur det beräknade nollstället $\hat{t}_{318}$ sker via $\h
 
 \subsection*{Uppgift 7. Disa Degerholm}
 
+
+\subsection*{1. Rörelseekvationer och bevarandelagar}
+Betrakta en stjärna fix i origo med massan $M$, där gravitationsparametern normeras till $G M = 1$. En planet med massa $m$ har lägesvektorn $\mathbf{r}(t) = \begin{pmatrix} x(t) \\ y(t) \end{pmatrix}$.
+Newtons gravitations- och rörelselagar ger accelerationen:
+\begin{equation}
+    \mathbf{r}''(t) = -\frac{\mathbf{r}}{\|\mathbf{r}\|^3} 
+    \iff 
+    \begin{cases}
+        x''(t) = -\dfrac{x}{(x^2 + y^2)^{3/2}} \\[0.8em]
+        y''(t) = -\dfrac{y}{(x^2 + y^2)^{3/2}}
+    \end{cases}
+\end{equation}
+Genom att införa hastigheterna $v_x = x'$ och $v_y = y'$ formuleras problemet som fyra kopplade första ordningens differentialekvationer:
+\begin{equation}
+    \frac{d}{dt}\begin{pmatrix} x \\ y \\ v_x \\ v_y \end{pmatrix} 
+    = \begin{pmatrix} v_x \\ v_y \\ -x / (x^2 + y^2)^{3/2} \\ -y / (x^2 + y^2)^{3/2} \end{pmatrix}.
+\end{equation}
+
+Systemet har två analytiska rörelsekonstanter:
+\begin{itemize}
+    \item \textbf{Total mekanisk energi per massenhet ($E$):} 
+    \begin{equation}
+        E = \frac{1}{2}(v_x^2 + v_y^2) - \frac{1}{\sqrt{x^2 + y^2}}, \quad \text{där } \frac{dE}{dt} = 0.
+    \end{equation}
+    \item \textbf{Rörelsemängdsmoment per massenhet ($L$):} 
+    \begin{equation}
+        L = x v_y - y v_x, \quad \text{där } \frac{dL}{dt} = 0.
+    \end{equation}
+\end{itemize}
+
+\subsection*{2. Numerisk stabilitet över lång tid: Forward Euler vs Semi-implicit Euler}
+Systemet integreras från startvärdena $\mathbf{r}(0) = (1, 0)$ och $\mathbf{v}(0) = (0, 1)$ ($E_0 = -0{,}5 < 0$, bunden elliptisk bana) med tidssteg $\Delta t = 0{,}005$:
+
+\begin{itemize}
+    \item \textbf{Forward Euler (Explicita framåtmetoden):} 
+    Ett tidssteg med steglängden $h$ uppdaterar tillståndet enligt:
+    \begin{equation}
+        y_{n+1} = y_n + h v_n, \qquad v_{n+1} = v_n - h y_n.
+    \end{equation}
+    Systemets mekaniska energi $E_n = y_n^2 + v_n^2$ efter ett steg blir:
+    \begin{align*}
+        E_{n+1} &= y_{n+1}^2 + v_{n+1}^2 = (y_n + h v_n)^2 + (v_n - h y_n)^2 \\
+        &= (y_n^2 + 2h y_n v_n + h^2 v_n^2) + (v_n^2 - 2h y_n v_n + h^2 y_n^2) \\
+        &= (y_n^2 + v_n^2) + h^2(y_n^2 + v_n^2) \\
+        &= (1 + h^2)(y_n^2 + v_n^2) = (1 + h^2)E_n.
+    \end{align*}
+    Eftersom förstoringsfaktorn uppfyller $1 + h^2 > 1$ för varje $h > 0$, multipliceras energin med ett tal större än 1 i varje enskilt steg. Energin växer därmed monotont ($E_n = (1 + h^2)^n E_0$), vilket tvingar lösningen att spiralisera utåt och ger stora numeriska fasfel.
+    
+    \item \textbf{Semi-implicit Euler (Symplektisk integrator):}
+    Genom att uppdatera hastigheten före positionen:
+    \begin{equation}
+        \begin{cases}
+            \mathbf{v}_{n+1} = \mathbf{v}_n + \Delta t \cdot \mathbf{a}(\mathbf{r}_n) \\[0.3em]
+            \mathbf{r}_{n+1} = \mathbf{r}_n + \Delta t \cdot \mathbf{v}_{n+1}
+        \end{cases}
+    \end{equation}
+    bevaras fasrumsarean och en modifierad skugghamiltonian exakt. Energin uppvisar ingen sekulär drift utan oscillerar strikt inom ett begränsat intervall $\mathcal{O}(\Delta t)$. Banan förblir därmed sluten och stabil över godtyckligt långa integrationstider.
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{upg71disa.png}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{upg72disa.png}
+\end{figure}
+
 \subsection*{Uppgift 7. Hampus Hillding}
 
 \subsection*{Uppgift 7. Skillnader och likheter}
@@ -352,7 +447,6 @@ Skattningen av $\pi$ ur det beräknade nollstället $\hat{t}_{318}$ sker via $\h
 \section*{Uppgift 8. Titel}
 
 \subsection*{Uppgift 8. Disa Degerholm}
-
 
 \subsection*{1. Modellering och rörelseekvationer i trekropparsproblemet}
 Systemet modelleras som ett planärt, cirkulärt begränsat trekropparsproblem bestående av Solen fix i origo ($M_S = 1$), Jupiter ($M_J = 0{,}08$) i cirkulär bana, samt en rymdsond med försumbar massa ($m \to 0$). Jordens gravitationella påverkan försummas då dess influensradie är försumbar i förhållande till solens gravitationsfält.
@@ -426,6 +520,16 @@ Med startvinkeln $\phi_0 = 1{,}78\text{ rad}$ styrs sonden så att den passerar 
     E_0 \approx -0{,}10 < 0 \implies E_{\text{post}} \approx +0{,}14 > 0.
 \end{equation}
 Eftersom $E_{\text{post}} > 0$ är banan en öppen hyperbel som garanterar att skeppet lämnar solsystemet.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{upg81disa.png}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{upg82disa.png}
+\end{figure}
 
 \subsection*{Uppgift 8. Hampus Hillding}
 
