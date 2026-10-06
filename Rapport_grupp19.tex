@@ -121,6 +121,16 @@ autonom flyttar $\varepsilon$ bara nollgenomgången $t_0$, inte tiden nära noll
 \end{figure}
 
 \subsection*{Uppgift 3. Hampus Hillding}
+\textbf{Analytisk lösning:} Oändligt många lösningar finns där $y(t)$ har formen:
+\begin{itemize}
+    \item $y(t)=\frac{(t-a)^2}{4}$ då $t<a$
+    \item $y(t)=0$ då $t\in[a,b]$
+    \item $y(t)=-\frac{(t-b)^2}{4}$ då $t>b$
+\end{itemize}
+För konstanter $a,b : a<0< b$.\\
+\textbf{Numeriskt:} Min numeriska lösning stannar på $y=0$ för alltid.\\
+Med begynnelsevillkor $y(-1)=-0.99$ får jag att $y$ ''fastnar'' på 0 i ungefär 0.03 enheter av t. Se figur.\\
+    \includegraphics [width=10cm]{uppg3hh.png}
 
 \textbf{Analytisk lösning.} Oändligt många lösningar finns, där $y(t)$ kan
 ha formen:
@@ -150,7 +160,7 @@ tidsenheter. Se figur.
     som Disa. Han fick en lösningsfamilj med en parameter $c \geq 0$ (bara
     $t \geq 0$), medan Disa även lät lösningen komma in från $t < 0$ och fick två
     parametrar. 
-    \item \textbf{Lös problemet numeriskt med kommentarer:} Både Disa och Hampus fick att $y=0, \forall x\in \mathbb{R}$ oavsett om man använde RK4 eller Euler. Det var annorlunda än Hampus analytiska lösning. Anton fick samma resultat med Euler. Detta kunde förutses a priori: eftersom
+    \item \textbf{Lös problemet numeriskt med kommentarer:} Både Disa och Hampus fick att $y=0, \forall x\in \mathbb{R}$ oavsett om man använde RK4 eller Euler. Anton fick samma resultat med Euler. Detta kunde förutses a priori: eftersom
     $f(0) = 0$ blir varje explicit stegmetod låst i $y = 0$ om den startar exakt där.
     \item \textbf{Hur länge fastnar den numeriska lösningen:} Disa härledde analytiskt via separation av variabler med startvärdet $y(-1) = -1$ att lösningen ges av $y(t) = -\frac{1}{4}(1-t)^2$ för $t \le 1$. Analytiskt nås därmed $y = 0$ vid $t = 1$, varpå lösningen kan kvarstanna i jämvikten $y \equiv 0$ godtyckligt länge eftersom Picard entydighetssats upphör att gälla i $y = 0$. Hon noterade att om en numerisk lösare träffar $y_n = 0$ exakt så blir alla steglutningar noll ($k_i = 0$), vilket låser den i jämvikten. Men som Hampus visade växer den numeriska lösningen ändå vidare i praktiken, vilket förklaras av att flyttalsavrundningar ger ett litet fel $y_n = \delta > 0$ där den relativa tillväxten $y_{n+1}/y_n \approx 1 + h/\sqrt{\delta}$ exploderar då $\delta \to 0^+$ och skjuter lösningen förbi origo. Anton mätte i stället tiden som lösningen befinner sig \emph{i} intervallet $|y| \leq 10^{-6}$ och fick $\Delta t \approx 0{,}004$, vilket stämmer med det analytiska värdet $4 \cdot 10^{-3}$ och är oberoende av $\varepsilon$.
 \end{enumerate}
@@ -249,6 +259,11 @@ aldrig blir positiv. En automatlösare kan undvika detta genom att förkasta
 steget och halvera $h$ när $y$ byter tecken.
 
 \subsection*{Uppgift 4. Hampus Hillding}
+\textbf{Analytiskt:} $N=98$ ger $y = \frac{-1}{ x-\frac{100}{98}}$ som smäller när $x=\frac{100}{98}\approx1.02$.\\
+\textbf{Numeriskt:} Med hjälp av Eulers metod med steglängd $h=0.001$ får jag att lösningen efter en stund börjar växa väldigt snabbt och det sista värdet jag får innan jag när 'OverflowError' är $x=1.036$,  $y\approx2.3\cdot10^{210}$. Vilket är lite senare än den riktiga singulariteten.
+\textbf{Bevis:} Eftersom $f(x,y)$ och $\frac{\partial f}{\partial y}$ är kontinuerliga på varje sluten rektangel så gäller Picards sats som säger att det finns en \textit{unik} integralkurva genom en given punkt. Detta innebär att två integralkurvor aldrig kan dela en gemensam punkt (korsa varandra). Eftersom $y(x)=0$ är en integralkurva kan inga andra integralkurvor gå från y<0 till y>0 (satsen om mellanliggande värden) v.s.b.\\
+\textbf{Teckenbyte:} Med $C=100000$, $\epsilon=-0.001$ och $h = 0.02$ fick jag $y$ att gå från negativt till positivt.\\
+\textbf{Automatlösare:} För att få en automatlösare att undvika dessa typer av fel skulle man kunna känna av när y är på väg att byta tecken och anpassa steglängden därefter.
 
 \subsection*{Uppgift 4. Skillnader och likheter}
 
@@ -261,7 +276,7 @@ steget och halvera $h$ när $y$ byter tecken.
 
     RK4 tar däremot delsteg längre fram i intervallet där lutningen $f(t, y) = y^2$ redan har hunnit växa kraftigt. På grund av den höga ordningen $\mathcal{O}(h^4)$ följer RK4 den explosiva tillväxten mycket mer precist och nådde tröskeln $y \ge 10^5$ strax \emph{före} den analytiska singulariteten $t^* \approx 1{,}1$ innan flyttalsöverflöde (\texttt{overflow}) inträffade. Att Disa kunde ta fler eller färre steg beror helt på vald steglängd $h$ och avbrottströskel. Den numeriska smälltiden beror alltså på metodens ordning och valda stoppvillkor, och man kan inte lita på numeriska lösare i omedelbar närhet av en vertikal asymptot.
     \item \textbf{Visa att om $y(0)<0$ så måste $y(t)<0$ för alla $t>0$:} Både Disa, Hampus och Anton hade samma argument med att f är lokalt Lipschitz kontineruligt överallt och att då y(t)=0 är en lösning kan ingen annan lösning korsa den och blir därmed bara över eller under 0 i sitt y värde.
-    \item \textbf{Numeriska exempel:} Hampus testade sig fram till ett stort nog C då han tänkte att ett stort C skulle ge ett $y'$ som var tillräckligt stor hopp för att komma över gränsen. Disa härledde formeln för det istället och kom fram till att $h > \frac{1}{C |\epsilon|}$. Anton härledde samma villkor som Disa men uttryckt i $C$: $C > 1/(h|\varepsilon|)$,
+    \item \textbf{Numeriska exempel:} Hampus testade sig fram till ett stort nog C då han tänkte att ett stort C skulle ge ett $y'$ som gav tillräckligt stort hopp för att komma över gränsen. Disa härledde formeln för det istället och kom fram till att $h > \frac{1}{C |\epsilon|}$. Anton härledde samma villkor som Disa men uttryckt i $C$: $C > 1/(h|\varepsilon|)$,
     till exempel $C > 10^{14}$ för $\varepsilon = -10^{-10}$ och $h = 10^{-4}$.
     \item \textbf{Automatlösare:} Disa tänkte att en adaptiv steglängdskontroll (se Disas lösning) och detektering av teckenbyte (se Disas lösning) skulle kunna hjälpa. Hampus hade samma ideer. Anton föreslog samma teckenkontroll: förkasta steget och halvera $h$ om $y$
     byter tecken.
@@ -347,6 +362,17 @@ $8 \cdot 10^{12}$ steg, vilket inte är genomförbart. Dessutom skulle
 avrundningsfelen dominera långt innan dess.
 
 \subsection*{Uppgift 5. Hampus Hillding}
+Med Eulers metod fick jag
+    \begin{itemize}
+        \item k=0: $y(2^k)=266.39$
+        \item k=1: $y(2^k)=724.12$
+        \item k=2: $y(2^k)=5350.61$
+        \item k=3: $y(2^k)=292133.84$
+        \item k=4: tog för lång tid.
+    \end{itemize}
+    
+Teoretiskt fel $= \frac{nMh^2}{2} = 2^k \frac{Mh}{2}=2^k\cdot Ce^{2^k}\cdot \frac{h}{2}$  om $M=y''(2^k)=Ce^{2^k}$.
+\\Skillnaden mellan det faktiska felet och det teoretiska felet blev ungefär 2.64e-11 för k=0, 0.000276 för k=1, 0.000255 för k=2 och 0.0244 för k=3.
 
 \subsection*{Uppgift 5. Skillnader och likheter}
 
@@ -493,6 +519,11 @@ linjärt med tiden men delas med $318{,}5$. Det som blir svårare är
 kostnaden: cirka 640 gånger fler steg.
 
 \subsection*{Uppgift 6. Hampus Hillding}
+Analytiskt fick jag lösningen $y(t)=cos(t)$ som har ett första nollställe vid $t=\pi/2$. \\
+\textbf{Numeriskt:} \\
+Jag skrev om ekvationen till ett system av förstagrads-ODE:er. Med Eulers metod på systemet fick jag 9 korrekta siffror av $\pi$. För att få fler siffror använde jag Runge-Kutta av ordning 4. Jag stegade tills mitt $y$ bytte tecken. Då använde jag Newtons metod för att komma ännu närmare lösningen som jag visste fanns inom det sista steget i RK4. Med steglängd $h=10^{-3}$ fick jag då 13 korrekta siffror av $\pi$, och med steglängd $h=10^{-5}$ fick jag 22 korrekta siffror.\\
+\textbf{Rot nära t=1000:}\\
+Jag modifierade koden för att hitta roten närmast $t=1000$, dvs. $t=637\pi/2$. Med $h=10^{-3}$ fick jag lika många korrekta siffror som tidigare, dvs. 13. I båda fallen fick jag också ett fel $\approx2.6\cdot10^{-14}$. Enligt teorin borde cirka 637 gånger så många steg ge ungefär 637 gånger så stort fel i värdet på $t$ men eftersom vi multiplicerar roten med $\frac{2}{637}$ istället för bara $2$ för att få värdet på $\pi$ tar dessa effekter ut varandra i skattningen av $\pi$. Den huvudsakliga svårigheten blir att det tar längre tid för programmet att köras.
 
 \subsection*{Uppgift 6. Skillnader och likheter}
 
@@ -501,7 +532,7 @@ kostnaden: cirka 640 gånger fler steg.
     \item \textbf{Hur många korrekta siffror kan man få innan datorn smälter:} 
     Att datorn smälter beror på två faktorer: beräkningstiden exploderar ($N \propto 1/h$) och flyttalsavrundningar ($\epsilon_{\text{mach}} \approx 2{,}2 \cdot 10^{-16}$) tar över då felet växer som $\mathcal{O}(\epsilon_{\text{mach}}/h)$. Med standard dubbelprecision (\texttt{float64}) nådde Disa ca 11–12 korrekta siffror med RK4 ($h \sim 10^{-3}$ till $10^{-4}$ kombinerat med Newtons metod för nollstället $t^* = \pi/2$), medan hårdvarugränsen på 53 bitars mantissa förhindrar fler än ca 15–16 siffror. För Euler nådde Hampus ca 9 siffror innan tidsåtgången och avrundningsfelen satte stopp. Anton visade att begränsningen i Euler dels berodde på fasfelet $\approx \pi h^2/3$, dels på ackumulerade avrundningar från tidsuppdateringen $t = t + h$, vilket förbättrades till 12 decimaler med $t = i \cdot h$. För att nå 20 korrekta decimaler eliminerades flyttalsgränsen med godtycklig precision i \texttt{mpmath} (\texttt{dps = 40}), där Disa använde ett Taylor-polynom av grad 30 ($M \ge 15$) kombinerat med Newtons metod, medan Anton använde RK4 med $h = 10^{-5}$ och Newton-förfining.
     \item \textbf{Hur mycket svårare blir det med skifte:} 
-    Disa visade att nollstället närmast $T = 1000$ ges av $t_k = \pi/2 + k\pi$, vilket ger $k = 318$ och $t_{318} = 318{,}5\pi \approx 1000{,}597$[cite: 3]. Ur formeln $\pi = \hat{t}_{318}/318{,}5$ dämpas felet i nollstället med en teoretisk faktor $318{,}5$[cite: 3]. Däremot växer metodens fasfel och trunkeringsfel linjärt med integrationstiden ($\sim t \cdot h^p$), vilket vid $t \approx 1000$ är en faktor drygt 600 större än vid $t = \pi/2$, samtidigt som det ackumulerade avrundningsfelet ökar med antalet steg. Därmed tar den numeriska feltillväxten överhanden och gör skattningen vid $10^3$ betydligt svårare. Hampus funderar ???. Anton fick däremot samma fel i $\pi$ som för första nollstället ($2{,}62 \cdot 10^{-10}$ för $h = 0{,}01$). Felet i $t^*$ växer linjärt med antalet svängningar, men delas med $318{,}5$, så effekterna tar ut varandra. Det som blir svårare är kostnaden (cirka 640 gånger fler steg), inte precisionen.
+    Disa visade att nollstället närmast $T = 1000$ ges av $t_k = \pi/2 + k\pi$, vilket ger $k = 318$ och $t_{318} = 318{,}5\pi \approx 1000{,}597$[cite: 3]. Ur formeln $\pi = \hat{t}_{318}/318{,}5$ dämpas felet i nollstället med en teoretisk faktor $318{,}5$[cite: 3]. Däremot växer metodens fasfel och trunkeringsfel linjärt med integrationstiden ($\sim t \cdot h^p$), vilket vid $t \approx 1000$ är en faktor drygt 600 större än vid $t = \pi/2$, samtidigt som det ackumulerade avrundningsfelet ökar med antalet steg. Därmed tar den numeriska feltillväxten överhanden och gör skattningen vid $10^3$ betydligt svårare. Anton fick däremot samma fel i $\pi$ som för första nollstället ($2{,}62 \cdot 10^{-10}$ för $h = 0{,}01$). Felet i $t^*$ växer linjärt med antalet svängningar, men delas med $318{,}5$, så effekterna tar ut varandra. Det som blir svårare är kostnaden (cirka 640 gånger fler steg), inte precisionen. Hampus fick också ungefär sammma fel i sin skattnig av $\pi$ vid båda nollställena.
 \end{enumerate}
 
 \section*{Uppgift 7. Titel}
@@ -592,6 +623,29 @@ Explicit Euler förlorade alltså nästan all bindningsenergi trots litet $h$,
 medan felet med semi-implicit Euler bara oscillerar och aldrig växer.
 
 \subsection*{Uppgift 7. Hampus Hillding}
+\textbf{Systemets ODE:}
+Låt $\mathbf{r}(t)=(x(t), y(t))$. Gravitationskraften från solen på fås av $F=G\frac{m_{jord}m_{sol}}{r^2}$ Vi väljer $m_{sol}$ så att $Gm_{sol}=1$. Eftersom detta är den enda kraften som verkar på jorden får vi via Newtons andra lag att \[ \ddot{\mathbf{r}}=-\frac{1}{r^2}\mathbf{e_r} =-\frac{1}{r^2}\cdot\frac{\mathbf{r}}{r}\]
+\[r=\sqrt{x^2+y^2} \text{ ger } \ddot{\mathbf{r}}=-\frac{\mathbf{r}}{(x^2+y^2)^{\frac{3}{2}}}\]
+Detta kan alternativt skrivas som systemet
+\begin{equation*}
+\begin{cases}
+\ddot{x}=-\frac{x}{(x^2+y^2)^{3/2}}\\
+\ddot{y}=-\frac{y}{(x^2+y^2)^{3/2}}
+\end{cases}
+\end{equation*}
+\textbf{Simulera:} För att använda Eulers metod skrev jag om systemet som ett system av första ordningens differentialekvationer:
+\begin{equation*}
+\begin{cases}
+\dot{x}=u\\
+\dot{u}=-\frac{x}{(x^2+y^2)^{3/2}}\\
+\dot{y}=v\\
+\dot{v}=-\frac{y}{(x^2+y^2)^{3/2}}
+\end{cases}
+\end{equation*}
+Med vanliga Eulermetoden rör sig jorden i en utåtgående spiral. Detta är en dålig modell av verkligheten eftersom energin inte bevaras.\\
+\includegraphics [width=10cm]{spiralbanahh.png}\\
+Med semi-implicit Euler får jag istället en sluten elliptisk bana som bevarar energin.\\
+\includegraphics [width=10cm]{slutenbanahh.png}\\
 
 \subsection*{Uppgift 7. Skillnader och likheter}
 
@@ -734,6 +788,16 @@ $15\,000$~km ovanför ytan och krockar inte. Eftersom $E > 0$ lämnar skeppet
 solsystemet.
 
 \subsection*{Uppgift 8. Hampus Hillding}
+Jag valde solens massa till $m_{sol}=1/G$ som sist och valde jordens massa till $m_e=m_{sol}/333000$ (vilket stämmer överens ungefär med verkligheten) och jupiters massa till $m_j=m_{sol}/100$ (vilket är ca. 10 gånger tyngre än verkligheten, för lättare slingshot). Jag lät jordens bana ha radie 1 och jupiters bana ha radie 5.2. Jag lät de två planeternas banor endast bero på dragningskraften till solen och inte mellan varandra. I och med detta kunde jag återanvända ekvationssystemet från förra uppgiften för att beskriva båda planeternas respektive banor. För rymdskeppet lät jag dess bana påverkas av gravitationen från alla de tre övriga kropparna. Systemet som beskriver skeppets rörelse blir då
+\begin{equation*}
+\begin{cases}
+\ddot{x_s}=-\frac{x_s}{(x_s^2+y_s^2)^{3/2}} + \frac{m_e(x_e-x_s)}{((x_e-x_s)^2+(y_e-y_s)^2)^{3/2}}+\frac{m_j(x_j-x_s)}{((x_j-x_s)^2+(y_j-y_s)^2)^{3/2}}\\
+\ddot{y_s}=-\frac{y_s}{(x_s^2+y_s^2)^{3/2}} + \frac{m_e(y_e-y_s)}{((x_e-x_s)^2+(y_e-y_s)^2)^{3/2}}+\frac{m_j(y_j-y_s)}{((x_j-x_s)^2+(y_j-y_s)^2)^{3/2}}
+\end{cases}
+\end{equation*}
+Sedan använde jag semi-implicit Euler för att stega fram alla objektens banor. För att hitta rätt startpositioner för att få en slingshot lät jag programmet testa att starta med jorden i olika vinklar och tala om för vilka vinklar skeppet passerade utanför ett visst avstånd från solen (som inte hade kunnat nås i vanliga fall). Jag lät skeppet starta på samma position som jorden men med en hastighet som gjorde att skeppets bana precis kunde korsa jupiters bana. Jupiters startläge hade vinkel noll hela tiden. Med en steglängd $h=0.05$ hittade jag en 'gravitational slingshot' då jordens (och skeppets) startvinkel var 4.4 radianer. För att försäkra mig om att skeppet kommer att lämna solsystemet beräknade jag banans energi $E=T+V =\frac{1}{2}(\dot{x}^2+\dot{y}^2)-\frac{1}{\sqrt{x^2+y^2}}$. (Egentligen ska allt multipliceras med massan, men vi kan ignorera den eftersom den alltid är positiv.) Jag såg då att energin var positiv, vilket innebär att skeppet lämnar solsystemet. Vid början av simuleringen är energin negativ.
+\\
+\includegraphics [width=15cm]{slingshothh.png}\\
 
 \subsection*{Uppgift 8. Skillnader och likheter}
 
