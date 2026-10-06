@@ -105,6 +105,31 @@ autonom flyttar $\varepsilon$ bara nollgenomgången $t_0$, inte tiden nära noll
 
 \subsection*{Uppgift 3. Hampus Hillding}
 
+\subsection*{Uppgift 3. Fredrik Sollenberg}
+\begin{adjustwidth}{0.9cm}{0.9cm}
+
+\textbf{Analytiskt:} Betrakta begynnelsevärdesproblemet $\frac{dy}{dt} = \sqrt{|y|},\quad y(0) = 0$. Vi kan enkelt övertyga oss om att $f(t,y)=\sqrt{|y|}$ är kontinuerlig överallt men eftersom $\frac{\partial f}{\partial y}\to \infty$ (inte Lipschitz) vid $t=0$ kan lösningars existens garanteras men de behöver inte vara unika vid $y=0$.
+\medskip\\
+Separering och integrering av D.E:n ger lösningen $y=\pm(\frac{t}{2}+c)^2$, (en parabel som tangerar horisontella axeln), och eftersom $\frac{dy}{dt} =\sqrt{|y|} \geq 0$ för alla $t$ har vi bara den ``uppåtlutande'' delen av kurvan. Vi kan föreställa oss resultatet som en $y=x^3$-liknande kurva som börjar i det negativa, stiger till en terasspunkt i $y=0$ och fortsätter uppåt. Men... om $y$ kommer till $0$ så har vi $y'(0)=\sqrt{|0|} = 0$ och den förebådade tvetydigheten uppenbarar sig. 
+\medskip\\
+\textbf{Numeriskt:} I vårt fall när $y(0)=0$ kommer en numerisk lösningsmetod för begynnelsevärdesproblem att spotta tillbaka en kurva där $y$ alltid är lika med $0$. Exempelvis, för framåt-euler-metoden kommer lösaren att utföra beräkningen
+\[
+y_{n+1} = 0 + \Delta t\sqrt{0} =0
+\]
+som aldrig kommer att lämna $y(0)=0$. Detsamma går att visa för RK4. Vi vet att om $y(0) > 0$ går kurvan bestämt uppåt mot $\infty$. Däremot om $y(0) < 0$ kommer den att gå uppåt mot $0$. Vi kan bevisa att kurvan numeriskt kommer att slå över till den positiva sidan (givet att inget steg landar på exakt $0$). Låt oss säga $|y_n| = \delta > 0$. Villkoret för övergången är
+\[
+y_{n+1} = -\delta + \Delta t\sqrt{\delta} > 0 \implies \Delta t>\sqrt{\delta}
+\]
+Vilket till slut måste hända ty $y' > 0$. När ett steg väl är positivt gäller även egenskapen
+\[
+\frac{y_{n+1}}{y_n} = \frac{\delta+\Delta t\sqrt{\delta}}{\delta} = 1 + \frac{\Delta t}{\sqrt{\delta}} \to \infty \text{, när } \delta \to 0^{+}
+\]
+vilket innebär att den numeriska lösningskurvan verkligen inte vill fastna kring $0$. Detsamma går att visa för metoder som RK4 m.fl.
+\medskip\\
+\textbf{Observationer m. Python:} För det ursprungliga problemet där $y(0)=0$ får vi likt förväntat en rakt streck eftersom $y$ alltid är lika med $0$. För den andra situationen $y(-1)=-1$ får vi en s-kurva som vi förväntade oss. Jag testade med flera metoder och ingen fastnade vid $y=0$. Mina kamrater beräknade att tiden den analytiska kurvan befinner sig inom $|y|\leq10^{-6}$ borde vara 0.004 vilket stämde överens med mina test för fram/bak-Euler. Högre ordningens explicita funktioner hade en kortare visit. Ingen metod jag provade hade längre. 
+\end{adjustwidth}
+
+
 \subsection*{Uppgift 3. Skillnader och likheter}
 
 \begin{enumerate}
@@ -208,6 +233,26 @@ aldrig blir positiv. En automatlösare kan undvika detta genom att förkasta
 steget och halvera $h$ när $y$ byter tecken.
 
 \subsection*{Uppgift 4. Hampus Hillding}
+b
+
+\subsection*{Uppgift 4. Fredrik Sollenberg}
+\begin{adjustwidth}{0.9cm}{0.9cm}
+\textbf{Analytiskt:} Vi har begynnelsevärdesproblemet $\frac{dy}{dt}=y^2,y(0)=N/100$ där N är de två sista siffrorna i ens personummer. Vi vet att $f(t,y)=y^2$ är kontinuerlig överallt och vi kan dessutom konstatera att funktionen är lokalt Lipschitz överallt. Picard ger: Det finns en unik lösning överallt. Vi löser D.E:n enkelt med separering och integrering och får att $y=\frac{-1}{t+c}$. För vårt positiva startvärde fås lösningskurvan av den positiva delen av lösningen till D.E:n. Vi vet att en kurva är strikt positiv eller strikt negativ (utom $y=0$) eftersom gränsfallskurvan $y=0$ fungerar som en mur som vi vet inte kan korsas utan att bryta mot lösningarnas redan fastställda entydighet.
+\medskip\\
+Kurvan kommer att gå mot oändligheten när $t\to c$. Vi kan lösa ut $c$ ur D.E:ns lösningsfunktion och inse vi analytiskt kan beräkna tiden för singulariteten ($t^*$) utifrån en enda punkt. 
+\medskip\\
+\textbf{Numeriskt:} Vi kan påvisa singulariteten numeriskt genom att försöka lösa begynnelsevärdesproblemet som om ingenting och se hur programmet kraschar eller visar en plot där y är låg med på bara något enstaka tidssteg går till astronomiska siffror utan att någonsin komma förbi en viss tidpunkt. Om man försöker bestämma $t^*$ genom det sista steget i en numerisk metod kommer man att få ett för lågt tal eftersom den numeriska metoden, ex. Euler framåt, kommer att hamna under den analytiska kurvan och därmed ``tror'' att $t^*$ kommer senare. Att lösa för $c$ i den analytiska lösnigen för en punkt ger också ett högt värde av samma anledning.
+\medskip\\
+\textbf{Observationer m. Python:} I det här fallet finner vi precis det vi förväntat oss hittils. Om vi dock har $\frac{dy}{dt}=Cy^2,y(0)=\epsilon$ kan för för vissa $C$ och små $\epsilon$ en negativ lösning felaktigt ge en positiv kurva med numeriska metoder. För Eulers metod visar det sig att
+\[
+y_{1}=\epsilon + \Delta tC\epsilon^2 = \epsilon(1+\Delta tC\epsilon), 
+\]
+\[
+\text{ Felaktigt positiv om: }1+\Delta tC\epsilon<0\Leftrightarrow \Delta t|\epsilon| > \frac{1}{C}
+\]
+Alltså, om tidssteget eller $C$ är för stora kan vi få den här effekten för ett visst $\epsilon$. 
+\end{adjustwidth}
+
 
 \subsection*{Uppgift 4. Skillnader och likheter}
 
@@ -316,7 +361,14 @@ avrundningsfelen dominera långt innan dess.
 
 
 \subsection*{Uppgift 5. Hampus Hillding}
-
+\subsection*{Uppgift 5. Fredrik Sollenberg}
+\begin{adjustwidth}{0.9cm}{0.9cm}
+\textbf{Analytiskt:} Begynnelsevärdesproblemet $y'=y, y(0)=N$ har uppenbart lösningen $Ne^x$. 
+\medskip\\
+\textbf{Numeriskt:} Uppgiften är att räkna ut $y(2^k)=Ne^{(2^k)}$ som om man inte visste om den analytiska lösningen. Jag använde mig av modulen mpmath som har godtycklig precision och dess funktion odefun() som returnerar en funktion som är en taylorapproximation av lösningskurvan med önskad precision. Värderar man denna funktion i $t=2^k$ får man tillbaka lösningen. 
+\medskip\\
+\textbf{Observationer m. Python:} Kör man programmet fick jag snabbt ut värden för k upp till 6. 7 tog ett par sekunder och 8 tog någon minut. Jag hade igång programmet ganska länge och fick ett värde för $k=9$. Därefter gav jag upp eftersom nästa tal skulle ta orimligt lång tid och programmet använde 18 GB av mitt RAM.
+\end{adjustwidth}
 \subsection*{Uppgift 5. Skillnader och likheter}
 
 \begin{enumerate}
@@ -458,6 +510,14 @@ kostnaden: cirka 640 gånger fler steg.
 
 \subsection*{Uppgift 6. Hampus Hillding}
 
+\subsection*{Uppgift 6. Fredrik Sollenberg}
+\begin{adjustwidth}{0.9cm}{0.9cm}
+\textbf{Analytiskt:} Karakteristiska ekvationen och begynnelsevillkoren ger $y=\frac{1}{2} e^{(it)}+ \frac{1}{2} e^{(-it)}$ vilket är identiskt med Eulers formel-definitionen av cosinus. För de numeriska beräkningarna skrevs ekvationen om som ett system av första ordningens ODE:er. 
+\medskip\\
+\textbf{Numeriskt:}  Om vi vid något om cosinus så är det att första nollstället är vid $\frac{\pi}{2}$. Genom att beräkna nollstället numeriskt kan vi beräkna värdet på $\pi$. Vi hittar nollstället och multiplicerar med 2. Vi skulle kunna använda vilket nollställe som helst men det tidigaste är bäst för att ju längre bort man kommer från $t=0$ desto större fasförskjutning får man. En metod som Euler frmåt eller RK4 kommer att genomföra en period av cosinusfunktionen efter tiden $t=\pi+\delta$ för något fel $\delta$. Efter många svängningar har felen byggts upp. Även om vi då hittar det numeriska nollstället med hög precision kommer det att vara förskjutet en aning och ge ett sämre svar. Denna förskjutning ökar linjärt med antal svängningar.
+\medskip\\
+\textbf{Observationer m. Python:} Jag använde tre metoder, Euler framåt (den sög), scipys funktion solve\_ivp med RK ordning 8, och mpmath med taylor. Solve\_ivp räknar ut så bra det går ($\approx$ 14 decimaler) men den stödjer inte godtycklig precision av sig själv. Mpmath räknade ut perfekt bara sådär. Av praktiska skäl användes solve\_ivp för uppgiften att beräkna $\pi$ vid $t=1000$ och intressant nog var felet tydligt vilket jag skyller på fasföskjutningen. Gällande uppgiften att beräkna godtyckligt många decimaler av pi användes mpmath. Jag fick 10 miljoner korrekta decimaler på några få minuter. Den enda egentliga begränsningen var tiden det tog; mitt RAM märkte knappt av det. 
+\end{adjustwidth}
 \subsection*{Uppgift 6. Skillnader och likheter}
 
 \begin{enumerate}
@@ -515,6 +575,25 @@ medan felet med semi-implicit Euler bara oscillerar och aldrig växer.
 
 \subsection*{Uppgift 7. Hampus Hillding}
 
+\subsection*{Uppgift 7. Fredrik Sollenberg}
+\begin{adjustwidth}{0.9cm}{0.9cm}
+\textbf{Analytiskt:} Vi börjar med att anta att solen inte kan flytta sig från origo. Då behöver vi bara beskriva jordens rörelse med D.E:er. Vi utgår från Newtons gravitationslag. 
+\[
+\ddot{\textbf{r}}=-\frac{GM}{r^2}\frac{\textbf{r}}{r}
+\]
+vilket med komposantuppdelning av $\textbf{r} = (x,y)$ blir 
+\[
+\begin{cases}
+    a_x=-\frac{GMx}{r^3}\\
+    a_y=-\frac{GMy}{r^3}
+\end{cases}
+\]
+som vi kan räkna med 
+\medskip\\
+\textbf{Numeriskt:} Om vi plottar fasplanet för det här begynnelsevärdesproblemet får vi den simulerade planetbanan. När man simulerar planetbanor är det viktigt att man använder en symplektisk metod på D.E:n eftersom annars åker jorden in i solen och alla dör. Jag blev varse. Sen efter att jag implementerade den symplektiska metoden semiimplicit Euler så dog inte alla. 
+\medskip\\
+\textbf{Observationer m. Python:} Jorden snurrar runt solen. 
+\end{adjustwidth}
 \subsection*{Uppgift 7. Skillnader och likheter}
 
 \begin{enumerate}
@@ -639,7 +718,16 @@ $15\,000$~km ovanför ytan och krockar inte. Eftersom $E > 0$ lämnar skeppet
 solsystemet.
 
 \subsection*{Uppgift 8. Hampus Hillding}
-
+\subsection*{Uppgift 8. Fredrik Sollenberg}
+\begin{adjustwidth}{0.9cm}{0.9cm}
+I den här uppgiften tog jag en annan approach. I Python gjorde jag en klass med planeter med attribut som position och hastighet. Sen i en egen klass för själva simulationen beräknade jag gravitationen mellan alla planerterna som vektorer sen utförde jag semiimplicita Euler-metoden på systemts tillstånd och plottade. 
+\medskip\\ 
+För att göra en gravitationsslunga måste man designa ett begynnelsetillstånd som gör att ett rymdskepp skickas ut från jorden och närmar sig jupiter i sidan av dess bana och flyger in precis bakom planeten. Om gravitationsslungan har gett raketen tillräckligt med energi för att lämna solsystemet kommer dess mekaniska energi ($E$) att vara större än 0. $E$ beräknas med formeln
+\[
+E =T+V=\frac{1}{2}mv^2+\sum_{i}\frac{GM_im}{r_i}
+\]
+och det kan vara bra att veta.
+\end{adjustwidth}
 \subsection*{Uppgift 8. Skillnader och likheter}
 
 \begin{enumerate}
