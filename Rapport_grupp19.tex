@@ -184,7 +184,6 @@ vilket innebär att den numeriska lösningskurvan verkligen inte vill fastna kri
     som Disa. Han fick en lösningsfamilj med en parameter $c \geq 0$ (bara
     $t \geq 0$), medan Disa även lät lösningen komma in från $t < 0$ och fick två
     parametrar. 
-    \item \text
     
     \item \textbf{Lös problemet numeriskt med kommentarer:} Alla i gruppen fick att $y=0, \forall x\in \mathbb{R}$ oavsett om man använde RK4 eller Euler. Detta kunde förutses: Eftersom
     $f(0) = 0$ blir varje explicit stegmetod låst i $y = 0$ om den startar exakt där.
@@ -221,7 +220,8 @@ För $N = 82$ är den exakta singularitetstiden $t^* = \frac{100}{82} \approx 1{
     \[
     t_{\text{stopp}} \approx 1{,}2100.
     \]
-    Detta ger en direkt numerisk undre uppskattning av singularitetstiden som stämmer väl överens med det analytiska värdet $t^* = \frac{100}{82} \approx 1{,}2195$.
+    Detta ger en numerisk undre uppskattning av singularitetstiden som stämmer överens med det analytiska värdet $t^* = \frac{100}{82} \approx 1{,}2195$. Den numeriska beräkningen ger dock $t_{stopp}\approx 1,23$ vilket ligger nära den analytiska singularitetstiden 
+    $t^*\approx 1,2195$. Skillnaden beror på den numeriska metodens steglängd och det valda tröskelvärdet och med mindre h kommer man närmare och närmare 1,2195.
 \end{itemize}
 
 \subsection*{3. Bevis: $y(0) < 0 \implies y(t) < 0$ för alla $t > 0$}
@@ -343,15 +343,15 @@ Differentialekvationen har den exakta lösningen:
 \end{equation}
 För $y' = y$ gäller $y^{(v)}(\xi) = N e^\xi$. Det lokala trunkeringsfelet per steg ges av:
 \begin{equation}
-    \epsilon_{\text{lokal}} = -\frac{y^{(v)}(\xi)}{180} h^5 = -\frac{N e^\xi}{180} h^5.
+    \epsilon_{\text{lokal}} = -\frac{y^{(v)}(\xi)}{120} h^5 = -\frac{N e^\xi}{120} h^5.
 \end{equation}
 Över $M = \frac{T}{h}$ steg fram till $T = 2^k$ begränsas det globala felet av:
 \begin{equation}
-    |E_M| \le M \cdot \max_{0 \le \xi \le T} |\epsilon_{\text{lokal}}(\xi)| \cdot e^{T - \xi} \le \frac{T}{h} \left(\frac{N e^T}{180} h^5\right) = \frac{N \cdot 2^k e^{2^k}}{180} h^4.
+    |E_M| \le M \cdot \max_{0 \le \xi \le T} |\epsilon_{\text{lokal}}(\xi)| \cdot e^{T - \xi} \le \frac{T}{h} \left(\frac{N e^T}{120} h^5\right) = \frac{N \cdot 2^k e^{2^k}}{120} h^4.
 \end{equation}
 Kravet på två korrekta decimaler ($|E_M| \le 0{,}005$) kräver:
 \begin{equation}
-    \frac{N \cdot 2^k e^{2^k}}{180} h^4 \le 0{,}005 \implies h \le \left(\frac{0{,}9}{N \cdot 2^k}\right)^{1/4} e^{-2^{k-2}}.
+    \frac{N \cdot 2^k e^{2^k}}{120} h^4 \le 0{,}005 \implies h \le \left(\frac{0{,}9}{N \cdot 2^k}\right)^{1/4} e^{-2^{k-2}}.
 \end{equation}
 Steglängden $h$ måste alltså minskas exponentiellt, vilket gör att antalet steg $M = \frac{2^k}{h} \propto 2^{5k/4} e^{2^{k-2}}$ växer explosionsartat.
 
@@ -526,7 +526,34 @@ Skattningen av $\pi$ ur det beräknade nollstället $\hat{t}_{318}$ sker via $\h
     \end{equation}
     Divisionen med $k + 0{,}5$ dämpar alltså felet i $\pi$ med en faktor drygt $300$.
     \item \textbf{Numerisk felförstoring:} Integrationstiden $t \approx 1000$ är över $600$ gånger längre än $t \approx \pi/2$. För en enstegsmetod (som RK4) ackumuleras fasfelet linjärt med integrationstiden, vilket ger över $600$ gånger större fasdrift. Dessutom genererar de hundratusentals beräkningsstegen betydligt större ackumulerade flyttalsfel.
-    \item \textbf{Slutsats:} Den numeriska fasdriften och avrundningsfelet över 1000 tidsenheter överväger dämpningsfaktorn $1/318{,}5$. Att bestämma $\pi$ vid $10^3$ är därmed avsevärt svårare och ger sämre precision än att beräkna det första nollstället.
+    \item \textbf{Slutsats:}
+    Resultaten visar att det slutliga skattningsfelet inte nödvändigtvis
+    ökar med integrationstiden. För RK4 är felet vid beräkningen av det
+    första nollstället $3{,}37\cdot10^{-10}$, medan skattningen av $\pi$
+    nära $t=1000$ ger felet $5{,}25\cdot10^{-11}$. Det senare felet är
+    ungefär $6{,}4$ gånger mindre.
+
+    \bigskip
+
+    Detta innebär dock inte att den långa integrationen generellt är
+    mer noggrann. Det slutliga felet påverkas både av det ackumulerade
+    integrationsfelet och av hur dessa fel fortplantas. Resultaten visar därför att skattningen nära
+    $t=1000$ i just denna beräkning har bättre precision, men de räcker
+    inte för att dra slutsatsen att lång integration generellt ger
+    bättre eller sämre precision.
+
+    \item Enligt Sauers sats 6.4 kan det globala numeriska felet
+    begränsas teoretiskt enligt
+    \[
+    |w_i-y_i|
+    \leq \frac{Ch^k}{L}
+    \left(e^{L(t_i-a)}-1\right).
+    \]
+    Felgränsen beror bland annat på steglängden $h$, lipschitzkonstanten L och
+    metodens ordning $k$. Den beskriver hur felet kan
+    utvecklas under integrationen, men ger inte det faktiska
+    felet i beräkningen.
+
 \end{itemize}
 
 \begin{figure}[H]
@@ -595,7 +622,7 @@ Jag modifierade koden för att hitta roten närmast $t=1000$, dvs. $t=637\pi/2$.
     \item \textbf{Hur många korrekta siffror kan man få innan datorn smälter:} 
     Att datorn smälter beror på två faktorer: beräkningstiden exploderar ($N \propto 1/h$) och flyttalsavrundningar ($\epsilon_{\text{mach}} \approx 2{,}2 \cdot 10^{-16}$) tar över då felet växer som $\mathcal{O}(\epsilon_{\text{mach}}/h)$. Med standard dubbelprecision (\texttt{float64}) nådde Disa ca 11–12 korrekta siffror med RK4 ($h \sim 10^{-3}$ till $10^{-4}$ kombinerat med Newtons metod för nollstället $t^* = \pi/2$), medan hårdvarugränsen på 53 bitars mantissa förhindrar fler än ca 15–16 siffror. För Euler nådde Hampus ca 9 siffror innan tidsåtgången och avrundningsfelen satte stopp. Anton visade att begränsningen i Euler dels berodde på fasfelet $\approx \pi h^2/3$, dels på ackumulerade avrundningar från tidsuppdateringen $t = t + h$, vilket förbättrades till 12 decimaler med $t = i \cdot h$. För att nå 20 korrekta decimaler eliminerades flyttalsgränsen med godtycklig precision i \texttt{mpmath} som använde ett Taylor-polynom av grad 30 ($M \ge 15$) kombinerat med Newtons metod, medan Anton använde RK4 med $h = 10^{-5}$ och Newton-förfining.
     \item \textbf{Hur mycket svårare blir det med skifte:} 
-    Disa visade att nollstället närmast $T = 1000$ ges av $t_k = \pi/2 + k\pi$, vilket ger $k = 318$ och $t_{318} = 318{,}5\pi \approx 1000{,}597$[cite: 3]. Ur formeln $\pi = \hat{t}_{318}/318{,}5$ dämpas felet i nollstället med en teoretisk faktor $318{,}5$[cite: 3]. Däremot växer metodens fasfel och trunkeringsfel linjärt med integrationstiden ($\sim t \cdot h^p$), vilket vid $t \approx 1000$ är en faktor drygt 600 större än vid $t = \pi/2$, samtidigt som det ackumulerade avrundningsfelet ökar med antalet steg. Därmed tar den numeriska feltillväxten överhanden och gör skattningen vid $10^3$ betydligt svårare. Anton fick däremot samma fel i $\pi$ som för första nollstället ($2{,}62 \cdot 10^{-10}$ för $h = 0{,}01$). Felet i $t^*$ växer linjärt med antalet svängningar, men delas med $318{,}5$, så effekterna tar ut varandra. Det som blir svårare är kostnaden (cirka 640 gånger fler steg), inte precisionen. Hampus fick också ungefär sammma fel i sin skattnig av $\pi$ vid båda nollställena.
+    Disa visade att nollstället närmast $T = 1000$ ges av $t_k = \pi/2 + k\pi$, vilket ger $k = 318$ och $t_{318} = 318{,}5\pi \approx 1000{,}597$. Ur formeln $\pi = \hat{t}_{318}/318{,}5$ dämpas felet i nollstället med en teoretisk faktor $318{,}5$. Däremot växer metodens fasfel och trunkeringsfel linjärt med integrationstiden ($\sim t \cdot h^p$), vilket vid $t \approx 1000$ är en faktor drygt 600 större än vid $t = \pi/2$, samtidigt som det ackumulerade avrundningsfelet ökar med antalet steg. Därmed tar den numeriska feltillväxten överhanden och gör skattningen vid $10^3$ betydligt svårare. Anton fick däremot samma fel i $\pi$ som för första nollstället ($2{,}62 \cdot 10^{-10}$ för $h = 0{,}01$). Felet i $t^*$ växer linjärt med antalet svängningar, men delas med $318{,}5$, så effekterna tar ut varandra. Det som blir svårare är kostnaden (cirka 640 gånger fler steg), inte precisionen. Hampus fick också ungefär sammma fel i sin skattnig av $\pi$ vid båda nollställena.
 \end{enumerate}
 
 \section*{Uppgift 7. Newton!}
@@ -1025,15 +1052,15 @@ Differentialekvationen har den exakta lösningen:
 \end{equation}
 För $y' = y$ gäller $y^{(v)}(\xi) = N e^\xi$. Det lokala trunkeringsfelet per steg ges av:
 \begin{equation}
-    \epsilon_{\text{lokal}} = -\frac{y^{(v)}(\xi)}{180} h^5 = -\frac{N e^\xi}{180} h^5.
+    \epsilon_{\text{lokal}} = -\frac{y^{(v)}(\xi)}{120} h^5 = -\frac{N e^\xi}{120} h^5.
 \end{equation}
 Över $M = \frac{T}{h}$ steg fram till $T = 2^k$ begränsas det globala felet av:
 \begin{equation}
-    |E_M| \le M \cdot \max_{0 \le \xi \le T} |\epsilon_{\text{lokal}}(\xi)| \cdot e^{T - \xi} \le \frac{T}{h} \left(\frac{N e^T}{180} h^5\right) = \frac{N \cdot 2^k e^{2^k}}{180} h^4.
+    |E_M| \le M \cdot \max_{0 \le \xi \le T} |\epsilon_{\text{lokal}}(\xi)| \cdot e^{T - \xi} \le \frac{T}{h} \left(\frac{N e^T}{120} h^5\right) = \frac{N \cdot 2^k e^{2^k}}{120} h^4.
 \end{equation}
 Kravet på två korrekta decimaler ($|E_M| \le 0{,}005$) kräver:
 \begin{equation}
-    \frac{N \cdot 2^k e^{2^k}}{180} h^4 \le 0{,}005 \implies h \le \left(\frac{0{,}9}{N \cdot 2^k}\right)^{1/4} e^{-2^{k-2}}.
+    \frac{N \cdot 2^k e^{2^k}}{120} h^4 \le 0{,}005 \implies h \le \left(\frac{0{,}9}{N \cdot 2^k}\right)^{1/4} e^{-2^{k-2}}.
 \end{equation}
 Steglängden $h$ måste alltså minskas exponentiellt, vilket gör att antalet steg $M = \frac{2^k}{h} \propto 2^{5k/4} e^{2^{k-2}}$ växer explosionsartat.
 
