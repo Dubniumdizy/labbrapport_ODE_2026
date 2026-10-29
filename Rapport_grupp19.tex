@@ -157,7 +157,16 @@ tidsenheter. Se figur.
 
 \textbf{Analytiskt:} Betrakta begynnelsevärdesproblemet $\frac{dy}{dt} = \sqrt{|y|},\quad y(0) = 0$. Vi kan enkelt övertyga oss om att $f(t,y)=\sqrt{|y|}$ är kontinuerlig överallt men eftersom $\frac{\partial f}{\partial y}\to \infty$ (inte Lipschitz) vid $t=0$ kan lösningars existens garanteras men de behöver inte vara unika vid $y=0$.
 \medskip\\
-Separering och integrering av D.E:n ger lösningen $y=\pm(\frac{t}{2}+c)^2$, (en parabel som tangerar horisontella axeln), och eftersom $\frac{dy}{dt} =\sqrt{|y|} \geq 0$ för alla $t$ har vi bara den ``uppåtlutande'' delen av kurvan. Vi kan föreställa oss resultatet som en $y=x^3$-liknande kurva som börjar i det negativa, stiger till en terasspunkt i $y=0$ och fortsätter uppåt. Men... om $y$ kommer till $0$ så har vi $y'(0)=\sqrt{|0|} = 0$ och den förebådade tvetydigheten uppenbarar sig. 
+Separering och integrering av D.E:n ger lösningen 
+\[
+y(t)=
+\begin{cases}
+-\frac{1}{4}(t-a)^2 , t\leq a\\
+0, a\leq t \leq b\\
+\frac{1}{4}(t-b)^2, t\geq b
+\end{cases}
+\]
+där $a\leq 0\leq b$. Vi kan föreställa oss resultatet som en kubisk-liknande kurva som börjar i det negativa, stiger till en terasspunkt i $y=0$ och fortsätter uppåt. Men... om $y$ kommer till $0$ så har vi $y'(0)=\sqrt{|0|} = 0$ och den förebådade tvetydigheten uppenbarar sig. 
 \medskip\\
 \textbf{Numeriskt:} I vårt fall när $y(0)=0$ kommer en numerisk lösningsmetod för begynnelsevärdesproblem att spotta tillbaka en kurva där $y$ alltid är lika med $0$. Exempelvis, för framåt-euler-metoden kommer lösaren att utföra beräkningen
 \[
@@ -297,9 +306,11 @@ steget och halvera $h$ när $y$ byter tecken.
 \medskip\\
 Kurvan kommer att gå mot oändligheten när $t\to c$. Vi kan lösa ut $c$ ur D.E:ns lösningsfunktion och inse att vi analytiskt kan beräkna tiden för singulariteten ($t^*$) utifrån en enda punkt. 
 \medskip\\
-\textbf{Numeriskt:} Vi kan påvisa singulariteten numeriskt genom att försöka lösa begynnelsevärdesproblemet som om ingenting och se hur programmet kraschar eller visar en plot där kurvan är låg men på bara något enstaka tidssteg går till astronomiska siffror utan att någonsin komma förbi en viss tidpunkt. Om man försöker bestämma $t^*$ genom det sista steget i Eulers metod kommer man att få ett för högt tal eftersom metoden kommer att hamna under den analytiska kurvan och kommer därmed ``tro'' att $t^*$ kommer senare. Att lösa för $c$ i den analytiska lösnigen för en punkt ger också ett högt värde av samma anledning.
+\textbf{Numeriskt:} Vi kan påvisa singulariteten numeriskt genom att försöka lösa begynnelsevärdesproblemet som om ingenting och se hur programmet kraschar eller visar en plot där kurvan är låg men på bara något enstaka tidssteg går till astronomiska siffror utan att någonsin komma förbi en viss tidpunkt.
 \medskip\\
-\textbf{Observationer m. Python:} I det här fallet finner vi precis det vi förväntat oss hittils. Om vi nu har $\frac{dy}{dt}=Cy^2,y(0)=\epsilon$ kan för för vissa $C$ och små $\epsilon <0$ en negativ lösning felaktigt ge en positiv kurva med numeriska metoder. För Eulers metod visar det sig att
+Om man försöker bestämma $t^*$ genom att bryta när $y$ blir väldigt högt och sätta vårt $t*$ till bryttiden kommer man i teorin att få ett för lågt tal eftersom metoden kommer stanna innan $y$ riktigt når $\infty$ men använder man en dålig metod (vilket jag gjorde) kommer lösningsmetoden att underskatta kurvans lutning så mycket att man ändå får ett för högt värde. Att lösa för $c$ i den analytiska lösnigen för en punkt ger också ett högt värde av samma anledning.
+\medskip\\
+\textbf{Observationer m. Python:} Med både den analytiska och den numeriska beräkningen uppskattades $t*$ till en lite för hög siffra eftersom Eulers metod underskattar kurvan. Om vi nu har $\frac{dy}{dt}=Cy^2,y(0)=\epsilon$ kan för för vissa $C$ och små $\epsilon <0$ en negativ lösning felaktigt ge en positiv kurva med numeriska metoder. För Eulers metod visar det sig att
 \[
 y_{1}=\epsilon + \Delta tC\epsilon^2 = \epsilon(1+\Delta tC\epsilon), 
 \]
@@ -585,6 +596,16 @@ Jag modifierade koden för att hitta roten närmast $t=1000$, dvs. $t=637\pi/2$.
 \medskip\\
 \textbf{Numeriskt:}  Om vi vet något om cosinus så är det att första nollstället är vid $\frac{\pi}{2}$. Genom att beräkna nollstället numeriskt kan vi beräkna värdet på $\pi$. Vi hittar nollstället och multiplicerar med 2. Vi skulle kunna använda vilket nollställe som helst men det tidigaste är bäst för att ju längre bort man kommer från $t=0$ desto större fasförskjutning får man. En metod som Euler frmåt eller RK4 kommer att genomföra en period av cosinusfunktionen efter tiden $t=\pi+\delta$ för något fel $\delta$. Efter många svängningar har felen byggts upp. Även om vi då hittar det numeriska nollstället med hög precision kommer det att vara förskjutet en aning och ge ett sämre svar. Denna förskjutning ökar linjärt med antal svängningar.
 \medskip\\
+Vi vet att absolutfelet $e(t)$ för en metod av ordning $k$ vid tiden $t_1$ är begränsad av
+\[
+e(t_1) \leq \frac{Ch^{k}}{L}(e^{L(t_1-t_0)}-1)
+\]
+för någon konstant $C$ och en Lipschitzkonstant $L$ för y. Termen $e^{L(t_1-t_0)}$ är felfortplantningen och beskriver hur stort ett fel som uppstår vid $t_0$ blir vid $t_1$. Felfortplantningens mest generella form innehåller $L$ men i vårt fall när lösningen oscillerar är felet betydligt mer begränsat än så. Skulle ett fel $e(t_0)$ uppstå i lösningen av vårt vårt ODE-system med matrisen $A$ skulle det vid $t_1$ fortplantats till
+\[
+\frac{d\textbf{x}}{dt}=A\textbf{x} \text{,  med lösning för ett fel e(t):  } \textbf{e}(t_1) = e^{A(t_1-t_0)}\textbf{e}(t_0)\text{.}
+\]
+Eftersom vi vet att determinanten för $e^{A(t_1-t_0)$ alltid är 1 så inser vi att felet inte förstoras alls. Därför drar vi slutsatsen att felet ökar linjärt med tiden. 
+\medskip\\
 \textbf{Observationer m. Python:} Jag använde tre metoder, Euler framåt (den sög), scipys funktion solve\_ivp med RK ordning 8, och mpmath med taylor. Solve\_ivp räknar ut så bra det går ($\approx$ 14 decimaler) men den stödjer inte godtycklig precision av sig själv. Mpmath räknade ut perfekt, bara sådär. Av praktiska skäl användes solve\_ivp för uppgiften att beräkna $\pi$ vid $t=1000$ och intressant nog var felet tydligt vilket jag skyller på fasföskjutningen. Gällande uppgiften att beräkna godtyckligt många decimaler av pi användes mpmath. Jag fick 10 miljoner korrekta decimaler på några få minuter. Den enda egentliga begränsningen var tiden det tog; mitt RAM märkte knappt av det.
 \end{adjustwidth}
 
@@ -725,10 +746,19 @@ vilket med komposantuppdelning av $\textbf{r} = (x,y)$ blir
 \]
 som vi kan räkna med 
 \medskip\\
-\textbf{Numeriskt:} Om vi plottar fasplanet för det här begynnelsevärdesproblemet får vi den simulerade planetbanan. När man simulerar planetbanor är det viktigt att man använder en symplektisk metod på D.E:n eftersom annars åker jorden in i solen och alla dör. Jag blev varse. Sen efter att jag implementerade den symplektiska metoden semiimplicit Euler så dog inte alla. 
+\textbf{Numeriskt:} Om vi plottar fasplanet för det här begynnelsevärdesproblemet får vi den simulerade planetbanan. När man simulerar planetbanor är det viktigt att man använder en symplektisk metod på D.E:n eftersom sådana bevarar planetens energi. Andra metoder låter felberäkningarna i energin byggas upp över tid och producera uppenbart felaktiga lösningar (jordens bana divergerar/spiralerar in i solen). 
 \medskip\\
 \textbf{Observationer m. Python:} Jorden snurrar runt solen.
+\medskip\\
+\begin{center}
+   \includegraphics[width=0.4\linewidth]{Skärmbild 2026-10-23 163956.png} 
+\end{center}
+
+
 \end{adjustwidth}
+
+
+
 \subsection*{Uppgift 7. Skillnader och likheter}
 
 \begin{enumerate}
@@ -886,9 +916,15 @@ I den här uppgiften tog jag en annan approach. I Python gjorde jag en klass med
 \medskip\\ 
 För att göra en gravitationsslunga måste man designa ett begynnelsetillstånd som gör att ett rymdskepp skickas ut från jorden och närmar sig jupiter i sidan av dess bana och flyger in precis bakom planeten. Om gravitationsslungan har gett raketen tillräckligt med energi för att lämna solsystemet kommer dess mekaniska energi ($E$) att vara större än 0. $E$ beräknas med formeln
 \[
-E =T+V=\frac{1}{2}mv^2+\sum_{i}\frac{GM_im}{r_i}
+E =T+V=\frac{1}{2}mv^2-\sum_{i}\frac{GM_im}{r_i}
 \]
-\end{adjustwidth}
+\begin{center}
+  \includegraphics[width=0.5\linewidth]{Skärmbild 2026-10-23 160951.png}  
+\end{center}
+    
+
+\medskip\\
+
 \subsection*{Uppgift 8. Skillnader och likheter}
 
 \begin{enumerate}
