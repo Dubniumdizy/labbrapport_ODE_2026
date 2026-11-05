@@ -14,6 +14,85 @@
 
 \subsection*{Uppgift 3. Disa Degerholm}
 
+Betrakta begynnelsevärdesproblemet
+\begin{equation}
+    y' = \sqrt{|y|}, \quad y(0) = 0.
+\end{equation}
+
+\subsection*{1. Analytisk lösning och icke-entydighet}
+Picards existens- och entydighetssats (Simmons kap.~13) kräver att $f(y) = \sqrt{|y|}$ är lokalt Lipschitzkontinuerlig i en omgivning av $y = 0$, dvs.~att differenskvoten är begränsad:
+\begin{equation}
+    \lim_{y \to 0^+} \frac{|f(y) - f(0)|}{|y - 0|} = \lim_{y \to 0^+} \frac{\sqrt{y}}{y} = \lim_{y \to 0^+} \frac{1}{\sqrt{y}} = \infty.
+\end{equation}
+Eftersom Lipschitzvillkoret fallerar i $y = 0$ upphör entydigheten (Peanos existenssats garanterar endast existens).
+
+Separation av variabler för $y \ne 0$:
+\begin{itemize}
+    \item För $y > 0$: $\int y^{-1/2}\,dy = \int dt \implies 2\sqrt{y} = t - c_2 \implies y(t) = \frac{1}{4}(t - c_2)^2$ ($t \ge c_2$).
+    \item För $y < 0$: $\int (-y)^{-1/2}\,dy = \int dt \implies -2\sqrt{-y} = t - c_1 \implies y(t) = -\frac{1}{4}(t - c_1)^2$ ($t \le c_1$).
+\end{itemize}
+Eftersom $y' \ge 0$ är $y(t)$ icke-avtagande och kan ligga kvar på jämvikten $y \equiv 0$ under ett godtyckligt tidsintervall $[c_1, c_2]$:
+\begin{equation}
+    y(t) = \begin{cases}
+        -\frac{1}{4}(t - c_1)^2, & t \le c_1, \\
+        0, & c_1 < t < c_2, \\
+        \frac{1}{4}(t - c_2)^2, & t \ge c_2,
+    \end{cases}
+    \quad \text{där } c_1 \le 0 \le c_2.
+\end{equation}
+Detta ger en tvåparametrig familj av oändligt många lösningar.
+
+\subsection*{2. Numerisk lösning med RK4}
+Med $y_0 = 0$ fås i första RK4-steget:
+\begin{equation}
+    k_1 = f(0) = 0 \implies k_2 = k_3 = k_4 = 0 \implies y_1 = y_0 = 0.
+\end{equation}
+Genom induktion gäller $y_n = 0$ för alla $n$. En standardlösare förblir deterministiskt låst i den stationära lösningen $y(t) \equiv 0$ och kan inte numeriskt detektera förgreningen utan yttre störning.
+
+\subsection*{3. Hur länge lösningen fastnar vid $y(-1) = -1$}
+För $y < 0$ ger separation av variabler med $y(-1) = -1$:
+\begin{equation}
+    -2\sqrt{-y} = t + C \implies -2\sqrt{1} = -1 + C \implies C = -1,
+\end{equation}
+vilket ger $y(t) = -\frac{1}{4}(1 - t)^2$ för $t \le 1$. Analytiskt nås $y = 0$ vid $t = 1$, varpå lösningen kan kvarstanna i $y \equiv 0$ godtyckligt länge.
+
+\begin{itemize}
+    \item \textbf{Tid till tröskeln $|y| \le 10^{-6}$:}
+    För $y < 0$ ger separation av variabler med $y(-1) = -1$:
+    \[
+    \int (-y)^{-1/2}\,dy = \int dt \implies -2\sqrt{-y} = t - 1 \implies y(t) = -\frac{1}{4}(1 - t)^2.
+    \]
+    Tröskelvillkoret $|y| \le 10^{-6}$ ger:
+    \[
+    \frac{1}{4}(1 - t)^2 \le 10^{-6} \implies |1 - t| \le 2 \cdot 10^{-3} \implies t \approx 0{,}998.
+    \]
+    Tiden från startpunkten $t = -1$ blir därmed $\Delta t = 0{,}998 - (-1) = 1{,}998$.
+
+    \item \textbf{Numeriskt beteende:}
+    \begin{itemize}
+        \item Om $y_n = 0$ exakt blir alla lutningar noll:
+        \[
+        k_1 = f(t_n, 0) = \sqrt{|0|} = 0 \implies k_2 = k_3 = k_4 = 0 \implies y_{n+1} = y_n = 0,
+        \]
+        vilket låser lösaren permanent i jämvikten.
+        \item Om avrundningsfel ger $y_n = \delta > 0$ fås efter ett Euler-steg (eller motsvarande för RK4):
+        \[
+        y_{n+1} = \delta + h\sqrt{\delta} \implies \frac{y_{n+1}}{y_n} = 1 + \frac{h}{\sqrt{\delta}}.
+        \]
+        Eftersom $\lim_{\delta \to 0^+} \frac{h}{\sqrt{\delta}} = \infty$ växer tillskottet $\Delta y = h\sqrt{\delta} \gg \delta$ explosionsartat, varför lösningen lämnar intervallet $|y| \le 10^{-6}$ på ett fåtal steg.
+    \end{itemize}
+\end{itemize}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.7\textwidth]{upg31disa.png}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.7\textwidth]{upg32disa.png}
+\end{figure}
+
 \subsection*{Uppgift 3. Hampus Hillding}
 \textbf{Analytisk lösning:} Oändligt många lösningar finns där $y(t)$ har formen:
 \begin{itemize}
@@ -26,26 +105,38 @@ För konstanter $a,b : a<0< b$.\\
 Med begynnelsevillkor $y(-1)=-0,99$ får jag att $y$ ''fastnar'' på 0 i ungefär 0,003 enheter av t. Se figur.\\
     \includegraphics [width=10cm]{uppg3hh.png}
 
-\textbf{Analytisk lösning.} Oändligt många lösningar finns, där $y(t)$ kan
-ha formen:
-\begin{itemize}
-    \item $y(t)=-\frac{(t-a)^2}{4}$ då $t<a$,
-    \item $y(t)=0$ då $t\in[a,b]$,
-    \item $y(t)=\frac{(t-b)^2}{4}$ då $t>b$,
-\end{itemize}
-för konstanter $a<0<b$.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=10cm]{uppg3hh.png}
+\end{figure}
+
+\subsection*{Uppgift 3. Anton Fornstedt}
+
+\textbf{Analytisk lösning.} Förutom $y \equiv 0$ löser
+$y(t) = 0$ för $0 \leq t \leq c$ och $y(t) = (t-c)^2/4$ för $t > c$
+problemet för varje $c \geq 0$, så det finns oändligt många lösningar.
+Picard--Lindelöf garanterar ingen entydighet eftersom $f(y) = \sqrt{|y|}$
+inte är Lipschitz nära $0$: $|f(y) - f(0)|/|y| = 1/\sqrt{|y|} \to \infty$.
 
 \medskip
-\textbf{Numeriskt.} Min numeriska lösning stannar nära $y=0$. Med
-begynnelsevillkoret $y(-1)=-0{,}99$ ligger den nära noll i ungefär $0{,}03$
-tidsenheter. Se figur.
+\textbf{Numerisk lösning.} Euler ger $y_1 = 0 + h\sqrt{0} = 0$, och likaså
+alla följande steg, så den numeriska lösningen blir $y \equiv 0$ oavsett $h$.
 
-\IfFileExists{uppg3hh.png}{%
-    \begin{figure}[H]
-        \centering
-        \includegraphics[width=10cm]{uppg3hh.png}
-    \end{figure}
-}{}
+\medskip
+\textbf{Hur länge lösningen fastnar.} Med $y(-1) = -1 + \varepsilon$ och
+$h = 10^{-6}$ låg lösningen i $|y| \leq 10^{-6}$ under $\Delta t \approx 0{,}003998$,
+både för $\varepsilon = 0$ och $\varepsilon = 0{,}1$. Analytiskt gäller
+$(t - t_0)^2/4 \leq 10^{-6} \iff |t - t_0| \leq 2 \cdot 10^{-3}$, alltså
+$\Delta t = 4 \cdot 10^{-3}$, så lösningen fastnar inte. Eftersom ekvationen är
+autonom flyttar $\varepsilon$ bara nollgenomgången $t_0$, inte tiden nära noll.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.6\textwidth]{3.png}
+  \caption{Numerisk lösning nära $y = 0$. Streckade linjer: $|y| = 10^{-6}$.}
+\end{figure}
+
 \subsection*{Uppgift 3. Fredrik Sollenberg}
 \begin{adjustwidth}{0.9cm}{0.9cm}
 
@@ -152,7 +243,7 @@ För t.ex.\ $C = 50$, $\epsilon = -0{,}10$ och $h = 0{,}5$ ger RK4 ett falskt om
     \item \textbf{Invarians- och teckenkontroll:} Steget förkastas omedelbart om $y_n$ byter tecken ($y_n \cdot y_{n+1} \le 0$) eftersom teckenbyte är analytiskt förbjudet.
 \end{itemize}
 
-\begin{figure}[H]
+\begin{figure}
     \centering
     \includegraphics[width=0.7\textwidth]{upg4disa.png}
 \end{figure}
@@ -280,7 +371,7 @@ I standard flyttalsformat (\texttt{float64}, $\epsilon_{\text{mach}} \approx 2{,
 
 \subsection*{3. Resultat}
 
-\begin{figure}[H]
+\begin{figure}
     \centering
     \includegraphics[width=0.7\textwidth]{upg62disa.png}
 \end{figure}
@@ -461,7 +552,7 @@ Skattningen av $\pi$ ur det beräknade nollstället $\hat{t}_{318}$ sker via $\h
 
 \end{itemize}
 
-\begin{figure}[H]
+\begin{figure}
     \centering
     \includegraphics[width=0.7\textwidth]{upg5disa.png}
 \end{figure}
@@ -525,7 +616,7 @@ för någon konstant $C$ och en Lipschitzkonstant $L$ för y. Termen $e^{L(t_1-t
 \[
 \frac{d\textbf{x}}{dt}=A\textbf{x} \text{,  med lösning för ett fel e(t):  } \textbf{e}(t_1) = e^{A(t_1-t_0)}\textbf{e}(t_0)\text{.}
 \]
-Eftersom vi vet att determinanten för $e^{A(t_1-t_0)$ alltid är 1 så inser vi att felet inte förstoras alls. Därför drar vi slutsatsen att felet ökar linjärt med tiden. 
+Eftersom vi vet att determinanten för $e^{A(t_1-t_0)}$ alltid är 1 så inser vi att felet inte förstoras alls. Därför drar vi slutsatsen att felet ökar linjärt med tiden. 
 \medskip\\
 \textbf{Observationer m. Python:} Jag använde tre metoder, Euler framåt (den sög), scipys funktion solve\_ivp med RK ordning 8, och mpmath med taylor. Solve\_ivp räknar ut så bra det går ($\approx$ 14 decimaler) men den stödjer inte godtycklig precision av sig själv. Mpmath räknade ut perfekt, bara sådär. Av praktiska skäl användes solve\_ivp för uppgiften att beräkna $\pi$ vid $t=1000$ och intressant nog var felet tydligt vilket jag skyller på fasföskjutningen. Gällande uppgiften att beräkna godtyckligt många decimaler av pi användes mpmath. Jag fick 10 miljoner korrekta decimaler på några få minuter. Den enda egentliga begränsningen var tiden det tog; mitt RAM märkte knappt av det.
 \end{adjustwidth}
@@ -622,7 +713,6 @@ Sedan använde jag semi-implicit Euler för att stega fram alla objektens banor.
 \\
 \includegraphics [width=15cm]{slingshothh.png}\\
 \subsection*{Uppgift 8. Fredrik Sollenberg}
-\begin{adjustwidth}{0.9cm}{0.9cm}
 I den här uppgiften tog jag en annan approach. I Python gjorde jag en klass med planeter med attribut som position och hastighet. Sen i en egen klass för själva simulationen beräknade jag gravitationen mellan alla planerterna som vektorer sen utförde jag semiimplicita Euler-metoden på systemts tillstånd och plottade. 
 \medskip\\ 
 För att göra en gravitationsslunga måste man designa ett begynnelsetillstånd som gör att ett rymdskepp skickas ut från jorden och närmar sig jupiter i sidan av dess bana och flyger in precis bakom planeten. Om gravitationsslungan har gett raketen tillräckligt med energi för att lämna solsystemet kommer dess mekaniska energi ($E$) att vara större än 0. $E$ beräknas med formeln
@@ -634,7 +724,7 @@ E =T+V=\frac{1}{2}mv^2-\sum_{i}\frac{GM_im}{r_i}
 \end{center}
     
 
-\medskip\\
+\medskip
 
 \subsection*{Uppgift 8. Skillnader och likheter}
 
@@ -646,7 +736,7 @@ E =T+V=\frac{1}{2}mv^2-\sum_{i}\frac{GM_im}{r_i}
     Disa följde skeppets energi över tid och såg att den efter passagen ökade från negativ ($E_0 \approx -0{,}10$) till stabilt positiv ($E \approx +0{,}14$). Eftersom energin är positiv övergår banan till en öppen hyperbel med en fart på ca $0{,}54\text{ AU/tidsenhet}$ långt bort från solen, vilket garanterar att skeppet lämnar solsystemet. Anton studerade också energikriteriet ($E \ge 0$ för flykt) och erhöll $E \approx +0{,}0055$. Att $h = 10^{-4}$ och $10^{-5}$ gav identiska svar bekräftar konvergensen, medan $h = 10^{-3}$ gav ett fel på över en tiopotens. Fredrik beräknade $E$ utifrån systemets tillstånd efter plotten gjorts. 
 \end{enumerate}
 
-\end{document}\begin{itemize}
+\begin{itemize}
     \item För $y > 0$: $\int y^{-1/2}\,dy = \int dt \implies 2\sqrt{y} = t - c_2 \implies y(t) = \frac{1}{4}(t - c_2)^2$ ($t \ge c_2$).
     \item För $y < 0$: $\int (-y)^{-1/2}\,dy = \int dt \implies -2\sqrt{-y} = t - c_1 \implies y(t) = -\frac{1}{4}(t - c_1)^2$ ($t \le c_1$).
 \end{itemize}
