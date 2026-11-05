@@ -114,10 +114,19 @@ Med begynnelsevillkor $y(-1)=-0,99$ får jag att $y$ ''fastnar'' på 0 i ungefä
 \subsection*{Uppgift 3. Anton Fornstedt}
 
 \textbf{Analytisk lösning.} Förutom $y \equiv 0$ löser
-$y(t) = 0$ för $0 \leq t \leq c$ och $y(t) = (t-c)^2/4$ för $t > c$
-problemet för varje $c \geq 0$, så det finns oändligt många lösningar.
-Picard--Lindelöf garanterar ingen entydighet eftersom $f(y) = \sqrt{|y|}$
-inte är Lipschitz nära $0$: $|f(y) - f(0)|/|y| = 1/\sqrt{|y|} \to \infty$.
+\[
+  y(t) =
+  \begin{cases}
+    -(t-a)^2/4, & t < a, \\
+    0, & a \leq t \leq b, \\
+    (t-b)^2/4, & t > b,
+  \end{cases}
+  \qquad a \leq 0 \leq b,
+\]
+problemet. Både $a$ och $b$ kan väljas fritt, så det
+finns oändligt många lösningar. Picard--Lindelöf garanterar ingen entydighet
+eftersom $f(y) = \sqrt{|y|}$ inte är Lipschitz nära $0$:
+$|f(y) - f(0)|/|y| = 1/\sqrt{|y|} \to \infty$.
 
 \medskip
 \textbf{Numerisk lösning.} Euler ger $y_1 = 0 + h\sqrt{0} = 0$, och likaså
@@ -594,6 +603,13 @@ $\pi \approx t^*/318{,}5$. Felet i $\pi$ blev detsamma som för första
 nollstället ($2{,}62 \cdot 10^{-10}$ för $h = 0{,}01$). Felet i $t^*$ växer
 linjärt med tiden men delas med $318{,}5$. Det som blir svårare är
 kostnaden: cirka 640 gånger fler steg.
+
+\medskip
+\textbf{Jämförelse med Sauer Thm 6.4.} Med $k = 4$, $C = 1/120$ och $L = 1$ ger satsen följande gräns för felet:
+$|\text{fel}(t)| \leq \tfrac{h^4}{120}(e^{t} - 1)$. Vid första nollstället blir
+gränsen för felet i $\pi$ ungefär $6{,}4 \cdot 10^{-10}$ ($h = 0{,}01$) mot uppmätta
+$2{,}62 \cdot 10^{-10}$, alltså användbar. Nära $t = 1000$ ger $e^{1000} \approx 10^{434}$
+en oanvändbar gräns, eftersom det verkliga felet bara växer linjärt i $t$.
 
 \subsection*{Uppgift 6. Hampus Hillding}
 Analytiskt fick jag lösningen $y(t)=cos(t)$ som har ett första nollställe vid $t=\pi/2$. \\
