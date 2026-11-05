@@ -440,7 +440,7 @@ Teoretiskt fel $= \frac{nMh^2}{2} = 2^k \frac{Mh}{2}=2^k\cdot Ce^{2^k}\cdot \fra
     medan Disa med RK4 nådde $k = 4$ med 6\,400 steg. Det visar tydligt skillnaden
     mellan fel $\sim h$ och $\sim h^4$. Fredrik använde modulen Mpmath och fick en lösning för $k=9$. 
     \item \textbf{Jämför teoretiska och numeriska felen:} 
-    Eulers metod har global konvergensordning $\mathcal{O}(h)$ medan RK4 har $\mathcal{O}(h^4)$. Disa konstaterade att RK4 för ett givet steg $h$ ger långt fler korrekta decimaler än Euler eftersom varje steghalvering krymper felet med en faktor $2^4 = 16$ istället för bara $2$. Detta förklarar varför Hampus lyckades nå 2 korrekta decimaler med Euler för $k=3$, men för $k=4$ exploderade beräkningstiden ($N \propto 1/h$) och tog för lång tid. Antons asymptotiska felformel $34e^{T} \cdot Th/2$ stämde med det uppmätta felet på 3-4 siffror. 
+    Eulers metod har global konvergensordning $\mathcal{O}(h)$ medan RK4 har $\mathcal{O}(h^4)$. Disa konstaterade att RK4 för ett givet steg $h$ ger långt fler korrekta decimaler än Euler eftersom varje steghalvering krymper felet med en faktor $2^4 = 16$ istället för bara $2$. Detta förklarar varför Hampus lyckades nå 2 korrekta decimaler med Euler för $k=2$, men för $k=3$ exploderade beräkningstiden ($N \propto 1/h$) och tog för lång tid. Antons asymptotiska felformel $34e^{T} \cdot Th/2$ stämde med det uppmätta felet på 3-4 siffror. 
 \end{enumerate}
 
 \section*{Uppgift 6. Vad är $\pi$?}
