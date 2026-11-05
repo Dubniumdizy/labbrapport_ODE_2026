@@ -1,9 +1,8 @@
 \documentclass{article}
 \input{preambles/preamble_rapport}
-\usepackage{float}
 
 \title{Rapport}
-\author{Disa Degerholm, Hampus Hillding, Anton Fornstedt, Fredrik Sollenberg}
+\author{Disa Degerholm}
 \date{\today}
 
 \begin{document}
@@ -15,111 +14,6 @@
 
 \subsection*{Uppgift 3. Disa Degerholm}
 
-Betrakta begynnelsevärdesproblemet
-\begin{equation}
-    y' = \sqrt{|y|}, \quad y(0) = 0.
-\end{equation}
-
-\subsection*{1. Analytisk lösning och icke-entydighet}
-Picards existens- och entydighetssats (Simmons kap.~13) kräver att $f(y) = \sqrt{|y|}$ är lokalt Lipschitzkontinuerlig i en omgivning av $y = 0$, dvs.~att differenskvoten är begränsad:
-\begin{equation}
-    \lim_{y \to 0^+} \frac{|f(y) - f(0)|}{|y - 0|} = \lim_{y \to 0^+} \frac{\sqrt{y}}{y} = \lim_{y \to 0^+} \frac{1}{\sqrt{y}} = \infty.
-\end{equation}
-Eftersom Lipschitzvillkoret fallerar i $y = 0$ upphör entydigheten (Peanos existenssats garanterar endast existens).
-
-Separation av variabler för $y \ne 0$:
-\begin{itemize}
-    \item För $y > 0$: $\int y^{-1/2}\,dy = \int dt \implies 2\sqrt{y} = t - c_2 \implies y(t) = \frac{1}{4}(t - c_2)^2$ ($t \ge c_2$).
-    \item För $y < 0$: $\int (-y)^{-1/2}\,dy = \int dt \implies -2\sqrt{-y} = t - c_1 \implies y(t) = -\frac{1}{4}(t - c_1)^2$ ($t \le c_1$).
-\end{itemize}
-Eftersom $y' \ge 0$ är $y(t)$ icke-avtagande och kan ligga kvar på jämvikten $y \equiv 0$ under ett godtyckligt tidsintervall $[c_1, c_2]$:
-\begin{equation}
-    y(t) = \begin{cases}
-        -\frac{1}{4}(t - c_1)^2, & t \le c_1, \\
-        0, & c_1 < t < c_2, \\
-        \frac{1}{4}(t - c_2)^2, & t \ge c_2,
-    \end{cases}
-    \quad \text{där } c_1 \le 0 \le c_2.
-\end{equation}
-Detta ger en tvåparametrig familj av oändligt många lösningar.
-
-\subsection*{2. Numerisk lösning med RK4}
-Med $y_0 = 0$ fås i första RK4-steget:
-\begin{equation}
-    k_1 = f(0) = 0 \implies k_2 = k_3 = k_4 = 0 \implies y_1 = y_0 = 0.
-\end{equation}
-Genom induktion gäller $y_n = 0$ för alla $n$. En standardlösare förblir deterministiskt låst i den stationära lösningen $y(t) \equiv 0$ och kan inte numeriskt detektera förgreningen utan yttre störning.
-
-\subsection*{3. Hur länge lösningen fastnar vid $y(-1) = -1$}
-För $y < 0$ ger separation av variabler med $y(-1) = -1$:
-\begin{equation}
-    -2\sqrt{-y} = t + C \implies -2\sqrt{1} = -1 + C \implies C = -1,
-\end{equation}
-vilket ger $y(t) = -\frac{1}{4}(1 - t)^2$ för $t \le 1$. Analytiskt nås $y = 0$ vid $t = 1$, varpå lösningen kan kvarstanna i $y \equiv 0$ godtyckligt länge.
-
-\begin{itemize}
-    \item \textbf{Tid till tröskeln $|y| \le 10^{-6}$:}
-    För $y < 0$ ger separation av variabler med $y(-1) = -1$:
-    \[
-    \int (-y)^{-1/2}\,dy = \int dt \implies -2\sqrt{-y} = t - 1 \implies y(t) = -\frac{1}{4}(1 - t)^2.
-    \]
-    Tröskelvillkoret $|y| \le 10^{-6}$ ger:
-    \[
-    \frac{1}{4}(1 - t)^2 \le 10^{-6} \implies |1 - t| \le 2 \cdot 10^{-3} \implies t \approx 0{,}998.
-    \]
-    Tiden från startpunkten $t = -1$ blir därmed $\Delta t = 0{,}998 - (-1) = 1{,}998$.
-
-    \item \textbf{Numeriskt beteende:}
-    \begin{itemize}
-        \item Om $y_n = 0$ exakt blir alla lutningar noll:
-        \[
-        k_1 = f(t_n, 0) = \sqrt{|0|} = 0 \implies k_2 = k_3 = k_4 = 0 \implies y_{n+1} = y_n = 0,
-        \]
-        vilket låser lösaren permanent i jämvikten.
-        \item Om avrundningsfel ger $y_n = \delta > 0$ fås efter ett Euler-steg (eller motsvarande för RK4):
-        \[
-        y_{n+1} = \delta + h\sqrt{\delta} \implies \frac{y_{n+1}}{y_n} = 1 + \frac{h}{\sqrt{\delta}}.
-        \]
-        Eftersom $\lim_{\delta \to 0^+} \frac{h}{\sqrt{\delta}} = \infty$ växer tillskottet $\Delta y = h\sqrt{\delta} \gg \delta$ explosionsartat, varför lösningen lämnar intervallet $|y| \le 10^{-6}$ på ett fåtal steg.
-    \end{itemize}
-\end{itemize}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.7\textwidth]{upg31disa.png}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.7\textwidth]{upg32disa.png}
-\end{figure}
-
-\subsection*{Uppgift 3. Anton Fornstedt}
-
-\textbf{Analytisk lösning.} Förutom $y \equiv 0$ löser
-$y(t) = 0$ för $0 \leq t \leq c$ och $y(t) = (t-c)^2/4$ för $t > c$
-problemet för varje $c \geq 0$, så det finns oändligt många lösningar.
-Picard--Lindelöf garanterar ingen entydighet eftersom $f(y) = \sqrt{|y|}$
-inte är Lipschitz nära $0$: $|f(y) - f(0)|/|y| = 1/\sqrt{|y|} \to \infty$.
-
-\medskip
-\textbf{Numerisk lösning.} Euler ger $y_1 = 0 + h\sqrt{0} = 0$, och likaså
-alla följande steg, så den numeriska lösningen blir $y \equiv 0$ oavsett $h$.
-
-\medskip
-\textbf{Hur länge lösningen fastnar.} Med $y(-1) = -1 + \varepsilon$ och
-$h = 10^{-6}$ låg lösningen i $|y| \leq 10^{-6}$ under $\Delta t \approx 0{,}003998$,
-både för $\varepsilon = 0$ och $\varepsilon = 0{,}1$. Analytiskt gäller
-$(t - t_0)^2/4 \leq 10^{-6} \iff |t - t_0| \leq 2 \cdot 10^{-3}$, alltså
-$\Delta t = 4 \cdot 10^{-3}$, så lösningen fastnar inte. Eftersom ekvationen är
-autonom flyttar $\varepsilon$ bara nollgenomgången $t_0$, inte tiden nära noll.
-
-\begin{figure}[h]
-  \centering
-  \includegraphics[width=0.6\textwidth]{3.png}
-  \caption{Numerisk lösning nära $y = 0$. Streckade linjer: $|y| = 10^{-6}$.}
-\end{figure}
-
 \subsection*{Uppgift 3. Hampus Hillding}
 \textbf{Analytisk lösning:} Oändligt många lösningar finns där $y(t)$ har formen:
 \begin{itemize}
@@ -128,8 +22,8 @@ autonom flyttar $\varepsilon$ bara nollgenomgången $t_0$, inte tiden nära noll
     \item $y(t)=-\frac{(t-b)^2}{4}$ då $t>b$
 \end{itemize}
 För konstanter $a,b : a<0< b$.\\
-\textbf{Numeriskt:} Min numeriska lösning stannar på $y=0$ för alltid.\\
-Med begynnelsevillkor $y(-1)=-0.99$ får jag att $y$ ''fastnar'' på 0 i ungefär 0.03 enheter av t. Se figur.\\
+\textbf{Numeriskt:} Jag använde Eulers metod. Min numeriska lösning stannar på $y=0$ för alltid.\\
+Med begynnelsevillkor $y(-1)=-0,99$ får jag att $y$ ''fastnar'' på 0 i ungefär 0,003 enheter av t. Se figur.\\
     \includegraphics [width=10cm]{uppg3hh.png}
 
 \textbf{Analytisk lösning.} Oändligt många lösningar finns, där $y(t)$ kan
@@ -423,10 +317,10 @@ Med Eulers metod fick jag
         \item k=0: $y(2^k)=266.39$
         \item k=1: $y(2^k)=724.12$
         \item k=2: $y(2^k)=5350.61$
-        \item k=3: $y(2^k)=292133.84$
+        \item k=3: $y(2^k)=292133.8$
         \item k=4: tog för lång tid.
     \end{itemize}
-    
+
 Teoretiskt fel $= \frac{nMh^2}{2} = 2^k \frac{Mh}{2}=2^k\cdot Ce^{2^k}\cdot \frac{h}{2}$  om $M=y''(2^k)=Ce^{2^k}$.
 \\Skillnaden mellan det faktiska felet och det teoretiska felet blev ungefär 2.64e-11 för k=0, 0.000276 för k=1, 0.000255 för k=2 och 0.0244 för k=3.
 \subsection*{Uppgift 5. Fredrik Sollenberg}
@@ -615,7 +509,7 @@ Analytiskt fick jag lösningen $y(t)=cos(t)$ som har ett första nollställe vid
 \textbf{Numeriskt:} \\
 Jag skrev om ekvationen till ett system av förstagrads-ODE:er. Med Eulers metod på systemet fick jag 9 korrekta siffror av $\pi$. För att få fler siffror använde jag Runge-Kutta av ordning 4. Jag stegade tills mitt $y$ bytte tecken. Då använde jag Newtons metod för att komma ännu närmare lösningen som jag visste fanns inom det sista steget i RK4. Med steglängd $h=10^{-3}$ fick jag då 13 korrekta siffror av $\pi$, och med steglängd $h=10^{-5}$ fick jag 22 korrekta siffror.\\
 \textbf{Rot nära t=1000:}\\
-Jag modifierade koden för att hitta roten närmast $t=1000$, dvs. $t=637\pi/2$. Med $h=10^{-3}$ fick jag lika många korrekta siffror som tidigare, dvs. 13. I båda fallen fick jag också ett fel $\approx2.6\cdot10^{-14}$. Enligt teorin borde cirka 637 gånger så många steg ge ungefär 637 gånger så stort fel i värdet på $t$ men eftersom vi multiplicerar roten med $\frac{2}{637}$ istället för bara $2$ för att få värdet på $\pi$ tar dessa effekter ut varandra i skattningen av $\pi$. Den huvudsakliga svårigheten blir att det tar längre tid för programmet att köras.
+Jag modifierade koden för att hitta roten närmast $t=1000$, dvs. $t=637\pi/2$. Med $h=10^{-3}$ fick jag lika många korrekta siffror som tidigare, dvs. 13. I båda fallen fick jag också ett fel $\approx2.6\cdot10^{-14}$. Sats 6.4 i \textit{Numerical Analysis} (Sauer) ger oss en övre gräns för det globala trunkeringsfelet $\frac{Ch^4}{L}(e^{Lt_i}-1)$, där $L$ är en Lipschitzkonstant för ODE:ns högerled, och $C \geq 0$ är någon konstant. Detta säger att felet som värst kan växa exponentiellt med t. Vårt numeriska resultat antyder visserligen att denna gräns stämmer då det numeriska felet växer betydligt långsammare än så, men gränsen ger dock inte en särskilt användbar beskrivning av vårt resultat. I vårt specifika problem växer det globala trunkeringsfelet istället mer eller mindre proportionellt mot t. Nollstället vid $t_2=\frac{637\pi}{2}$ är 637 gånger längre ut än nollstället vid $t_1=\frac{\pi}{2}$ vi får då också ett fel som är ungefär 637 gånger större i skattningen av nollstället. Våra två skattningar av $\pi$ är $\hat{\pi}_1 = 2\hat{t}_1$ och $\hat{\pi}_2 = \frac{2\hat{t}_2}{637}$ och därmed får vi ungefär samma fel i båda dessa skattningar.
 
 \subsection*{Uppgift 6. Fredrik Sollenberg}
 \begin{adjustwidth}{0.9cm}{0.9cm}
@@ -649,89 +543,6 @@ Eftersom vi vet att determinanten för $e^{A(t_1-t_0)$ alltid är 1 så inser vi
 \section*{Uppgift 7. Newton!}
 
 \subsection*{Uppgift 7. Disa Degerholm}
-
-\subsection*{1. Rörrelseekvationer och bevarandelagar}
-Betrakta en stjärna fix i origo med massan $M$, där gravitationsparametern
-normeras till $GM = 1$. En planet med massa $m$ har lägesvektorn
-$\mathbf{r}(t) = \begin{pmatrix} x(t) \\ y(t) \end{pmatrix}$.
-Newtons gravitations- och rörelselagar ger accelerationen:
-\begin{equation}
-    \mathbf{r}''(t) = -\frac{\mathbf{r}}{\|\mathbf{r}\|^3}
-    \iff
-    \begin{cases}
-        x''(t) = -\dfrac{x}{(x^2 + y^2)^{3/2}} \\[0.8em]
-        y''(t) = -\dfrac{y}{(x^2 + y^2)^{3/2}}
-    \end{cases}
-\end{equation}
-Genom att införa hastigheterna $v_x = x'$ och $v_y = y'$ formuleras
-problemet som fyra kopplade första ordningens differentialekvationer:
-\begin{equation}
-    \frac{d}{dt}\begin{pmatrix} x \\ y \\ v_x \\ v_y \end{pmatrix}
-    = \begin{pmatrix} v_x \\ v_y \\ -x / (x^2 + y^2)^{3/2} \\ -y / (x^2 + y^2)^{3/2} \end{pmatrix}.
-\end{equation}
-
-Systemet har två analytiska rörelsekonstanter:
-\begin{itemize}
-    \item \textbf{Total mekanisk energi per massenhet ($E$):}
-    \begin{equation}
-        E = \frac{1}{2}(v_x^2 + v_y^2) - \frac{1}{\sqrt{x^2 + y^2}}, \quad \text{där } \frac{dE}{dt} = 0.
-    \end{equation}
-    \item \textbf{Rörelsemängdsmoment per massenhet ($L$):}
-    \begin{equation}
-        L = x v_y - y v_x, \quad \text{där } \frac{dL}{dt} = 0.
-    \end{equation}
-\end{itemize}
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.7\textwidth]{upg71disa.png}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.7\textwidth]{upg72disa.png}
-\end{figure}
-
-\subsection*{Uppgift 7. Anton Fornstedt}
-
-\textbf{Härledning.} Med $GM = 1$ och $r = \sqrt{x^2 + y^2}$ ger Newtons
-gravitationslag
-\[
-  x'' = -\frac{x}{r^3}, \qquad y'' = -\frac{y}{r^3},
-\]
-som skrevs om till ett första ordningens system i $(x, y, v_x, v_y)$. Med start
-i $(1, 0)$ ger $v_y = 1$ en cirkelbana, eftersom cirkelhastigheten är
-$\sqrt{GM/r} = 1$. Flykthastigheten är $\sqrt{2GM/r} = \sqrt{2}$.
-Energin $E = \tfrac{1}{2}(v_x^2 + v_y^2) - 1/r$ ska vara konstant. 
-
-\medskip
-\textbf{Explicit mot semi-implicit Euler.} Med explicit Euler spiralar
-planeten utåt och energin växer stadigt. I semi-implicit (symplektisk) Euler
-uppdateras först hastigheten och sedan positionen med den \emph{nya}
-hastigheten. Då förblir banan sluten och energin håller sig nära sitt
-startvärde ($h = 0{,}01$, $T = 10\,000$):
-
-\begin{center}
-\begin{tabular}{l c c c}
-\hline
-Metod & $v_y(0)$ & $E(0)$ & $E(10\,000)$ \\
-\hline
-Explicit Euler      & 1   & $-0{,}5$  & $-0{,}0590$ \\
-Semi-implicit Euler & 1   & $-0{,}5$  & $-0{,}49995$ \\
-Semi-implicit Euler & 1,2 & $-0{,}28$ & $-0{,}2801$ \\
-\hline
-\end{tabular}
-\end{center}
-
-\begin{figure}[h]
-  \centering
-  \includegraphics[width=0.45\textwidth]{bana_euler.png}
-  \hfill
-  \includegraphics[width=0.45\textwidth]{bana_symplektisk.png}
-  \caption{Explicit Euler (vänster) och semi-implicit Euler (höger), $h = 0{,}01$, $T = 10\,000$.}
-\end{figure}
-
-Explicit Euler förlorade alltså nästan all bindningsenergi trots litet $h$,
-medan felet med semi-implicit Euler bara oscillerar och aldrig växer.
 
 \subsection*{Uppgift 7. Hampus Hillding}
 \textbf{Systemets ODE:}
@@ -799,142 +610,15 @@ som vi kan räkna med
 
 \subsection*{Uppgift 8. Disa Degerholm}
 
-
-\subsection*{1. Modellering och rörelseekvationer i trekropparsproblemet}
-Systemet modelleras som ett planärt, cirkulärt begränsat trekropparsproblem bestående av Solen fix i origo ($M_S = 1$), Jupiter ($M_J = 0{,}08$) i cirkulär bana, samt en rymdsond med försumbar massa ($m \to 0$). Jordens gravitationella påverkan försummas då dess influensradie är försumbar i förhållande till solens gravitationsfält.
-
-Astronomiska enheter väljs så att $G = 1$, längdenheten är $1\text{ AU}$ och $G M_S = 1$. Keplers tredje lag ger Jupiters vinkelhastighet vid banradien $R_J = 5{,}2\text{ AU}$:
-\begin{equation}
-    \omega_J = \sqrt{\frac{G M_S}{R_J^3}} = R_J^{-3/2} = 5{,}2^{-3/2} \approx 0{,}0843\text{ rad/tidsenhet}.
-\end{equation}
-Jupiters banvektor ges av:
-\begin{equation}
-    \mathbf{r}_J(t) = \begin{pmatrix} x_J(t) \\ y_J(t) \end{pmatrix} = \begin{pmatrix} R_J \cos(\omega_J t + \phi_0) \\ R_J \sin(\omega_J t + \phi_0) \end{pmatrix},
-\end{equation}
-där fasvinkeln $\phi_0$ anger Jupiters position vid $t = 0$.
-
-Superposition av Newtons gravitationslag för Solen och Jupiter ger kraften per massenhet på sonden vid $\mathbf{r}(t) = \begin{pmatrix} x(t) \\ y(t) \end{pmatrix}$:
-\begin{equation}
-    \mathbf{r}''(t) = -\frac{\mathbf{r}}{\|\mathbf{r}\|^3} - M_J \frac{\mathbf{r} - \mathbf{r}_J(t)}{\|\mathbf{r} - \mathbf{r}_J(t)\|^3}.
-\end{equation}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.7\textwidth]{upg81disa.png}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.7\textwidth]{upg82disa.png}
-\end{figure}
-
-Med hastigheterna $v_x = x'$ och $v_y = y'$ formuleras rörelsen som fyra kopplade första ordningens differentialekvationer:
-\begin{equation}
-    \frac{d}{dt}\begin{pmatrix} x \\ y \\ v_x \\ v_y \end{pmatrix} 
-    = \begin{pmatrix} v_x \\ v_y \\ -\dfrac{x}{(x^2+y^2)^{3/2}} - M_J \dfrac{x - x_J}{\big((x-x_J)^2 + (y-y_J)^2\big)^{3/2}} \\[1em] -\dfrac{y}{(x^2+y^2)^{3/2}} - M_J \dfrac{y - y_J}{\big((x-x_J)^2 + (y-y_J)^2\big)^{3/2}} \end{pmatrix}.
-\end{equation}
-
-\subsection*{2. Flyktvillkor och energiprincip}
-Sondens specifika mekaniska energi relativt Solen definieras av:
-\begin{equation}
-    E_{\text{helio}}(t) = \frac{1}{2}\|\mathbf{v}(t)\|^2 - \frac{1}{\|\mathbf{r}(t)\|}.
-\end{equation}
-Banans geometri bestäms av energins tecken:
-\begin{itemize}
-    \item \textbf{Bunden bana ($E < 0$):} Flykthastigheten vid $r = 1\text{ AU}$ ges av $v_{\text{esc}} = \sqrt{2} \approx 1{,}414$. Startfarten sätts till $v_0 = 1{,}34 < \sqrt{2}$, vilket ger en bunden startellips med $E_0 = \frac{1}{2}(1{,}34)^2 - 1 = -0{,}1022 < 0$. Sonden kan därmed inte lämna solsystemet på egen hand.
-    \item \textbf{Hyperbolisk flykt ($E > 0$):} Efter närpassagen vid en tidpunkt $t_{\text{post}}$ där sonden avlägsnat sig från Jupiters närfält gäller:
-    \begin{equation}
-        E_{\text{post}} = \frac{1}{2}\|\mathbf{v}(t_{\text{post}})\|^2 - \frac{1}{\|\mathbf{r}(t_{\text{post}})\|} > 0.
-    \end{equation}
-    Ett positivt energivärde ($E_{\text{post}} > 0$) garanterar en öppen hyperbolisk flyktbana med asymptotisk resthastighet vid oändligheten.
-\end{itemize}
-
-\subsection*{3. Gravitationsslunga (Gravitational Slingshot)}
-En gravitationsslunga fungerar som en elastisk stöt där sonden lånar rörelseenergi av planeten.
-
-\paragraph{1. Relativ rörelse kring Jupiter}
-Låt sondens hastighet i solsystemet före och efter mötet vara $\mathbf{v}_{\text{in}}$ respektive $\mathbf{v}_{\text{ut}}$, och Jupiters banhastighet vara $\mathbf{v}_J$. I Jupiters eget vilosystem är sondens relativa hastigheter:
-\begin{equation}
-    \mathbf{v}_{\text{rel, in}} = \mathbf{v}_{\text{in}} - \mathbf{v}_J, \qquad \mathbf{v}_{\text{rel, ut}} = \mathbf{v}_{\text{ut}} - \mathbf{v}_J.
-\end{equation}
-Eftersom gravitationsfältet kring Jupiter är konservativt ändras inte farten under passagen, utan banan vrids bara en vinkel $\delta$:
-\begin{equation}
-    \|\mathbf{v}_{\text{rel, ut}}\| = \|\mathbf{v}_{\text{rel, in}}\| = v_{\text{rel}}.
-\end{equation}
-
-\paragraph{2. Hastighetsökning i solsystemet}
-När sonden lämnar Jupiter transformeras hastigheten tillbaka till solens koordinatsystem genom att lägga till $\mathbf{v}_J$:
-\begin{equation}
-    \mathbf{v}_{\text{ut}} = \mathbf{v}_J + \mathbf{v}_{\text{rel, ut}}.
-\end{equation}
-Sondens nya rörelseenergi per massenhet beräknas via skalärprodukten:
-\begin{equation}
-    \frac{1}{2}\|\mathbf{v}_{\text{ut}}\|^2 = \frac{1}{2}\|\mathbf{v}_J + \mathbf{v}_{\text{rel, ut}}\|^2 = \frac{1}{2}\|\mathbf{v}_J\|^2 + \frac{1}{2}v_{\text{rel}}^2 + \mathbf{v}_J \cdot \mathbf{v}_{\text{rel, ut}}.
-\end{equation}
-Termen $\mathbf{v}_J \cdot \mathbf{v}_{\text{rel, ut}} = \|\mathbf{v}_J\| v_{\text{rel}} \cos \theta$ (där $\theta$ är vinkeln mellan $\mathbf{v}_J$ och $\mathbf{v}_{\text{rel, ut}}$) avgör energiändringen:
-\begin{itemize} 
-    \item Passerar sonden \emph{framför} planeten pekar uthastigheten mot planetens rörelseriktning ($\cos \theta < 0$), vilket bromsar sonden.
-    \item Passerar sonden \emph{bakom} planeten vinklas uthastigheten med planetens rörelseriktning ($\cos \theta > 0$), vilket ger ett positivt tillskott av rörelseenergi.
-\end{itemize}
-
-\paragraph{3. Numeriskt resultat}
-Med startvinkeln $\phi_0 = 1{,}78\text{ rad}$ styrs sonden så att den passerar strax bakom Jupiter. Därmed ökar den specifika energin från en bunden bana vid start till en permanent flyktbana:
-\begin{equation}
-    E_0 \approx -0{,}10 < 0 \implies E_{\text{post}} \approx +0{,}14 > 0.
-\end{equation}
-Eftersom $E_{\text{post}} > 0$ är banan en öppen hyperbel som garanterar att skeppet lämnar solsystemet.
-
-\subsection*{Uppgift 8. Anton Fornstedt}
-
-\textbf{Modell.} Solen ligger i origo ($GM = 1$). Jupiter går runt solen i en
-cirkel med radien $5{,}2$, vinkelhastigheten $\omega = 5{,}2^{-3/2} \approx 0{,}0843$
-och massan $1/1000$. Jupiter startar i vinkeln $\theta$. Skeppet startar i
-$(1, 0)$ med hastigheten $(0,\, 1 + \Delta v)$ och dras av både solen och Jupiter:
-\[
-  \mathbf{r}'' = -\frac{\mathbf{r}}{r^3}
-  - \frac{1}{1000}\,\frac{\mathbf{r} - \mathbf{r}_J(t)}{|\mathbf{r} - \mathbf{r}_J(t)|^3}.
-\]
-Jordens dragning togs inte med. Systemet löstes med semi-implicit Euler, som
-i uppgift 7. Som $\Delta v$ användes den fart som behövs för att nå ut till
-Jupiters bana (Hohmann), $\Delta v = \sqrt{2 \cdot 5{,}2/6{,}2} - 1 \approx 0{,}295$.
-
-\medskip
-\textbf{Resultat.} Genom att testa olika startvinklar med $h = 10^{-3}$ hittades
-$\theta = 99{,}75^\circ$. Sedan kördes samma vinkel med mindre $h$:
-
-\begin{center}
-\begin{tabular}{c c c}
-\hline
-$h$ & Minsta avstånd till Jupiters centrum & $E$ \\
-\hline
-$10^{-3}$ & $0{,}00102$  & $+0{,}0624$ \\
-$10^{-4}$ & $0{,}000584$ & $+0{,}00539$ \\
-$10^{-5}$ & $0{,}000592$ & $+0{,}00549$ \\
-\hline
-\end{tabular}
-\end{center}
-
-\begin{figure}[h]
-  \centering
-  \includegraphics[width=0.7\textwidth]{bana8.png}
-  \caption{Skeppets bana med $\theta = 99{,}75^\circ$ och $h = 10^{-4}$.}
-\end{figure}
-
-Med $h = 10^{-3}$ blir resultatet fel, men för $h = 10^{-4}$ och $10^{-5}$ blir
-svaren nästan lika, så de går att lita på. Minsta avståndet ($\approx 0{,}00059$)
-är större än Jupiters radie ($\approx 0{,}00048$), så skeppet passerar ungefär
-$15\,000$~km ovanför ytan och krockar inte. Eftersom $E > 0$ lämnar skeppet
-solsystemet.
-
 \subsection*{Uppgift 8. Hampus Hillding}
-Jag valde solens massa till $m_{sol}=1/G$ som sist och valde jordens massa till $m_e=m_{sol}/333000$ (vilket stämmer överens ungefär med verkligheten) och jupiters massa till $m_j=m_{sol}/100$ (vilket är ca. 10 gånger tyngre än verkligheten, för lättare slingshot). Jag lät jordens bana ha radie 1 och jupiters bana ha radie 5.2. Jag lät de två planeternas banor endast bero på dragningskraften till solen och inte mellan varandra. I och med detta kunde jag återanvända ekvationssystemet från förra uppgiften för att beskriva båda planeternas respektive banor. För rymdskeppet lät jag dess bana påverkas av gravitationen från alla de tre övriga kropparna. Systemet som beskriver skeppets rörelse blir då
+Jag valde solens massa till 1/G som sist och valde jordens massa till $m_e=m_{sol}/333000$ (vilket stämmer överens ungefär med verkligheten) och jupiters massa till $m_j=m_{sol}/100$ (vilket är ca. 10 gånger tyngre än verkligheten, för lättare slingshot). Jag lät jordens bana ha radie 1 och jupiters bana ha radie 5,2. Jag lät de två planeternas banor endast bero på dragningskraften till solen och inte mellan varandra. I och med detta kunde jag återanvända ekvationssystemet från förra uppgiften för att beskriva båda planeternas respektive banor. För rymdskeppet lät jag dess bana påverkas av gravitationen från alla de tre övriga kropparna. Systemet som beskriver skeppets rörelse blir då
 \begin{equation*}
 \begin{cases}
 \ddot{x_s}=-\frac{x_s}{(x_s^2+y_s^2)^{3/2}} + \frac{m_e(x_e-x_s)}{((x_e-x_s)^2+(y_e-y_s)^2)^{3/2}}+\frac{m_j(x_j-x_s)}{((x_j-x_s)^2+(y_j-y_s)^2)^{3/2}}\\
 \ddot{y_s}=-\frac{y_s}{(x_s^2+y_s^2)^{3/2}} + \frac{m_e(y_e-y_s)}{((x_e-x_s)^2+(y_e-y_s)^2)^{3/2}}+\frac{m_j(y_j-y_s)}{((x_j-x_s)^2+(y_j-y_s)^2)^{3/2}}
 \end{cases}
 \end{equation*}
-Sedan använde jag semi-implicit Euler för att stega fram alla objektens banor. För att hitta rätt startpositioner för att få en slingshot lät jag programmet testa att starta med jorden i olika vinklar och tala om för vilka vinklar skeppet passerade utanför ett visst avstånd från solen (som inte hade kunnat nås i vanliga fall). Jag lät skeppet starta på samma position som jorden men med en hastighet som gjorde att skeppets bana precis kunde korsa jupiters bana. Jupiters startläge hade vinkel noll hela tiden. Med en steglängd $h=0.05$ hittade jag en 'gravitational slingshot' då jordens (och skeppets) startvinkel var 4.4 radianer. För att försäkra mig om att skeppet kommer att lämna solsystemet beräknade jag banans energi $E=T+V =\frac{1}{2}(\dot{x}^2+\dot{y}^2)-\frac{1}{\sqrt{x^2+y^2}}$. (Egentligen ska allt multipliceras med massan, men vi kan ignorera den eftersom den alltid är positiv.) Jag såg då att energin var positiv, vilket innebär att skeppet lämnar solsystemet. Vid början av simuleringen är energin negativ.
+Sedan använde jag semi-implicit Euler för att stega fram alla objektens banor. För att hitta rätt startpositioner för att få en slingshot lät jag programmet testa att starta med jorden i olika vinklar och tala om för vilka vinklar skeppet passerade utanför ett visst avstånd från solen (som inte hade kunnat nås i vanliga fall). Jag lät skeppet starta väldigt nära jorden (samma vinkel men pyttelite längre från solen) men med en hastighet som gjorde att skeppets bana precis kunde korsa Jupiters bana. På grund av  Jupiters startläge som hade vinkel noll hela tiden. Med en steglängd $h=0,05$ hittade jag en 'gravitational slingshot' då jordens (och skeppets) startvinkel var 4,4 radianer. För att försäkra mig om att skeppet kommer att lämna solsystemet beräknade jag banans energi $E=T+V =\frac{1}{2}(\dot{x}^2+\dot{y}^2)-\frac{1}{\sqrt{x^2+y^2}}$. (Egentligen ska allt multipliceras med massan, men vi kan ignorera den eftersom den alltid är positiv.) Jag såg då att energin var $\approx 0,033$, alltså positiv, vilket innebär att skeppet lämnar solsystemet. Vid början av simuleringen är energin negativ. I de två figurerna nedan plottar jag kropparnas banor i simuleringen och rymdskeppets energi över tid.
 \\
 \includegraphics [width=15cm]{slingshothh.png}\\
 \subsection*{Uppgift 8. Fredrik Sollenberg}
