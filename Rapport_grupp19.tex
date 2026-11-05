@@ -207,7 +207,7 @@ För $N = 82$ är den exakta singularitetstiden $t^* = \frac{100}{82} \approx 1{
 \subsection*{2. Numerisk singularitet och skattning av $t^*$}
 \begin{itemize}
     \item \textbf{Numeriskt bevis för singularitet:} 
-    Vid numerisk integration (t.ex.\ RK4) växer $y_n$ och derivatan $y'_n = y_n^2$ explosionsartat då $t \to t^*$. Eftersom lösningskurvan blir vertikal kan ett fixt steg $h$ inte följa funktionen. Värdena överskrider snabbt gränsen för standardflyttal (\texttt{float64} $\sim 1{,}8 \cdot 10^{308}$) och genererar \texttt{inf}/\texttt{NaN}, vilket numeriskt påvisar singulariteten.
+    Vid numerisk integration (t.ex.\ RK4) växer $y_n$ och derivatan $y'_n = y_n^2$ explosionsartat då $t \to t^*$. Eftersom lösningskurvan blir vertikal kan ett fixt steg $h$ inte följa funktionen. Värdena överskrider snabbt gränsen för standardflyttal (float64 $\sim 1{,}8 \cdot 10^{308}$) och genererar \texttt{inf}/\texttt{NaN}, vilket numeriskt visar på singulariteten.
 
     \item \textbf{Uppskattning av $t^*$:}
     Genom att integrera framåt med steglängd $h = 0{,}01$ fram till ett tröskelvärde (t.ex.\ $y > 10^5$) avbryts beräkningen vid sista steget:
@@ -515,41 +515,25 @@ Skattningen av $\pi$ ur det beräknade nollstället $\hat{t}_{318}$ sker via $\h
 
 \paragraph{Jämförelse mellan teoretiskt fel och beräkningsfel:}
 \begin{itemize}
-    \item \textbf{Teoretisk dämpning:}
-    Eftersom nollställena ges av $t_k = (k + 0{,}5)\pi$ skattas $\pi$ via $\hat{\pi} = \frac{\hat{t}_k}{k + 0{,}5}$. För $k = 318$ ger ett numeriskt beräkningsfel $\delta t = |\hat{t}_{318} - t_{318}|$ därmed direkt felet i $\pi$:
+    \item \textbf{Teoretisk dämpning:} Nollställena är $t_k = (k + 0{,}5)\pi$. Med skattningen $\hat{\pi} = \frac{\hat{t}_k}{k + 0{,}5}$ fås felet i $\pi$ direkt ur felet i rotsökningen $\delta t = |\hat{t}_k - t_k|$:
     \begin{equation}
-        \delta \pi = \left| \frac{\hat{t}_{318}}{318{,}5} - \frac{t_{318}}{318{,}5} \right| = \frac{\delta t}{318{,}5}.
+        \delta\pi = |\hat{\pi} - \pi| = \left|\frac{\hat{t}_k}{k + 0{,}5} - \frac{t_k}{k + 0{,}5}\right| = \frac{\delta t}{k + 0{,}5}.
     \end{equation}
-    Divisionen med $k + 0{,}5$ dämpar alltså felet i $\pi$ med en faktor drygt $300$.
-    \item \textbf{Numerisk felförstoring:} Integrationstiden $t \approx 1000$ är över $600$ gånger längre än $t \approx \pi/2$. För en enstegsmetod (som RK4) ackumuleras fasfelet linjärt med integrationstiden, vilket ger över $600$ gånger större fasdrift. Dessutom genererar de hundratusentals beräkningsstegen betydligt större ackumulerade flyttalsfel.
-    \item \textbf{Slutsats:}
-    Resultaten visar att det slutliga skattningsfelet inte nödvändigtvis
-    ökar med integrationstiden. För RK4 är felet vid beräkningen av det
-    första nollstället $3{,}37\cdot10^{-10}$, medan skattningen av $\pi$
-    nära $t=1000$ ger felet $5{,}25\cdot10^{-11}$. Det senare felet är
-    ungefär $6{,}4$ gånger mindre.
+    För $k = 318$ ger nämnaren $318{,}5$ att beräkningsfelet dämpas med en faktor drygt $300$.
 
-    \bigskip
+    \item \textbf{Feltillväxt:} Integrationstiden $t \approx 1000$ är över $600$ gånger längre än $t \approx \pi/2$. För RK4 ackumuleras fasfelet linjärt, samtidigt som fler steg ger större avrundningsfel från flyttalsaritmetik.
 
-    Detta innebär dock inte att den långa integrationen generellt är
-    mer noggrann. Det slutliga felet påverkas både av det ackumulerade
-    integrationsfelet och av hur dessa fel fortplantas. Resultaten visar därför att skattningen nära
-    $t=1000$ i just denna beräkning har bättre precision, men de räcker
-    inte för att dra slutsatsen att lång integration generellt ger
-    bättre eller sämre precision.
-
-    \item Enligt Sauers sats 6.4 kan det globala numeriska felet
-    begränsas teoretiskt enligt
+    \item \textbf{Slutsats:} Skattningen vid $t \approx 1000$ ger lägre fel ($5{,}25 \cdot 10^{-11}$) än vid första nollstället ($3{,}37 \cdot 10^{-10}$). Eftersom både tidsfelet $\delta t$ och nämnaren $k + 0{,}5$ växer linjärt med $t$ tar effekterna i huvudsak ut varandra:
     \[
-    |w_i-y_i|
-    \leq \frac{Ch^k}{L}
-    \left(e^{L(t_i-a)}-1\right).
+    \delta\pi = \frac{\delta t}{k + 0{,}5} \sim \frac{\mathcal{O}(t)}{\mathcal{O}(t)} \sim \text{konstant}.
     \]
-    Felgränsen beror bland annat på steglängden $h$, lipschitzkonstanten L och
-    metodens ordning $k$. Den beskriver hur felet kan
-    utvecklas under integrationen, men ger inte det faktiska
-    felet i beräkningen.
+    Att felet blev cirka sex gånger mindre här beror alltså på gynnsam felutsläckning i just denna körning, inte på att lång integration generellt ger bättre precision.
 
+    \item \textbf{Teoretisk felgräns (Sauer sats 6.4):} Det globala felet begränsas teoretiskt av
+    \[
+    |w_i - y_i| \le \frac{C h^p}{L} \left(e^{L(t_i - a)} - 1\right),
+    \]
+    där $h$ är steglängden, $p = 4$ är metodens ordning och $L$ är Lipschitzkonstanten. Denna exponentiella gräns är mycket pessimistisk och beskriver värsta tänkbara fall, inte det faktiska felet.
 \end{itemize}
 
 \begin{figure}
